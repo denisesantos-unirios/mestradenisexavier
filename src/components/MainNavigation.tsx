@@ -15,7 +15,8 @@ const menuItems = [
     title: "Engenharia de Software I",
     icon: Code2,
     submenu: [
-      { title: "Aula 1 - Apresentação da Disciplina", path: "/engenharia-software-1/aula-1" }
+      { title: "Aula 1 - Apresentação da Disciplina", path: "/engenharia-software-1/aula-1" },
+      { title: "Aula 2 - Análise de Sistemas + Processos", path: "/engenharia-software-1/aula-2" }
     ]
   },
   {
