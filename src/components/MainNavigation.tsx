@@ -18,7 +18,8 @@ const menuItems = [
       { title: "Aula 1 - Apresentação da Disciplina", path: "/engenharia-software-1/aula-1" },
       { title: "Aula 2 - Análise de Sistemas + Processos", path: "/engenharia-software-1/aula-2" },
       { title: "Aula 3 - Metodologias Ágeis", path: "/engenharia-software-1/aula-3" },
-      { title: "Aula 4 - Engenharia de Requisitos", path: "/engenharia-software-1/aula-4" }
+      { title: "Aula 4 - Engenharia de Requisitos", path: "/engenharia-software-1/aula-4" },
+      { title: "Aula 5 - ES Assistida por IA", path: "/engenharia-software-1/aula-5" }
     ]
   },
   {
