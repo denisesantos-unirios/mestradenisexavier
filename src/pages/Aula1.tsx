@@ -1,12 +1,15 @@
 import HeroSection from "@/components/HeroSection";
 import CrisisSection from "@/components/CrisisSection";
 import MarshmallowSection from "@/components/MarshmallowSection";
-import Navigation from "@/components/Navigation";
+import LessonNavigation from "@/components/LessonNavigation";
 
-const Index = () => {
+const Aula1 = () => {
   return (
     <main className="relative" style={{ background: "var(--gradient-hero)" }}>
-      <Navigation />
+      <LessonNavigation 
+        title="Aula 1 - Apresentação da Disciplina"
+        course="Engenharia de Software I"
+      />
       <HeroSection />
       <CrisisSection />
       <MarshmallowSection />
@@ -14,11 +17,11 @@ const Index = () => {
       {/* Footer */}
       <footer className="py-12 text-center border-t border-border/30">
         <p className="text-muted-foreground">
-          Engenharia de Software I • 2026
+          Engenharia de Software I • Prof.ª Mestra Denise Xavier dos Santos • 2026
         </p>
       </footer>
     </main>
   );
 };
 
-export default Index;
+export default Aula1;
