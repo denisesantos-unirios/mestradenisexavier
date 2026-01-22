@@ -32,7 +32,9 @@ const menuItems = [
     id: "projetos-interface",
     title: "Projetos de Interface",
     icon: Monitor,
-    submenu: []
+    submenu: [
+      { title: "Aula 1 - Apresentação da Disciplina", path: "/projetos-interface/aula-1" }
+    ]
   }
 ];
 
