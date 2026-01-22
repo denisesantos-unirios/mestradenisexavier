@@ -3,28 +3,35 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Menu, X, Home, ChevronRight } from "lucide-react";
 
+interface Section {
+  id: string;
+  title: string;
+}
+
 interface LessonNavigationProps {
   title: string;
   course: string;
+  sections?: Section[];
 }
 
-const sections = [
-  { id: "hero", label: "Início" },
-  { id: "crise", label: "Crise do Software" },
-  { id: "marshmallow", label: "Marshmallow Challenge" },
+const defaultSections: Section[] = [
+  { id: "hero", title: "Início" },
+  { id: "crise", title: "Crise do Software" },
+  { id: "marshmallow", title: "Marshmallow Challenge" },
 ];
 
-const LessonNavigation = ({ title, course }: LessonNavigationProps) => {
+const LessonNavigation = ({ title, course, sections }: LessonNavigationProps) => {
+  const activeSections = sections || defaultSections;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
+  const [activeSection, setActiveSection] = useState(activeSections[0]?.id || "");
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
       // Update active section based on scroll position
-      const sectionElements = sections.map(s => ({
+      const sectionElements = activeSections.map(s => ({
         id: s.id,
         element: document.getElementById(s.id)
       }));
@@ -43,7 +50,7 @@ const LessonNavigation = ({ title, course }: LessonNavigationProps) => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [activeSections]);
 
   return (
     <motion.nav
@@ -76,7 +83,7 @@ const LessonNavigation = ({ title, course }: LessonNavigationProps) => {
 
           {/* Desktop Section Navigation */}
           <div className="hidden md:flex items-center gap-1 bg-secondary/50 rounded-full p-1">
-            {sections.map((section) => (
+            {activeSections.map((section) => (
               <a
                 key={section.id}
                 href={`#${section.id}`}
@@ -86,7 +93,7 @@ const LessonNavigation = ({ title, course }: LessonNavigationProps) => {
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {section.label}
+                {section.title}
               </a>
             ))}
           </div>
@@ -118,7 +125,7 @@ const LessonNavigation = ({ title, course }: LessonNavigationProps) => {
               <div className="text-xs text-muted-foreground mb-3 px-3">
                 {course} • {title}
               </div>
-              {sections.map((section) => (
+              {activeSections.map((section) => (
                 <a
                   key={section.id}
                   href={`#${section.id}`}
@@ -129,7 +136,7 @@ const LessonNavigation = ({ title, course }: LessonNavigationProps) => {
                       : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                   }`}
                 >
-                  {section.label}
+                  {section.title}
                 </a>
               ))}
             </div>
