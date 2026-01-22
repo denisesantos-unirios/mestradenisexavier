@@ -33,7 +33,9 @@ const menuItems = [
     title: "Projetos de Interface",
     icon: Monitor,
     submenu: [
-      { title: "Aula 1 - Apresentação da Disciplina", path: "/projetos-interface/aula-1" }
+      { title: "Aula 1 - Apresentação da Disciplina", path: "/projetos-interface/aula-1" },
+      { title: "Aula 2 - Design de Interação", path: "/projetos-interface/aula-2" },
+      { title: "Aula 3 - Conceitualizando a Interação", path: "/projetos-interface/aula-3" }
     ]
   }
 ];
