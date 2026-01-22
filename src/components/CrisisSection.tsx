@@ -1,4 +1,8 @@
-import { AlertTriangle, Calendar, TrendingDown, Target, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, TrendingDown, Target, CheckCircle2 } from "lucide-react";
+import { motion } from "framer-motion";
+import ScrollReveal from "./animations/ScrollReveal";
+import StaggerContainer, { StaggerItem } from "./animations/StaggerContainer";
+import ParallaxSection from "./animations/ParallaxSection";
 
 const timelineEvents = [
   {
@@ -53,89 +57,129 @@ const CrisisSection = () => {
       <div className="max-w-6xl mx-auto w-full">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <span className="crisis-badge mb-6 inline-block">Contexto Histórico</span>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            A <span className="accent-text">Crise</span> do Software
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Entre 1960 e 1980, a indústria de software enfrentou uma crise sem precedentes
-          </p>
+          <ScrollReveal animation="scale">
+            <span className="crisis-badge mb-6 inline-block">Contexto Histórico</span>
+          </ScrollReveal>
+          <ScrollReveal animation="blur" delay={0.2} duration={0.8}>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              A <span className="accent-text">Crise</span> do Software
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal animation="fadeUp" delay={0.4}>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Entre 1960 e 1980, a indústria de software enfrentou uma crise sem precedentes
+            </p>
+          </ScrollReveal>
         </div>
 
         {/* Problems Grid */}
-        <div className="grid md:grid-cols-3 gap-6 mb-20">
+        <StaggerContainer className="grid md:grid-cols-3 gap-6 mb-20" staggerDelay={0.2}>
           {problems.map((problem, index) => (
-            <div 
-              key={problem.title}
-              className="glass-card p-8 text-center hover:scale-105 transition-transform duration-300"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-            <div className="w-16 h-16 rounded-2xl bg-destructive/20 flex items-center justify-center mx-auto mb-6">
-              <problem.icon className="w-8 h-8 text-destructive" />
-            </div>
-              <h3 className="text-2xl font-bold text-foreground mb-3">{problem.title}</h3>
-              <p className="text-muted-foreground">{problem.description}</p>
-            </div>
+            <StaggerItem key={problem.title}>
+              <motion.div 
+                className="glass-card p-8 text-center h-full"
+                whileHover={{ scale: 1.05, y: -5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div 
+                  className="w-16 h-16 rounded-2xl bg-destructive/20 flex items-center justify-center mx-auto mb-6"
+                  initial={{ rotate: -10 }}
+                  whileInView={{ rotate: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <problem.icon className="w-8 h-8 text-destructive" />
+                </motion.div>
+                <h3 className="text-2xl font-bold text-foreground mb-3">{problem.title}</h3>
+                <p className="text-muted-foreground">{problem.description}</p>
+              </motion.div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* Timeline */}
         <div className="relative mb-20">
-          <h3 className="text-2xl font-bold text-center mb-12">Linha do Tempo</h3>
+          <ScrollReveal animation="fadeDown">
+            <h3 className="text-2xl font-bold text-center mb-12">Linha do Tempo</h3>
+          </ScrollReveal>
           <div className="relative">
             <div className="hidden md:block timeline-line" />
             <div className="space-y-8">
               {timelineEvents.map((event, index) => (
-                <div 
+                <ScrollReveal 
                   key={event.year}
-                  className={`relative flex flex-col md:flex-row items-center gap-6 ${
-                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
+                  animation={index % 2 === 0 ? "fadeLeft" : "fadeRight"}
+                  delay={index * 0.15}
                 >
-                  <div className={`flex-1 ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                    <div className={`glass-card p-6 inline-block ${
-                      index % 2 === 0 ? 'md:ml-auto' : ''
-                    }`}>
-                      <span className={`text-sm font-medium ${
-                        event.type === 'crisis' ? 'text-destructive' : 
-                        event.type === 'solution' ? 'text-primary' : 'text-accent'
-                      }`}>
-                        {event.year}
-                      </span>
-                      <h4 className="text-xl font-bold text-foreground mt-1">{event.title}</h4>
-                      <p className="text-muted-foreground mt-2">{event.description}</p>
+                  <div 
+                    className={`relative flex flex-col md:flex-row items-center gap-6 ${
+                      index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                    }`}
+                  >
+                    <div className={`flex-1 ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                      <motion.div 
+                        className={`glass-card p-6 inline-block ${
+                          index % 2 === 0 ? 'md:ml-auto' : ''
+                        }`}
+                        whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <span className={`text-sm font-medium ${
+                          event.type === 'crisis' ? 'text-destructive' : 
+                          event.type === 'solution' ? 'text-primary' : 'text-accent'
+                        }`}>
+                          {event.year}
+                        </span>
+                        <h4 className="text-xl font-bold text-foreground mt-1">{event.title}</h4>
+                        <p className="text-muted-foreground mt-2">{event.description}</p>
+                      </motion.div>
                     </div>
+                    <motion.div 
+                      className="w-4 h-4 rounded-full bg-primary z-10 flex-shrink-0"
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                    />
+                    <div className="flex-1" />
                   </div>
-                  <div className="w-4 h-4 rounded-full bg-primary z-10 flex-shrink-0" />
-                  <div className="flex-1" />
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
         </div>
 
         {/* Solutions */}
-        <div className="glass-card p-10">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-              <CheckCircle2 className="w-6 h-6 text-primary" />
-            </div>
-            <h3 className="text-2xl font-bold text-foreground">Soluções Propostas</h3>
-          </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            {solutions.map((solution, index) => (
-              <div 
-                key={index}
-                className="flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
-              >
-                <span className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
-                  {index + 1}
-                </span>
-                <p className="text-foreground">{solution}</p>
+        <ParallaxSection speed={0.3}>
+          <ScrollReveal animation="slideUp">
+            <div className="glass-card p-10">
+              <div className="flex items-center gap-4 mb-8">
+                <motion.div 
+                  className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <CheckCircle2 className="w-6 h-6 text-primary" />
+                </motion.div>
+                <h3 className="text-2xl font-bold text-foreground">Soluções Propostas</h3>
               </div>
-            ))}
-          </div>
-        </div>
+              <StaggerContainer className="grid md:grid-cols-2 gap-4" staggerDelay={0.1}>
+                {solutions.map((solution, index) => (
+                  <StaggerItem key={index}>
+                    <motion.div 
+                      className="flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <span className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
+                        {index + 1}
+                      </span>
+                      <p className="text-foreground">{solution}</p>
+                    </motion.div>
+                  </StaggerItem>
+                ))}
+              </StaggerContainer>
+            </div>
+          </ScrollReveal>
+        </ParallaxSection>
       </div>
     </section>
   );
