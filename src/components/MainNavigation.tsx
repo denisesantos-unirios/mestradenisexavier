@@ -35,7 +35,11 @@ const menuItems = [
     submenu: [
       { title: "Aula 1 - Apresentação da Disciplina", path: "/projetos-interface/aula-1" },
       { title: "Aula 2 - Design de Interação", path: "/projetos-interface/aula-2" },
-      { title: "Aula 3 - Conceitualizando a Interação", path: "/projetos-interface/aula-3" }
+      { title: "Aula 3 - Conceitualizando a Interação", path: "/projetos-interface/aula-3" },
+      { title: "Aula 4 - Requisitos de Usabilidade", path: "/projetos-interface/aula-4" },
+      { title: "Aula 5 - Coleta de Informações", path: "/projetos-interface/aula-5" },
+      { title: "Aula 6 - Como Interfaces Afetam Pessoas", path: "/projetos-interface/aula-6" },
+      { title: "Aula 7 - Análise de Tarefas e Fluxos", path: "/projetos-interface/aula-7" }
     ]
   }
 ];

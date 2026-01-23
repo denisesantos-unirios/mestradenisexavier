@@ -12,6 +12,10 @@ import Aula5 from "./pages/Aula5";
 import ProjetosInterfaceAula1 from "./pages/projetos-interface/Aula1";
 import ProjetosInterfaceAula2 from "./pages/projetos-interface/Aula2";
 import ProjetosInterfaceAula3 from "./pages/projetos-interface/Aula3";
+import ProjetosInterfaceAula4 from "./pages/projetos-interface/Aula4";
+import ProjetosInterfaceAula5 from "./pages/projetos-interface/Aula5";
+import ProjetosInterfaceAula6 from "./pages/projetos-interface/Aula6";
+import ProjetosInterfaceAula7 from "./pages/projetos-interface/Aula7";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +36,10 @@ const App = () => (
           <Route path="/projetos-interface/aula-1" element={<ProjetosInterfaceAula1 />} />
           <Route path="/projetos-interface/aula-2" element={<ProjetosInterfaceAula2 />} />
           <Route path="/projetos-interface/aula-3" element={<ProjetosInterfaceAula3 />} />
+          <Route path="/projetos-interface/aula-4" element={<ProjetosInterfaceAula4 />} />
+          <Route path="/projetos-interface/aula-5" element={<ProjetosInterfaceAula5 />} />
+          <Route path="/projetos-interface/aula-6" element={<ProjetosInterfaceAula6 />} />
+          <Route path="/projetos-interface/aula-7" element={<ProjetosInterfaceAula7 />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
