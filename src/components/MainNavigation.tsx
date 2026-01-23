@@ -39,7 +39,9 @@ const menuItems = [
       { title: "Aula 4 - Requisitos de Usabilidade", path: "/projetos-interface/aula-4" },
       { title: "Aula 5 - Coleta de Informações", path: "/projetos-interface/aula-5" },
       { title: "Aula 6 - Como Interfaces Afetam Pessoas", path: "/projetos-interface/aula-6" },
-      { title: "Aula 7 - Análise de Tarefas e Fluxos", path: "/projetos-interface/aula-7" }
+      { title: "Aula 7 - Análise de Tarefas e Fluxos", path: "/projetos-interface/aula-7" },
+      { title: "Aula 8 - Introdução à UX", path: "/projetos-interface/aula-8" },
+      { title: "Aula 9 - Princípios de UX", path: "/projetos-interface/aula-9" }
     ]
   }
 ];
