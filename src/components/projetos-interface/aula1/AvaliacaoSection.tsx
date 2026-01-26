@@ -38,16 +38,16 @@ const avaliacoesEtapa1 = [
 const avaliacoesEtapa2 = [
   {
     icon: Presentation,
-    title: "Projeto",
-    pontos: "10,0 pontos",
-    descricao: "Entrega final do Projeto de Usabilidade com protótipo e documentação",
+    title: "Projeto (Fase 4)",
+    pontos: "2,5 pontos",
+    descricao: "Planejamento final com DECIDE",
     color: "from-emerald-500 to-teal-500"
   },
   {
     icon: Trophy,
-    title: "Experimento",
-    pontos: "10,0 pontos",
-    descricao: "Aplicação do teste de usabilidade com usuários reais",
+    title: "Experimento (Fase 5)",
+    pontos: "7,5 pontos",
+    descricao: "Teste e validação com usuários reais",
     color: "from-violet-500 to-purple-500"
   }
 ];
@@ -55,23 +55,58 @@ const avaliacoesEtapa2 = [
 const projetoFases = [
   {
     fase: "Fase 1",
-    titulo: "Quem é o usuário e o que ele precisa?",
+    titulo: "Requisitos (1,2 pts)",
     items: [
-      "Objetivo geral do sistema",
-      "Nível de habilidade dos usuários",
-      "Perfis (personas)",
-      "Tarefas",
-      "Equipe e responsabilidades"
+      "1.1 Objetivo geral do sistema (0.2)",
+      "1.2 Nível de habilidade dos usuários (0.2)",
+      "1.3 Tarefas que os usuários irão realizar (0.2)",
+      "1.4 Perfis/Personas (0.2)",
+      "1.5 Equipe de desenvolvimento (0.2)",
+      "1.6 Ações/Responsabilidades/Cronograma (0.2)"
     ]
   },
   {
     fase: "Fase 2",
-    titulo: "Como construir e avaliar a interface?",
+    titulo: "Planejamento Inicial (2,2 pts)",
     items: [
-      "Fluxo principal (diagrama de atividades)",
-      "Protótipo no Figma",
-      "Planejamento de teste (modelo DECIDE)",
-      "Preparação do teste + tarefas + métricas"
+      "2.1 Diagrama de atividades do fluxo principal (0.7)",
+      "2.2 Interface atual (0.5)",
+      "2.3 Protótipo no Figma (1.0)"
+    ]
+  },
+  {
+    fase: "Fase 3",
+    titulo: "Desenvolvimento - Heurísticas (6,6 pts)",
+    items: [
+      "3.1 Deixar o usuário no comando (1.8)",
+      "3.2 Reduzir a carga de memória (1.8)",
+      "3.3 Tornar a interface consistente (3.0)"
+    ]
+  }
+];
+
+const projetoFasesEtapa2 = [
+  {
+    fase: "Fase 4",
+    titulo: "Planejamento Final - DECIDE (2,5 pts)",
+    items: [
+      "2.4.1 Objetivo do teste (0.5)",
+      "2.4.2 Questionamentos (0.5)",
+      "2.4.3 Tarefas a serem avaliadas (0.5)",
+      "2.4.4 Medição/métricas (0.5)",
+      "Preparação do teste (0.5)"
+    ]
+  },
+  {
+    fase: "Fase 5",
+    titulo: "Teste e Validação (7,5 pts)",
+    items: [
+      "4.1 Recursos: Filmagem (1.0)",
+      "4.2 Coleta de dados (1.0)",
+      "4.3 Survey/questionário (1.0)",
+      "4.4 Análise dos resultados (1.0)",
+      "4.5 Relatório de resultados (1.5)",
+      "4.6 Apresentação final (2.0)"
     ]
   }
 ];
@@ -179,7 +214,7 @@ const AvaliacaoSection = () => {
           </div>
         </ScrollReveal>
 
-        {/* Projeto de Usabilidade */}
+        {/* Projeto de Usabilidade - Etapa 1 */}
         <ScrollReveal>
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-sm mb-4">
@@ -187,10 +222,20 @@ const AvaliacaoSection = () => {
               <span className="text-primary">A Alma da Disciplina</span>
             </div>
             <h3 className="text-3xl font-bold">O Projeto de Usabilidade</h3>
+            <p className="text-muted-foreground mt-2">Detalhamento das fases e critérios de avaliação</p>
           </div>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        {/* Fases da Etapa 1 */}
+        <ScrollReveal>
+          <div className="mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-sm">
+              <span className="font-bold text-blue-400">1ª Etapa - 10 pontos</span>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
           {projetoFases.map((fase, index) => (
             <ScrollReveal key={index} delay={index * 0.1}>
               <motion.div
@@ -199,6 +244,44 @@ const AvaliacaoSection = () => {
               >
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-sm mb-4">
                   <span className="font-bold">{fase.fase}</span>
+                </div>
+                <h4 className="font-bold text-lg mb-4">{fase.titulo}</h4>
+                
+                <ul className="space-y-2">
+                  {fase.items.map((item, i) => (
+                    <motion.li
+                      key={i}
+                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                      whileHover={{ x: 5 }}
+                    >
+                      <ChevronRight className="w-4 h-4 text-primary shrink-0" />
+                      <span>{item}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
+            </ScrollReveal>
+          ))}
+        </div>
+
+        {/* Fases da Etapa 2 */}
+        <ScrollReveal>
+          <div className="mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-sm">
+              <span className="font-bold text-emerald-400">2ª Etapa - 10 pontos</span>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
+          {projetoFasesEtapa2.map((fase, index) => (
+            <ScrollReveal key={index} delay={index * 0.1}>
+              <motion.div
+                className="glass-card p-6 h-full"
+                whileHover={{ y: -5 }}
+              >
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-sm mb-4">
+                  <span className="font-bold text-emerald-400">{fase.fase}</span>
                 </div>
                 <h4 className="font-bold text-lg mb-4">{fase.titulo}</h4>
                 
