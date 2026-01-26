@@ -1,5 +1,6 @@
 import MainNavigation from "@/components/MainNavigation";
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import ManifestoSection from "@/components/aula3/ManifestoSection";
 import ScrumSection from "@/components/aula3/ScrumSection";
 import KanbanSection from "@/components/aula3/KanbanSection";
@@ -28,6 +29,7 @@ const Aula3 = () => {
         <KanbanSection />
         <SprintActivitySection />
       </main>
+      <PdfExportButton filename="ES1_Aula-3_Metodologias-Ageis.pdf" />
     </div>
   );
 };

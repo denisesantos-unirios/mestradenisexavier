@@ -2,6 +2,7 @@ import HeroSection from "@/components/HeroSection";
 import CrisisSection from "@/components/CrisisSection";
 import MarshmallowSection from "@/components/MarshmallowSection";
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 
 const Aula1 = () => {
   return (
@@ -20,6 +21,7 @@ const Aula1 = () => {
           Engenharia de Software I • Prof.ª Mestra Denise Xavier dos Santos • 2026
         </p>
       </footer>
+      <PdfExportButton filename="ES1_Aula-1_Apresentacao.pdf" />
     </main>
   );
 };

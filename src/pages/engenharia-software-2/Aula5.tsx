@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/engenharia-software-2/aula5/HeroSection";
 import MiniMundoSection from "@/components/engenharia-software-2/aula5/MiniMundoSection";
 import EntregaSection from "@/components/engenharia-software-2/aula5/EntregaSection";
@@ -15,7 +16,7 @@ const Aula5 = () => {
       <LessonNavigation 
         sections={sections} 
         title="Aula 5 - PBL Fase 1: Mini-Mundo"
-        course="engenharia-software-2"
+        course="Engenharia de Software II"
       />
       
       <div className="pt-16">
@@ -31,6 +32,7 @@ const Aula5 = () => {
           <EntregaSection />
         </div>
       </div>
+      <PdfExportButton filename="ES2_Aula-5_PBL-MiniMundo.pdf" />
     </main>
   );
 };

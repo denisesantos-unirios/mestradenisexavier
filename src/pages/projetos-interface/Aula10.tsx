@@ -1,4 +1,5 @@
 import MainNavigation from "@/components/MainNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/projetos-interface/aula10/HeroSection";
 import DeficienciasSection from "@/components/projetos-interface/aula10/DeficienciasSection";
 import WCAGSection from "@/components/projetos-interface/aula10/WCAGSection";
@@ -16,6 +17,7 @@ const Aula10 = () => {
         <TecnologiasAssistivasSection />
         <AtividadeSection />
       </main>
+      <PdfExportButton filename="Projetos-Interface_Aula-10_Acessibilidade.pdf" />
     </div>
   );
 };

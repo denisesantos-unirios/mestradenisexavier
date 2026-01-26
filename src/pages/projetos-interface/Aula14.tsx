@@ -1,5 +1,6 @@
 import MainNavigation from "@/components/MainNavigation";
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/projetos-interface/aula14/HeroSection";
 import DCUSection from "@/components/projetos-interface/aula14/DCUSection";
 import NormasSection from "@/components/projetos-interface/aula14/NormasSection";
@@ -39,6 +40,7 @@ const Aula14 = () => {
         <NormasSection />
         <AtividadeSection />
       </main>
+      <PdfExportButton filename="Projetos-Interface_Aula-14_DCU.pdf" />
     </div>
   );
 };

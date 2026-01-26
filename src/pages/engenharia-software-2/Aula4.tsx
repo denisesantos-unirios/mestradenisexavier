@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/engenharia-software-2/aula4/HeroSection";
 import TiposRequisitosSection from "@/components/engenharia-software-2/aula4/TiposRequisitosSection";
 import EstudoCasoSection from "@/components/engenharia-software-2/aula4/EstudoCasoSection";
@@ -15,7 +16,7 @@ const Aula4 = () => {
       <LessonNavigation 
         sections={sections} 
         title="Aula 4 - Requisitos: Fundamentos"
-        course="engenharia-software-2"
+        course="Engenharia de Software II"
       />
       
       <div className="pt-16">
@@ -31,6 +32,7 @@ const Aula4 = () => {
           <EstudoCasoSection />
         </div>
       </div>
+      <PdfExportButton filename="ES2_Aula-4_Requisitos-Fundamentos.pdf" />
     </main>
   );
 };

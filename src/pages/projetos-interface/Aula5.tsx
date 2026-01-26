@@ -1,4 +1,5 @@
 import MainNavigation from "@/components/MainNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/projetos-interface/aula5/HeroSection";
 import PersonasSection from "@/components/projetos-interface/aula5/PersonasSection";
 import TarefasSection from "@/components/projetos-interface/aula5/TarefasSection";
@@ -14,6 +15,7 @@ const Aula5 = () => {
         <TarefasSection />
         <AtividadeSection />
       </main>
+      <PdfExportButton filename="Projetos-Interface_Aula-5_Coleta-Informacoes.pdf" />
     </div>
   );
 };

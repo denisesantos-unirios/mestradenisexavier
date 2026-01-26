@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/engenharia-software-2/aula3/HeroSection";
 import ImportanciaSection from "@/components/engenharia-software-2/aula3/ImportanciaSection";
 import ForumSection from "@/components/engenharia-software-2/aula3/ForumSection";
@@ -15,7 +16,7 @@ const Aula3 = () => {
       <LessonNavigation 
         sections={sections} 
         title="Aula 3 - JITT: Eng. de Requisitos"
-        course="engenharia-software-2"
+        course="Engenharia de Software II"
       />
       
       <div className="pt-16">
@@ -31,6 +32,7 @@ const Aula3 = () => {
           <ForumSection />
         </div>
       </div>
+      <PdfExportButton filename="ES2_Aula-3_JITT-Requisitos.pdf" />
     </main>
   );
 };
