@@ -11,7 +11,7 @@ import {
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerContainer, { StaggerItem } from "@/components/animations/StaggerContainer";
 
-const avaliacoes = [
+const avaliacoesEtapa1 = [
   {
     icon: FileCheck,
     title: "Atividades Práticas no AVA",
@@ -32,6 +32,23 @@ const avaliacoes = [
     pontos: "10,0 pontos",
     descricao: "Prova escrita ao final da etapa",
     color: "from-orange-500 to-amber-500"
+  }
+];
+
+const avaliacoesEtapa2 = [
+  {
+    icon: Presentation,
+    title: "Projeto",
+    pontos: "10,0 pontos",
+    descricao: "Entrega final do Projeto de Usabilidade com protótipo e documentação",
+    color: "from-emerald-500 to-teal-500"
+  },
+  {
+    icon: Trophy,
+    title: "Experimento",
+    pontos: "10,0 pontos",
+    descricao: "Aplicação do teste de usabilidade com usuários reais",
+    color: "from-violet-500 to-purple-500"
   }
 ];
 
@@ -85,9 +102,49 @@ const AvaliacaoSection = () => {
           </div>
         </ScrollReveal>
 
-        {/* Três Pilares */}
+        {/* Etapa 1 */}
+        <ScrollReveal>
+          <div className="mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-sm mb-4">
+              <span className="font-bold text-blue-400">1ª Etapa</span>
+            </div>
+          </div>
+        </ScrollReveal>
+
         <StaggerContainer className="grid md:grid-cols-3 gap-6 mb-12">
-          {avaliacoes.map((aval, index) => (
+          {avaliacoesEtapa1.map((aval, index) => (
+            <StaggerItem key={index}>
+              <motion.div
+                className="glass-card p-6 h-full relative overflow-hidden group"
+                whileHover={{ scale: 1.03 }}
+              >
+                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${aval.color}`} />
+                
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${aval.color} flex items-center justify-center`}>
+                    <aval.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-2xl font-bold text-primary">{aval.pontos}</div>
+                </div>
+                
+                <h3 className="font-bold text-lg mb-2">{aval.title}</h3>
+                <p className="text-sm text-muted-foreground">{aval.descricao}</p>
+              </motion.div>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
+
+        {/* Etapa 2 */}
+        <ScrollReveal>
+          <div className="mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-sm mb-4">
+              <span className="font-bold text-emerald-400">2ª Etapa</span>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        <StaggerContainer className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-12">
+          {avaliacoesEtapa2.map((aval, index) => (
             <StaggerItem key={index}>
               <motion.div
                 className="glass-card p-6 h-full relative overflow-hidden group"
