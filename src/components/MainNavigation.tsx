@@ -41,7 +41,9 @@ const menuItems = [
       { title: "Aula 6 - Como Interfaces Afetam Pessoas", path: "/projetos-interface/aula-6" },
       { title: "Aula 7 - Análise de Tarefas e Fluxos", path: "/projetos-interface/aula-7" },
       { title: "Aula 8 - Introdução à UX", path: "/projetos-interface/aula-8" },
-      { title: "Aula 9 - Princípios de UX", path: "/projetos-interface/aula-9" }
+      { title: "Aula 9 - Princípios de UX", path: "/projetos-interface/aula-9" },
+      { title: "Aula 10 - Acessibilidade: Fundamentos", path: "/projetos-interface/aula-10" },
+      { title: "Aula 11 - Acessibilidade na Prática", path: "/projetos-interface/aula-11" }
     ]
   }
 ];
