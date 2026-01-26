@@ -33,7 +33,15 @@ const menuItems = [
       { title: "Aula 4 - Requisitos: Fundamentos", path: "/engenharia-software-2/aula-4" },
       { title: "Aula 5 - PBL Fase 1: Mini-Mundo", path: "/engenharia-software-2/aula-5" },
       { title: "Aula 6 - JITT: Técnicas de Elicitação", path: "/engenharia-software-2/aula-6" },
-      { title: "Aula 7 - Elicitação: Prática", path: "/engenharia-software-2/aula-7" }
+      { title: "Aula 7 - Elicitação: Prática", path: "/engenharia-software-2/aula-7" },
+      { title: "Aula 8 - Documentação de Requisitos", path: "/engenharia-software-2/aula-8" },
+      { title: "Aula 9 - Validação de Requisitos", path: "/engenharia-software-2/aula-9" },
+      { title: "Aula 10 - JITT: Entrega Fase 2", path: "/engenharia-software-2/aula-10" },
+      { title: "Aula 11 - Introdução à UML", path: "/engenharia-software-2/aula-11" },
+      { title: "Aula 12 - Casos de Uso: Fundamentos", path: "/engenharia-software-2/aula-12" },
+      { title: "Aula 13 - JITT: Especificação UC", path: "/engenharia-software-2/aula-13" },
+      { title: "Aula 14 - Workshop: Diagrama UC", path: "/engenharia-software-2/aula-14" },
+      { title: "Aula 15 - Entrega Fase 3: Casos de Uso", path: "/engenharia-software-2/aula-15" }
     ]
   },
   {

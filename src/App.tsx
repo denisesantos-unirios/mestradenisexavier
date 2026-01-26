@@ -17,6 +17,14 @@ import ES2Aula4 from "./pages/engenharia-software-2/Aula4";
 import ES2Aula5 from "./pages/engenharia-software-2/Aula5";
 import ES2Aula6 from "./pages/engenharia-software-2/Aula6";
 import ES2Aula7 from "./pages/engenharia-software-2/Aula7";
+import ES2Aula8 from "./pages/engenharia-software-2/Aula8";
+import ES2Aula9 from "./pages/engenharia-software-2/Aula9";
+import ES2Aula10 from "./pages/engenharia-software-2/Aula10";
+import ES2Aula11 from "./pages/engenharia-software-2/Aula11";
+import ES2Aula12 from "./pages/engenharia-software-2/Aula12";
+import ES2Aula13 from "./pages/engenharia-software-2/Aula13";
+import ES2Aula14 from "./pages/engenharia-software-2/Aula14";
+import ES2Aula15 from "./pages/engenharia-software-2/Aula15";
 // Projetos de Interface
 import ProjetosInterfaceAula1 from "./pages/projetos-interface/Aula1";
 import ProjetosInterfaceAula2 from "./pages/projetos-interface/Aula2";
@@ -62,6 +70,14 @@ const App = () => (
           <Route path="/engenharia-software-2/aula-5" element={<ES2Aula5 />} />
           <Route path="/engenharia-software-2/aula-6" element={<ES2Aula6 />} />
           <Route path="/engenharia-software-2/aula-7" element={<ES2Aula7 />} />
+          <Route path="/engenharia-software-2/aula-8" element={<ES2Aula8 />} />
+          <Route path="/engenharia-software-2/aula-9" element={<ES2Aula9 />} />
+          <Route path="/engenharia-software-2/aula-10" element={<ES2Aula10 />} />
+          <Route path="/engenharia-software-2/aula-11" element={<ES2Aula11 />} />
+          <Route path="/engenharia-software-2/aula-12" element={<ES2Aula12 />} />
+          <Route path="/engenharia-software-2/aula-13" element={<ES2Aula13 />} />
+          <Route path="/engenharia-software-2/aula-14" element={<ES2Aula14 />} />
+          <Route path="/engenharia-software-2/aula-15" element={<ES2Aula15 />} />
           {/* Projetos de Interface */}
           <Route path="/projetos-interface/aula-1" element={<ProjetosInterfaceAula1 />} />
           <Route path="/projetos-interface/aula-2" element={<ProjetosInterfaceAula2 />} />
