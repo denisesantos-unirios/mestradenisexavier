@@ -43,7 +43,9 @@ const menuItems = [
       { title: "Aula 8 - Introdução à UX", path: "/projetos-interface/aula-8" },
       { title: "Aula 9 - Princípios de UX", path: "/projetos-interface/aula-9" },
       { title: "Aula 10 - Acessibilidade: Fundamentos", path: "/projetos-interface/aula-10" },
-      { title: "Aula 11 - Acessibilidade na Prática", path: "/projetos-interface/aula-11" }
+      { title: "Aula 11 - Acessibilidade na Prática", path: "/projetos-interface/aula-11" },
+      { title: "Aula 12 - Revisão Geral da Etapa 1", path: "/projetos-interface/aula-12" },
+      { title: "Aula 13 - Entrega da Fase 1", path: "/projetos-interface/aula-13" }
     ]
   }
 ];

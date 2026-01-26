@@ -20,6 +20,8 @@ import ProjetosInterfaceAula8 from "./pages/projetos-interface/Aula8";
 import ProjetosInterfaceAula9 from "./pages/projetos-interface/Aula9";
 import ProjetosInterfaceAula10 from "./pages/projetos-interface/Aula10";
 import ProjetosInterfaceAula11 from "./pages/projetos-interface/Aula11";
+import ProjetosInterfaceAula12 from "./pages/projetos-interface/Aula12";
+import ProjetosInterfaceAula13 from "./pages/projetos-interface/Aula13";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +50,8 @@ const App = () => (
           <Route path="/projetos-interface/aula-9" element={<ProjetosInterfaceAula9 />} />
           <Route path="/projetos-interface/aula-10" element={<ProjetosInterfaceAula10 />} />
           <Route path="/projetos-interface/aula-11" element={<ProjetosInterfaceAula11 />} />
+          <Route path="/projetos-interface/aula-12" element={<ProjetosInterfaceAula12 />} />
+          <Route path="/projetos-interface/aula-13" element={<ProjetosInterfaceAula13 />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
