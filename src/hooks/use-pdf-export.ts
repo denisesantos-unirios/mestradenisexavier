@@ -12,11 +12,18 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
     setIsGenerating(true);
     
     try {
-      // Get the main content element
-      const mainElement = document.querySelector("main");
-      if (!mainElement) {
-        throw new Error("No main element found");
-      }
+      // Get the main content element (some pages may have multiple <main> tags)
+      const mainCandidates = Array.from(document.querySelectorAll("main"));
+      const mainElement =
+        mainCandidates
+          .filter((el) => el && el.scrollHeight > 0)
+          .sort((a, b) => {
+            const aScore = a.scrollHeight + (a.textContent?.length ?? 0);
+            const bScore = b.scrollHeight + (b.textContent?.length ?? 0);
+            return bScore - aScore;
+          })[0] ?? null;
+
+      if (!mainElement) throw new Error("No main element found");
 
       // Create a temporary container for PDF generation
       const container = document.createElement("div");
@@ -36,9 +43,11 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
       // Clone the main content
       const clone = mainElement.cloneNode(true) as HTMLElement;
       
-      // Remove navigation elements, buttons, and interactive elements
+      // Remove navigation elements, buttons, and interactive elements.
+      // IMPORTANT: do NOT remove generic <header> tags because many lessons wrap content in <header>,
+      // which can result in blank PDFs.
       const elementsToRemove = clone.querySelectorAll(
-        "nav, button, .no-print, [data-no-print], input, video, iframe, .fixed, header, [class*='fixed']"
+        "nav, button, .no-print, [data-no-print], input, video, iframe, .fixed, [class*=' fixed'], [class^='fixed']"
       );
       elementsToRemove.forEach((el) => el.remove());
       
@@ -84,12 +93,22 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
       // Wait for images and fonts to load
       await new Promise(resolve => setTimeout(resolve, 500));
 
+      // Large lessons can exceed canvas limits and generate blank PDFs.
+      // Dynamically reduce scale to keep the rendered canvas within safe bounds.
+      const estimatedHeightPx = clone.scrollHeight || 1;
+      const maxCanvasPx = 24000;
+      const preferredScale = 1.5;
+      const dynamicScale = Math.max(
+        0.85,
+        Math.min(preferredScale, maxCanvasPx / estimatedHeightPx)
+      );
+
       const opt = {
         margin: [10, 10, 10, 10],
         filename: options?.filename ?? "aula.pdf",
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { 
-          scale: 1.5,
+          scale: dynamicScale,
           useCORS: true,
           logging: true,
           backgroundColor: "#ffffff",
