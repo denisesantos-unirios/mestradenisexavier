@@ -1,4 +1,5 @@
 import MainNavigation from "@/components/MainNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/projetos-interface/aula6/HeroSection";
 import CognicaoSection from "@/components/projetos-interface/aula6/CognicaoSection";
 import PercepcaoSection from "@/components/projetos-interface/aula6/PercepcaoSection";
@@ -9,11 +10,14 @@ const Aula6 = () => {
   return (
     <div className="min-h-screen bg-background">
       <MainNavigation />
-      <HeroSection />
-      <CognicaoSection />
-      <PercepcaoSection />
-      <MemoriaSection />
-      <AtividadeSection />
+      <main className="pt-16">
+        <HeroSection />
+        <CognicaoSection />
+        <PercepcaoSection />
+        <MemoriaSection />
+        <AtividadeSection />
+      </main>
+      <PdfExportButton filename="Projetos-Interface_Aula-6_Cognicao.pdf" />
     </div>
   );
 };

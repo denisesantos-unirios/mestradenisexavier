@@ -1,4 +1,5 @@
 import MainNavigation from "@/components/MainNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/projetos-interface/aula4/HeroSection";
 import UsabilidadeSection from "@/components/projetos-interface/aula4/UsabilidadeSection";
 import PrincipiosSection from "@/components/projetos-interface/aula4/PrincipiosSection";
@@ -16,6 +17,7 @@ const Aula4 = () => {
         <HeuristicasSection />
         <AtividadeSection />
       </main>
+      <PdfExportButton filename="Projetos-Interface_Aula-4_Usabilidade.pdf" />
     </div>
   );
 };

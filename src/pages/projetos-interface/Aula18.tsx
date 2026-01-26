@@ -1,5 +1,6 @@
 import MainNavigation from "@/components/MainNavigation";
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/projetos-interface/aula18/HeroSection";
 import InterfaceSection from "@/components/projetos-interface/aula18/InterfaceSection";
 import FramesSection from "@/components/projetos-interface/aula18/FramesSection";
@@ -39,6 +40,7 @@ const Aula18 = () => {
         <FramesSection />
         <AtividadeSection />
       </main>
+      <PdfExportButton filename="Projetos-Interface_Aula-18_Figma.pdf" />
     </div>
   );
 };

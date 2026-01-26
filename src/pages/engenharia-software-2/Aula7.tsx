@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/engenharia-software-2/aula7/HeroSection";
 import DinamicaSection from "@/components/engenharia-software-2/aula7/DinamicaSection";
 import FerramentasSection from "@/components/engenharia-software-2/aula7/FerramentasSection";
@@ -15,7 +16,7 @@ const Aula7 = () => {
       <LessonNavigation 
         sections={sections} 
         title="Aula 7 - Elicitação: Prática"
-        course="engenharia-software-2"
+        course="Engenharia de Software II"
       />
       
       <div className="pt-16">
@@ -31,6 +32,7 @@ const Aula7 = () => {
           <FerramentasSection />
         </div>
       </div>
+      <PdfExportButton filename="ES2_Aula-7_Elicitacao-Pratica.pdf" />
     </main>
   );
 };

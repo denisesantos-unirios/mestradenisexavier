@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/projetos-interface/aula3/HeroSection";
 import ModelosMentaisSection from "@/components/projetos-interface/aula3/ModelosMentaisSection";
 import UsuariosSection from "@/components/projetos-interface/aula3/UsuariosSection";
@@ -30,6 +31,7 @@ const ProjetosInterfaceAula3 = () => {
           Projetos de Interface • Prof.ª Mestra Denise Xavier dos Santos • 2026
         </p>
       </footer>
+      <PdfExportButton filename="Projetos-Interface_Aula-3_Conceitualizacao.pdf" />
     </main>
   );
 };

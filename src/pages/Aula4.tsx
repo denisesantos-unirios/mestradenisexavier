@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import RequirementsIntroSection from "@/components/aula4/RequirementsIntroSection";
 import RequirementsTypesSection from "@/components/aula4/RequirementsTypesSection";
 import ElicitationTechniquesSection from "@/components/aula4/ElicitationTechniquesSection";
@@ -29,6 +30,7 @@ const Aula4 = () => {
         <InterviewSimulationSection />
         <AVAActivitySection />
       </main>
+      <PdfExportButton filename="ES1_Aula-4_Engenharia-Requisitos.pdf" />
     </div>
   );
 };

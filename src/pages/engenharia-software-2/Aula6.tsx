@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/engenharia-software-2/aula6/HeroSection";
 import TecnicasSection from "@/components/engenharia-software-2/aula6/TecnicasSection";
 import ForumSection from "@/components/engenharia-software-2/aula6/ForumSection";
@@ -15,7 +16,7 @@ const Aula6 = () => {
       <LessonNavigation 
         sections={sections} 
         title="Aula 6 - JITT: Técnicas de Elicitação"
-        course="engenharia-software-2"
+        course="Engenharia de Software II"
       />
       
       <div className="pt-16">
@@ -31,6 +32,7 @@ const Aula6 = () => {
           <ForumSection />
         </div>
       </div>
+      <PdfExportButton filename="ES2_Aula-6_Tecnicas-Elicitacao.pdf" />
     </main>
   );
 };

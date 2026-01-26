@@ -1,4 +1,5 @@
 import MainNavigation from "@/components/MainNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/projetos-interface/aula13/HeroSection";
 import RequisitosFase1Section from "@/components/projetos-interface/aula13/RequisitosFase1Section";
 import CriteriosAvaliacaoSection from "@/components/projetos-interface/aula13/CriteriosAvaliacaoSection";
@@ -14,6 +15,7 @@ const Aula13 = () => {
         <CriteriosAvaliacaoSection />
         <EntregaSection />
       </main>
+      <PdfExportButton filename="Projetos-Interface_Aula-13_Entrega-Fase1.pdf" />
     </div>
   );
 };

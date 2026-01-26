@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/engenharia-software-2/aula2/HeroSection";
 import HistoriaSection from "@/components/engenharia-software-2/aula2/HistoriaSection";
 import CicloVidaSection from "@/components/engenharia-software-2/aula2/CicloVidaSection";
@@ -17,7 +18,7 @@ const Aula2 = () => {
       <LessonNavigation 
         sections={sections} 
         title="Aula 2 - Introdução à ES e Processos"
-        course="engenharia-software-2"
+        course="Engenharia de Software II"
       />
       
       <div className="pt-16">
@@ -37,6 +38,7 @@ const Aula2 = () => {
           <ProcessosSection />
         </div>
       </div>
+      <PdfExportButton filename="ES2_Aula-2_Introducao-Processos.pdf" />
     </main>
   );
 };

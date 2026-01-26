@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Menu, X, Home, ChevronRight } from "lucide-react";
+import { ArrowLeft, Menu, X, Home, ChevronRight, FileDown, Loader2 } from "lucide-react";
+import { usePdfExport } from "@/hooks/use-pdf-export";
 
 interface Section {
   id: string;
@@ -25,6 +26,9 @@ const LessonNavigation = ({ title, course, sections }: LessonNavigationProps) =>
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(activeSections[0]?.id || "");
+  
+  const pdfFilename = `${course.replace(/\s+/g, "-")}_${title.replace(/\s+/g, "-")}.pdf`;
+  const { exportToPdf, isGenerating } = usePdfExport({ filename: pdfFilename });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -98,17 +102,35 @@ const LessonNavigation = ({ title, course, sections }: LessonNavigationProps) =>
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6 text-foreground" />
-            ) : (
-              <Menu className="w-6 h-6 text-foreground" />
-            )}
-          </button>
+          {/* PDF Export & Mobile Menu */}
+          <div className="flex items-center gap-2">
+            {/* PDF Export Button */}
+            <button
+              onClick={exportToPdf}
+              disabled={isGenerating}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors disabled:opacity-50"
+              title="Baixar PDF da aula"
+            >
+              {isGenerating ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <FileDown className="w-4 h-4" />
+              )}
+              <span className="hidden sm:inline text-sm">PDF</span>
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
+            >
+              {isMenuOpen ? (
+                <X className="w-6 h-6 text-foreground" />
+              ) : (
+                <Menu className="w-6 h-6 text-foreground" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

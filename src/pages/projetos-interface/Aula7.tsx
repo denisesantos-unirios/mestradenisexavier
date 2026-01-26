@@ -1,4 +1,5 @@
 import MainNavigation from "@/components/MainNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/projetos-interface/aula7/HeroSection";
 import AnaliseSection from "@/components/projetos-interface/aula7/AnaliseSection";
 import HTASection from "@/components/projetos-interface/aula7/HTASection";
@@ -9,11 +10,14 @@ const Aula7 = () => {
   return (
     <div className="min-h-screen bg-background">
       <MainNavigation />
-      <HeroSection />
-      <AnaliseSection />
-      <HTASection />
-      <FluxosSection />
-      <AtividadeSection />
+      <main className="pt-16">
+        <HeroSection />
+        <AnaliseSection />
+        <HTASection />
+        <FluxosSection />
+        <AtividadeSection />
+      </main>
+      <PdfExportButton filename="Projetos-Interface_Aula-7_Analise-Tarefas.pdf" />
     </div>
   );
 };

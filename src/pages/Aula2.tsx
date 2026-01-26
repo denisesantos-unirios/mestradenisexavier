@@ -1,5 +1,6 @@
 import MainNavigation from "@/components/MainNavigation";
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import TheorySection from "@/components/aula2/TheorySection";
 import DynamicSection from "@/components/aula2/DynamicSection";
 import ModelingSection from "@/components/aula2/ModelingSection";
@@ -28,6 +29,7 @@ const Aula2 = () => {
         <ModelingSection />
         <ActivitySection />
       </main>
+      <PdfExportButton filename="ES1_Aula-2_Analise-Sistemas.pdf" />
     </div>
   );
 };

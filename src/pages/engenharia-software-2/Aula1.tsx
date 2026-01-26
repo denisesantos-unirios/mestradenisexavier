@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import HeroSection from "@/components/engenharia-software-2/aula1/HeroSection";
 import EmentaSection from "@/components/engenharia-software-2/aula1/EmentaSection";
 import MetodologiaSection from "@/components/engenharia-software-2/aula1/MetodologiaSection";
@@ -19,7 +20,7 @@ const Aula1 = () => {
       <LessonNavigation 
         sections={sections} 
         title="Aula 1 - Apresentação da Disciplina"
-        course="engenharia-software-2"
+        course="Engenharia de Software II"
       />
       
       <div className="pt-16">
@@ -43,6 +44,7 @@ const Aula1 = () => {
           <ProjetoIntegradorSection />
         </div>
       </div>
+      <PdfExportButton filename="ES2_Aula-1_Apresentacao.pdf" />
     </main>
   );
 };

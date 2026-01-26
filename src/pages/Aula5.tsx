@@ -1,4 +1,5 @@
 import LessonNavigation from "@/components/LessonNavigation";
+import PdfExportButton from "@/components/PdfExportButton";
 import AIIntroSection from "@/components/aula5/AIIntroSection";
 import UserStoryWorkshopSection from "@/components/aula5/UserStoryWorkshopSection";
 import PromptEngineeringSection from "@/components/aula5/PromptEngineeringSection";
@@ -113,6 +114,7 @@ const Aula5 = () => {
           </p>
         </div>
       </footer>
+      <PdfExportButton filename="ES1_Aula-5_IA-Engenharia-Software.pdf" />
     </div>
   );
 };
