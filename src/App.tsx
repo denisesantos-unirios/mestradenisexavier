@@ -22,6 +22,12 @@ import ProjetosInterfaceAula10 from "./pages/projetos-interface/Aula10";
 import ProjetosInterfaceAula11 from "./pages/projetos-interface/Aula11";
 import ProjetosInterfaceAula12 from "./pages/projetos-interface/Aula12";
 import ProjetosInterfaceAula13 from "./pages/projetos-interface/Aula13";
+import ProjetosInterfaceAula14 from "./pages/projetos-interface/Aula14";
+import ProjetosInterfaceAula15 from "./pages/projetos-interface/Aula15";
+import ProjetosInterfaceAula16 from "./pages/projetos-interface/Aula16";
+import ProjetosInterfaceAula17 from "./pages/projetos-interface/Aula17";
+import ProjetosInterfaceAula18 from "./pages/projetos-interface/Aula18";
+import ProjetosInterfaceAula19 from "./pages/projetos-interface/Aula19";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +58,12 @@ const App = () => (
           <Route path="/projetos-interface/aula-11" element={<ProjetosInterfaceAula11 />} />
           <Route path="/projetos-interface/aula-12" element={<ProjetosInterfaceAula12 />} />
           <Route path="/projetos-interface/aula-13" element={<ProjetosInterfaceAula13 />} />
+          <Route path="/projetos-interface/aula-14" element={<ProjetosInterfaceAula14 />} />
+          <Route path="/projetos-interface/aula-15" element={<ProjetosInterfaceAula15 />} />
+          <Route path="/projetos-interface/aula-16" element={<ProjetosInterfaceAula16 />} />
+          <Route path="/projetos-interface/aula-17" element={<ProjetosInterfaceAula17 />} />
+          <Route path="/projetos-interface/aula-18" element={<ProjetosInterfaceAula18 />} />
+          <Route path="/projetos-interface/aula-19" element={<ProjetosInterfaceAula19 />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

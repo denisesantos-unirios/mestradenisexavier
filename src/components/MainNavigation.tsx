@@ -45,7 +45,13 @@ const menuItems = [
       { title: "Aula 10 - Acessibilidade: Fundamentos", path: "/projetos-interface/aula-10" },
       { title: "Aula 11 - Acessibilidade na Prática", path: "/projetos-interface/aula-11" },
       { title: "Aula 12 - Revisão Geral da Etapa 1", path: "/projetos-interface/aula-12" },
-      { title: "Aula 13 - Entrega da Fase 1", path: "/projetos-interface/aula-13" }
+      { title: "Aula 13 - Entrega da Fase 1", path: "/projetos-interface/aula-13" },
+      { title: "Aula 14 - Design Centrado no Usuário", path: "/projetos-interface/aula-14" },
+      { title: "Aula 15 - Ideação e Brainstorming", path: "/projetos-interface/aula-15" },
+      { title: "Aula 16 - Fundamentos de Prototipação", path: "/projetos-interface/aula-16" },
+      { title: "Aula 17 - Prototipação de Papel", path: "/projetos-interface/aula-17" },
+      { title: "Aula 18 - Introdução ao Figma", path: "/projetos-interface/aula-18" },
+      { title: "Aula 19 - Componentes e Fluxos", path: "/projetos-interface/aula-19" }
     ]
   }
 ];
