@@ -26,7 +26,15 @@ const menuItems = [
     id: "engenharia-software-2",
     title: "Engenharia de Software II",
     icon: Layers,
-    submenu: []
+    submenu: [
+      { title: "Aula 1 - Apresentação da Disciplina", path: "/engenharia-software-2/aula-1" },
+      { title: "Aula 2 - Introdução à ES e Processos", path: "/engenharia-software-2/aula-2" },
+      { title: "Aula 3 - JITT: Engenharia de Requisitos", path: "/engenharia-software-2/aula-3" },
+      { title: "Aula 4 - Requisitos: Fundamentos", path: "/engenharia-software-2/aula-4" },
+      { title: "Aula 5 - PBL Fase 1: Mini-Mundo", path: "/engenharia-software-2/aula-5" },
+      { title: "Aula 6 - JITT: Técnicas de Elicitação", path: "/engenharia-software-2/aula-6" },
+      { title: "Aula 7 - Elicitação: Prática", path: "/engenharia-software-2/aula-7" }
+    ]
   },
   {
     id: "projetos-interface",

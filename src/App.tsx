@@ -9,6 +9,15 @@ import Aula2 from "./pages/Aula2";
 import Aula3 from "./pages/Aula3";
 import Aula4 from "./pages/Aula4";
 import Aula5 from "./pages/Aula5";
+// Engenharia de Software 2
+import ES2Aula1 from "./pages/engenharia-software-2/Aula1";
+import ES2Aula2 from "./pages/engenharia-software-2/Aula2";
+import ES2Aula3 from "./pages/engenharia-software-2/Aula3";
+import ES2Aula4 from "./pages/engenharia-software-2/Aula4";
+import ES2Aula5 from "./pages/engenharia-software-2/Aula5";
+import ES2Aula6 from "./pages/engenharia-software-2/Aula6";
+import ES2Aula7 from "./pages/engenharia-software-2/Aula7";
+// Projetos de Interface
 import ProjetosInterfaceAula1 from "./pages/projetos-interface/Aula1";
 import ProjetosInterfaceAula2 from "./pages/projetos-interface/Aula2";
 import ProjetosInterfaceAula3 from "./pages/projetos-interface/Aula3";
@@ -45,6 +54,15 @@ const App = () => (
           <Route path="/engenharia-software-1/aula-3" element={<Aula3 />} />
           <Route path="/engenharia-software-1/aula-4" element={<Aula4 />} />
           <Route path="/engenharia-software-1/aula-5" element={<Aula5 />} />
+          {/* Engenharia de Software 2 */}
+          <Route path="/engenharia-software-2/aula-1" element={<ES2Aula1 />} />
+          <Route path="/engenharia-software-2/aula-2" element={<ES2Aula2 />} />
+          <Route path="/engenharia-software-2/aula-3" element={<ES2Aula3 />} />
+          <Route path="/engenharia-software-2/aula-4" element={<ES2Aula4 />} />
+          <Route path="/engenharia-software-2/aula-5" element={<ES2Aula5 />} />
+          <Route path="/engenharia-software-2/aula-6" element={<ES2Aula6 />} />
+          <Route path="/engenharia-software-2/aula-7" element={<ES2Aula7 />} />
+          {/* Projetos de Interface */}
           <Route path="/projetos-interface/aula-1" element={<ProjetosInterfaceAula1 />} />
           <Route path="/projetos-interface/aula-2" element={<ProjetosInterfaceAula2 />} />
           <Route path="/projetos-interface/aula-3" element={<ProjetosInterfaceAula3 />} />
