@@ -1,33 +1,40 @@
-import MainNavigation from "@/components/MainNavigation";
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
-import TheorySection from "@/components/aula2/TheorySection";
-import DynamicSection from "@/components/aula2/DynamicSection";
-import ModelingSection from "@/components/aula2/ModelingSection";
-import ActivitySection from "@/components/aula2/ActivitySection";
+import IntroducaoSection from "@/components/aula2/IntroducaoSection";
+import DadoInformacaoSection from "@/components/aula2/DadoInformacaoSection";
+import TeoriaSistemasSection from "@/components/aula2/TeoriaSistemasSection";
+import AnalistaSection from "@/components/aula2/AnalistaSection";
+import ModelagemSection from "@/components/aula2/ModelagemSection";
+import ProcessosSection from "@/components/aula2/ProcessosSection";
+import ExerciciosSection from "@/components/aula2/ExerciciosSection";
 
 const Aula2 = () => {
   const sections = [
-    { id: "teoria", title: "Teoria Relâmpago" },
-    { id: "dinamica", title: "Dinâmica" },
+    { id: "introducao", title: "Introdução" },
+    { id: "dado-informacao", title: "Dado/Informação" },
+    { id: "teoria-sistemas", title: "Sistemas" },
+    { id: "analista", title: "Analista" },
     { id: "modelagem", title: "Modelagem" },
-    { id: "atividade", title: "Atividade" }
+    { id: "processos", title: "Processos" },
+    { id: "exercicios", title: "Exercícios" }
   ];
 
   return (
     <div className="min-h-screen bg-background">
-      <MainNavigation />
       <LessonNavigation 
-        title="Aula 2 - Análise de Sistemas + Processos"
+        title="Aula 2 - Análise de Sistemas"
         course="Engenharia de Software I"
         sections={sections}
       />
       
-      <main className="pt-32">
-        <TheorySection />
-        <DynamicSection />
-        <ModelingSection />
-        <ActivitySection />
+      <main className="pt-16">
+        <IntroducaoSection />
+        <DadoInformacaoSection />
+        <TeoriaSistemasSection />
+        <AnalistaSection />
+        <ModelagemSection />
+        <ProcessosSection />
+        <ExerciciosSection />
       </main>
       <PdfExportButton filename="ES1_Aula-2_Analise-Sistemas.pdf" />
     </div>
