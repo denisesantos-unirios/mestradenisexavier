@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { GraduationCap, Code2, Layers, Monitor, ChevronRight, BookOpen } from "lucide-react";
+import { GraduationCap, Code2, Layers, Monitor, ChevronRight, BookOpen, Award, Briefcase, Heart, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import MainNavigation from "@/components/MainNavigation";
+import professoraImg from "@/assets/professora-denise.jpg";
 
 const courses = [
   {
@@ -72,6 +73,23 @@ const courses = [
   }
 ];
 
+const certificacoes = [
+  "Product Owner - CSPO (Scrum Alliance, 2024)",
+  "Scrum Master Certified - CSM (Scrum Alliance, 2025)"
+];
+
+const experiencias = [
+  "UX & Prototipação",
+  "Scrum Master",
+  "Product Owner",
+  "Gerenciamento de Projetos",
+  "BI - ETL"
+];
+
+const hobbies = [
+  "Muay Thai", "Cantar", "Café", "Livros", "Seriados", "Viajar", "Violão"
+];
+
 const Home = () => {
   return (
     <main className="min-h-screen relative" style={{ background: "var(--gradient-hero)" }}>
@@ -87,7 +105,7 @@ const Home = () => {
           >
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-secondary/80 backdrop-blur-sm mb-8">
               <GraduationCap className="w-6 h-6 text-primary" />
-              <span className="text-muted-foreground font-medium">Portal de Aulas</span>
+              <span className="text-muted-foreground font-medium">Portal de Aulas • Semestre 2026.1</span>
             </div>
           </motion.div>
 
@@ -97,19 +115,119 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <span className="text-foreground">Professora Mestra</span>
-            <br />
-            <span className="accent-text">Denise Xavier dos Santos</span>
+            <span className="text-foreground">Boas-vindas!</span>
           </motion.h1>
 
           <motion.p
-            className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12"
+            className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             Explore as disciplinas e acesse os materiais de aula de forma interativa e dinâmica
           </motion.p>
+        </div>
+      </section>
+
+      {/* Professor Section */}
+      <section className="px-6 pb-16">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            className="glass-card p-8 md:p-12"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <div className="grid md:grid-cols-3 gap-8 items-center">
+              {/* Photo */}
+              <div className="flex justify-center md:justify-start">
+                <motion.div 
+                  className="relative"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="w-48 h-48 md:w-56 md:h-56 rounded-2xl overflow-hidden border-4 border-primary/20">
+                    <img 
+                      src={professoraImg} 
+                      alt="Prof.ª Denise Xavier dos Santos" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="absolute -bottom-3 -right-3 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-semibold">
+                    16 anos UNIRIOS
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Info */}
+              <div className="md:col-span-2 space-y-6">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+                    Prof.ª Mestra <span className="accent-text">Denise Xavier dos Santos</span>
+                  </h2>
+                  <p className="text-muted-foreground">
+                    Mestra em Ciência da Computação (PROCC, 2019) • Especialista em Banco de Dados
+                  </p>
+                </div>
+
+                {/* Certificações */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Award className="w-5 h-5 text-primary" />
+                    <h3 className="font-semibold text-foreground">Certificações</h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {certificacoes.map((cert, i) => (
+                      <span key={i} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm">
+                        {cert}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Experiência */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Briefcase className="w-5 h-5 text-accent" />
+                    <h3 className="font-semibold text-foreground">Áreas de Atuação</h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {experiencias.map((exp, i) => (
+                      <span key={i} className="px-3 py-1.5 rounded-full bg-secondary text-muted-foreground text-sm">
+                        {exp}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Hobbies */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Heart className="w-5 h-5 text-destructive" />
+                    <h3 className="font-semibold text-foreground">Hobbies</h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {hobbies.map((hobby, i) => (
+                      <span key={i} className="px-3 py-1.5 rounded-full bg-secondary/50 text-muted-foreground text-sm">
+                        {hobby}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Lattes */}
+                <a 
+                  href="http://lattes.cnpq.br/0000000000000000" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors text-sm font-medium"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Acessar Currículo Lattes
+                </a>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -120,7 +238,7 @@ const Home = () => {
             className="text-2xl font-bold text-foreground mb-10 text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
             Disciplinas
           </motion.h2>
@@ -132,7 +250,7 @@ const Home = () => {
                 className="glass-card p-8 hover:border-primary/50 transition-all duration-300 group"
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+                transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
                 whileHover={{ y: -5 }}
               >
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${course.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
