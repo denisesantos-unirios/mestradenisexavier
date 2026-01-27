@@ -1,6 +1,7 @@
-import HeroSection from "@/components/HeroSection";
-import CrisisSection from "@/components/CrisisSection";
-import MarshmallowSection from "@/components/MarshmallowSection";
+import HeroSection from "@/components/engenharia-software-1/aula1/HeroSection";
+import EmentaSection from "@/components/engenharia-software-1/aula1/EmentaSection";
+import MetodologiaSection from "@/components/engenharia-software-1/aula1/MetodologiaSection";
+import AvaliacaoSection from "@/components/engenharia-software-1/aula1/AvaliacaoSection";
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
 
@@ -12,8 +13,9 @@ const Aula1 = () => {
         course="Engenharia de Software I"
       />
       <HeroSection />
-      <CrisisSection />
-      <MarshmallowSection />
+      <EmentaSection />
+      <MetodologiaSection />
+      <AvaliacaoSection />
       
       {/* Footer */}
       <footer className="py-12 text-center border-t border-border/30">
