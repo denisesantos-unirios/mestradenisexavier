@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical } from "lucide-react";
 
 const menuItems = [
   {
@@ -68,6 +68,14 @@ const menuItems = [
       { title: "Aula 17 - Prototipação de Papel", path: "/projetos-interface/aula-17" },
       { title: "Aula 18 - Introdução ao Figma", path: "/projetos-interface/aula-18" },
       { title: "Aula 19 - Componentes e Fluxos", path: "/projetos-interface/aula-19" }
+    ]
+  },
+  {
+    id: "protocolos",
+    title: "Protocolos",
+    icon: FlaskConical,
+    submenu: [
+      { title: "Framework DECIDE - Experimentos de Usabilidade", path: "/protocolos/framework-decide" }
     ]
   }
 ];
