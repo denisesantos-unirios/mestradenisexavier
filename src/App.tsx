@@ -45,6 +45,8 @@ import ProjetosInterfaceAula16 from "./pages/projetos-interface/Aula16";
 import ProjetosInterfaceAula17 from "./pages/projetos-interface/Aula17";
 import ProjetosInterfaceAula18 from "./pages/projetos-interface/Aula18";
 import ProjetosInterfaceAula19 from "./pages/projetos-interface/Aula19";
+// Protocolos
+import FrameworkDECIDE from "./pages/protocolos/FrameworkDECIDE";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -98,6 +100,8 @@ const App = () => (
           <Route path="/projetos-interface/aula-17" element={<ProjetosInterfaceAula17 />} />
           <Route path="/projetos-interface/aula-18" element={<ProjetosInterfaceAula18 />} />
           <Route path="/projetos-interface/aula-19" element={<ProjetosInterfaceAula19 />} />
+          {/* Protocolos */}
+          <Route path="/protocolos/framework-decide" element={<FrameworkDECIDE />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
