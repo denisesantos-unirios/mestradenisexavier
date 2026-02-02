@@ -28,9 +28,13 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
       // Create a temporary container for PDF generation
       const container = document.createElement("div");
       container.id = "pdf-export-container";
+      // NOTE: placing the container far off-screen (e.g., left:-9999px) can cause
+      // html2canvas to compute extreme offsets and end up rendering a blank canvas.
+      // Keeping it at (0,0) but fully transparent avoids impacting UI while remaining
+      // renderable.
       container.style.cssText = `
-        position: absolute;
-        left: -9999px;
+        position: fixed;
+        left: 0;
         top: 0;
         width: 800px;
         background: #ffffff;
@@ -38,6 +42,8 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
         font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         padding: 30px;
         box-sizing: border-box;
+        pointer-events: none;
+        z-index: -1;
       `;
 
       // Clone the main content
