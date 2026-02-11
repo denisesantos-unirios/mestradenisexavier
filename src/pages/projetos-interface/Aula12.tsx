@@ -1,5 +1,6 @@
 import MainNavigation from "@/components/MainNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/projetos-interface/aula12/HeroSection";
 import MapaConceitulaSection from "@/components/projetos-interface/aula12/MapaConceitulaSection";
 import QuizRevisaoSection from "@/components/projetos-interface/aula12/QuizRevisaoSection";
@@ -11,6 +12,7 @@ const Aula12 = () => {
       <MainNavigation />
       <main className="pt-16">
         <HeroSection />
+        <LessonQRCode />
         <MapaConceitulaSection />
         <QuizRevisaoSection />
         <ChecklistSection />

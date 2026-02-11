@@ -1,5 +1,6 @@
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/projetos-interface/aula3/HeroSection";
 import ModelosMentaisSection from "@/components/projetos-interface/aula3/ModelosMentaisSection";
 import UsuariosSection from "@/components/projetos-interface/aula3/UsuariosSection";
@@ -21,6 +22,7 @@ const ProjetosInterfaceAula3 = () => {
         sections={sections}
       />
       <HeroSection />
+      <LessonQRCode />
       <ModelosMentaisSection />
       <UsuariosSection />
       <PraticaSection />

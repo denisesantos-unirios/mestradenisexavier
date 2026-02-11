@@ -1,5 +1,6 @@
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/engenharia-software-2/aula11/HeroSection";
 import HistoriaUMLSection from "@/components/engenharia-software-2/aula11/HistoriaUMLSection";
 import TiposDiagramasSection from "@/components/engenharia-software-2/aula11/TiposDiagramasSection";
@@ -22,6 +23,7 @@ const Aula11 = () => {
       <div className="pt-16">
         <div id="hero">
           <HeroSection />
+          <LessonQRCode />
         </div>
         
         <div id="historia">

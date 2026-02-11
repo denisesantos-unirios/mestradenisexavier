@@ -4,6 +4,7 @@ import MetodologiaSection from "@/components/engenharia-software-1/aula1/Metodol
 import AvaliacaoSection from "@/components/engenharia-software-1/aula1/AvaliacaoSection";
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 
 const Aula1 = () => {
   return (
@@ -13,6 +14,7 @@ const Aula1 = () => {
         course="Engenharia de Software I"
       />
       <HeroSection />
+      <LessonQRCode />
       <EmentaSection />
       <MetodologiaSection />
       <AvaliacaoSection />

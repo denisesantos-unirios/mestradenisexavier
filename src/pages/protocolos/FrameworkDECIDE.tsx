@@ -1,6 +1,7 @@
 import MainNavigation from "@/components/MainNavigation";
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/protocolos/decide/HeroSection";
 import FundamentacaoSection from "@/components/protocolos/decide/FundamentacaoSection";
 import FasesSection from "@/components/protocolos/decide/FasesSection";
@@ -33,6 +34,7 @@ const FrameworkDECIDE = () => {
       
       <main id="pdf-content" className="pt-16">
         <HeroSection />
+        <LessonQRCode />
         <FundamentacaoSection />
         <FasesSection />
         <MetodologiaSection />

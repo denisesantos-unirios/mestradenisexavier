@@ -4,6 +4,7 @@ import AIIntroSection from "@/components/aula5/AIIntroSection";
 import UserStoryWorkshopSection from "@/components/aula5/UserStoryWorkshopSection";
 import PromptEngineeringSection from "@/components/aula5/PromptEngineeringSection";
 import AIActivitySection from "@/components/aula5/AIActivitySection";
+import LessonQRCode from "@/components/LessonQRCode";
 import { motion } from "framer-motion";
 import { Bot, ChevronDown } from "lucide-react";
 
@@ -96,6 +97,8 @@ const Aula5 = () => {
           </motion.div>
         </div>
       </section>
+
+      <LessonQRCode />
 
       {/* Content Sections */}
       <AIIntroSection />

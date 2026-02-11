@@ -1,6 +1,7 @@
 import MainNavigation from "@/components/MainNavigation";
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/projetos-interface/aula15/HeroSection";
 import TecnicasSection from "@/components/projetos-interface/aula15/TecnicasSection";
 import PrincipiosSection from "@/components/projetos-interface/aula15/PrincipiosSection";
@@ -36,6 +37,7 @@ const Aula15 = () => {
       
       <main className="pt-16">
         <HeroSection />
+        <LessonQRCode />
         <TecnicasSection />
         <PrincipiosSection />
         <WorkshopSection />

@@ -1,6 +1,7 @@
 import MainNavigation from "@/components/MainNavigation";
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 import ManifestoSection from "@/components/aula3/ManifestoSection";
 import ScrumSection from "@/components/aula3/ScrumSection";
 import KanbanSection from "@/components/aula3/KanbanSection";
@@ -24,6 +25,7 @@ const Aula3 = () => {
       />
       
       <main className="pt-32">
+        <LessonQRCode />
         <ManifestoSection />
         <ScrumSection />
         <KanbanSection />
