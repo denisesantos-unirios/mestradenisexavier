@@ -1,5 +1,6 @@
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/engenharia-software-2/aula7/HeroSection";
 import DinamicaSection from "@/components/engenharia-software-2/aula7/DinamicaSection";
 import FerramentasSection from "@/components/engenharia-software-2/aula7/FerramentasSection";
@@ -22,6 +23,7 @@ const Aula7 = () => {
       <div className="pt-16">
         <div id="hero">
           <HeroSection />
+          <LessonQRCode />
         </div>
         
         <div id="dinamica">

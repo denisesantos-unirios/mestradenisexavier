@@ -1,5 +1,6 @@
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/projetos-interface/aula2/HeroSection";
 import IntroducaoIHCSection from "@/components/projetos-interface/aula2/IntroducaoIHCSection";
 import ProcessoInteracaoSection from "@/components/projetos-interface/aula2/ProcessoInteracaoSection";
@@ -36,6 +37,7 @@ const ProjetosInterfaceAula2 = () => {
       />
       
       <HeroSection />
+      <LessonQRCode />
       <IntroducaoIHCSection />
       <ProcessoInteracaoSection />
       <InterfaceDefinicaoSection />

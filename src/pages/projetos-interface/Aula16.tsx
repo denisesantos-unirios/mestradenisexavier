@@ -1,6 +1,7 @@
 import MainNavigation from "@/components/MainNavigation";
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
+import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/projetos-interface/aula16/HeroSection";
 import FidelidadeSection from "@/components/projetos-interface/aula16/FidelidadeSection";
 import TiposSection from "@/components/projetos-interface/aula16/TiposSection";
@@ -36,6 +37,7 @@ const Aula16 = () => {
       
       <main className="pt-16">
         <HeroSection />
+        <LessonQRCode />
         <FidelidadeSection />
         <TiposSection />
         <AtividadeSection />
