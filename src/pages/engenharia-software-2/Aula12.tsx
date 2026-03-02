@@ -3,11 +3,13 @@ import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/engenharia-software-2/aula12/HeroSection";
 import ElementosSection from "@/components/engenharia-software-2/aula12/ElementosSection";
+import RelacionamentosSection from "@/components/engenharia-software-2/aula12/RelacionamentosSection";
 import ExemploSection from "@/components/engenharia-software-2/aula12/ExemploSection";
 
 const sections = [
   { id: "hero", title: "Início" },
   { id: "elementos", title: "Elementos" },
+  { id: "relacionamentos", title: "Relacionamentos" },
   { id: "exemplo", title: "Exemplo" }
 ];
 
@@ -28,6 +30,10 @@ const Aula12 = () => {
         
         <div id="elementos">
           <ElementosSection />
+        </div>
+
+        <div id="relacionamentos">
+          <RelacionamentosSection />
         </div>
         
         <div id="exemplo">
