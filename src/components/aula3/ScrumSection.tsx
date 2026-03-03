@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Users, Crown, Shield, Clock, Calendar, MessageCircle, Eye, Repeat, ArrowRight, Zap, Target } from "lucide-react";
+import { Users, Crown, Shield, Clock, Calendar, MessageCircle, Eye, Repeat, ArrowRight, Zap, Target, BookOpen } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerContainer, { StaggerItem } from "@/components/animations/StaggerContainer";
+import scrumFrameworkImg from "@/assets/scrum-framework.png";
 
 const scrumRoles = [
   {
@@ -98,8 +99,27 @@ const ScrumSection = () => {
           </div>
         </ScrollReveal>
 
-        {/* Sprint Cycle Visual */}
+        {/* Scrum Framework Image */}
         <ScrollReveal animation="fadeUp" delay={0.1}>
+          <motion.div
+            whileHover={{ scale: 1.01 }}
+            className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-6 mb-8"
+          >
+            <h3 className="text-xl font-bold text-foreground mb-4 text-center flex items-center justify-center gap-2">
+              <BookOpen className="w-5 h-5 text-primary" />
+              O Framework Scrum — Visão Geral
+            </h3>
+            <img 
+              src={scrumFrameworkImg} 
+              alt="Diagrama do Framework Scrum mostrando o ciclo de Sprint com Product Backlog, Sprint Planning, Daily Scrum, Sprint Review e Sprint Retrospective" 
+              className="w-full rounded-xl"
+              loading="lazy"
+            />
+          </motion.div>
+        </ScrollReveal>
+
+        {/* Sprint Cycle Visual */}
+        <ScrollReveal animation="fadeUp" delay={0.15}>
           <motion.div
             whileHover={{ scale: 1.01 }}
             className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-8 mb-12 text-center"
@@ -252,8 +272,8 @@ const ScrumSection = () => {
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <a href="#kanban" className="flex flex-col items-center gap-2 text-primary hover:text-primary/80 transition-colors">
-            <span className="text-sm font-medium">Próximo: User Stories e Kanban</span>
+          <a href="#xp" className="flex flex-col items-center gap-2 text-primary hover:text-primary/80 transition-colors">
+            <span className="text-sm font-medium">Próximo: Extreme Programming (XP)</span>
             <ArrowRight className="w-5 h-5 rotate-90" />
           </a>
         </motion.div>
