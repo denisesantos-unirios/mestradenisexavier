@@ -4,6 +4,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
 import ManifestoSection from "@/components/aula3/ManifestoSection";
 import ScrumSection from "@/components/aula3/ScrumSection";
+import XPSection from "@/components/aula3/XPSection";
+import ComparacaoSection from "@/components/aula3/ComparacaoSection";
 import KanbanSection from "@/components/aula3/KanbanSection";
 import SprintActivitySection from "@/components/aula3/SprintActivitySection";
 
@@ -11,6 +13,8 @@ const Aula3 = () => {
   const sections = [
     { id: "manifesto", title: "Manifesto Ágil" },
     { id: "scrum", title: "Scrum" },
+    { id: "xp", title: "Extreme Programming" },
+    { id: "comparacao", title: "Comparação" },
     { id: "kanban", title: "Kanban" },
     { id: "atividade", title: "Atividade" }
   ];
@@ -28,6 +32,8 @@ const Aula3 = () => {
         <LessonQRCode />
         <ManifestoSection />
         <ScrumSection />
+        <XPSection />
+        <ComparacaoSection />
         <KanbanSection />
         <SprintActivitySection />
       </main>
