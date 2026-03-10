@@ -38,6 +38,7 @@ const Aula3 = () => {
         <ComparacaoSection />
         <KanbanSection />
         <SprintActivitySection />
+        <PresencialActivitySection />
       </main>
       <PdfExportButton filename="ES1_Aula-3_Metodologias-Ageis.pdf" />
     </div>
