@@ -8,6 +8,7 @@ import XPSection from "@/components/aula3/XPSection";
 import ComparacaoSection from "@/components/aula3/ComparacaoSection";
 import KanbanSection from "@/components/aula3/KanbanSection";
 import SprintActivitySection from "@/components/aula3/SprintActivitySection";
+import PresencialActivitySection from "@/components/aula3/PresencialActivitySection";
 
 const Aula3 = () => {
   const sections = [
@@ -16,7 +17,8 @@ const Aula3 = () => {
     { id: "xp", title: "Extreme Programming" },
     { id: "comparacao", title: "Comparação" },
     { id: "kanban", title: "Kanban" },
-    { id: "atividade", title: "Atividade" }
+    { id: "atividade", title: "Dinâmica Remota" },
+    { id: "atividade-presencial", title: "Dinâmica Presencial" }
   ];
 
   return (
