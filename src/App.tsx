@@ -81,6 +81,7 @@ const App = () => (
           <Route path="/engenharia-software-2/aula-13" element={<ES2Aula13 />} />
           <Route path="/engenharia-software-2/aula-14" element={<ES2Aula14 />} />
           <Route path="/engenharia-software-2/aula-15" element={<ES2Aula15 />} />
+          <Route path="/engenharia-software-2/aula-16" element={<ES2Aula16 />} />
           {/* Projetos de Interface */}
           <Route path="/projetos-interface/aula-1" element={<ProjetosInterfaceAula1 />} />
           <Route path="/projetos-interface/aula-2" element={<ProjetosInterfaceAula2 />} />
