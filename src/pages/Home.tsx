@@ -40,7 +40,8 @@ const courses = [
       { id: "aula-12", title: "Aula 12", description: "Diagrama de Casos de Uso", path: "/engenharia-software-2/aula-12" },
       { id: "aula-13", title: "Aula 13", description: "Especificação de Casos de Uso", path: "/engenharia-software-2/aula-13" },
       { id: "aula-14", title: "Aula 14", description: "Workshop Prático", path: "/engenharia-software-2/aula-14" },
-      { id: "aula-15", title: "Aula 15", description: "Entrega Fase 3", path: "/engenharia-software-2/aula-15" }
+      { id: "aula-15", title: "Aula 15", description: "Entrega Fase 3", path: "/engenharia-software-2/aula-15" },
+      { id: "aula-16", title: "Aula 16", description: "User Stories & Kanban", path: "/engenharia-software-2/aula-16" }
     ]
   },
   {
