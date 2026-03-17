@@ -25,6 +25,7 @@ import ES2Aula12 from "./pages/engenharia-software-2/Aula12";
 import ES2Aula13 from "./pages/engenharia-software-2/Aula13";
 import ES2Aula14 from "./pages/engenharia-software-2/Aula14";
 import ES2Aula15 from "./pages/engenharia-software-2/Aula15";
+import ES2Aula16 from "./pages/engenharia-software-2/Aula16";
 // Projetos de Interface
 import ProjetosInterfaceAula1 from "./pages/projetos-interface/Aula1";
 import ProjetosInterfaceAula2 from "./pages/projetos-interface/Aula2";
@@ -80,6 +81,7 @@ const App = () => (
           <Route path="/engenharia-software-2/aula-13" element={<ES2Aula13 />} />
           <Route path="/engenharia-software-2/aula-14" element={<ES2Aula14 />} />
           <Route path="/engenharia-software-2/aula-15" element={<ES2Aula15 />} />
+          <Route path="/engenharia-software-2/aula-16" element={<ES2Aula16 />} />
           {/* Projetos de Interface */}
           <Route path="/projetos-interface/aula-1" element={<ProjetosInterfaceAula1 />} />
           <Route path="/projetos-interface/aula-2" element={<ProjetosInterfaceAula2 />} />
