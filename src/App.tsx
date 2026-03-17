@@ -25,6 +25,7 @@ import ES2Aula12 from "./pages/engenharia-software-2/Aula12";
 import ES2Aula13 from "./pages/engenharia-software-2/Aula13";
 import ES2Aula14 from "./pages/engenharia-software-2/Aula14";
 import ES2Aula15 from "./pages/engenharia-software-2/Aula15";
+import ES2Aula16 from "./pages/engenharia-software-2/Aula16";
 // Projetos de Interface
 import ProjetosInterfaceAula1 from "./pages/projetos-interface/Aula1";
 import ProjetosInterfaceAula2 from "./pages/projetos-interface/Aula2";
