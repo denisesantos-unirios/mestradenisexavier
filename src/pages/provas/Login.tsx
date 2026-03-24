@@ -22,6 +22,10 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin + "/provas/login",
+      extraParams: {
+        login_hint: "denise.santos@uniriosead.com",
+        hd: "uniriosead.com",
+      },
     });
     if (result.error) {
       toast({
@@ -51,9 +55,9 @@ const Login = () => {
             animate={{ opacity: 1, y: 0 }}
           >
             <ShieldCheck className="w-16 h-16 text-destructive mx-auto mb-6" />
-            <h2 className="text-2xl font-bold text-foreground mb-4">Acesso Restrito</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-4">Acesso Negado</h2>
             <p className="text-muted-foreground mb-6">
-              Sua conta não possui permissão de professor. Este módulo é exclusivo para a coordenação da disciplina.
+              Este módulo é exclusivo para a Prof.ª Denise Xavier. Sua conta não possui acesso.
             </p>
             <Button variant="outline" onClick={() => navigate("/")}>
               Voltar ao Portal
@@ -88,7 +92,7 @@ const Login = () => {
             Entrar com Google
           </Button>
           <p className="text-xs text-muted-foreground mt-6">
-            Apenas contas autorizadas pela professora terão acesso.
+            Acesso exclusivo — Prof.ª Denise Xavier
           </p>
         </motion.div>
       </div>
