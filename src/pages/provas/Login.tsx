@@ -22,6 +22,10 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin + "/provas/login",
+      extraParams: {
+        login_hint: "denise.santos@uniriosead.com",
+        hd: "uniriosead.com",
+      },
     });
     if (result.error) {
       toast({
