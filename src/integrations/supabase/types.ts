@@ -14,16 +14,156 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      exams: {
+        Row: {
+          created_at: string
+          created_by: string
+          discipline: Database["public"]["Enums"]["discipline"]
+          id: string
+          question_ids: string[]
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          discipline: Database["public"]["Enums"]["discipline"]
+          id?: string
+          question_ids: string[]
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          discipline?: Database["public"]["Enums"]["discipline"]
+          id?: string
+          question_ids?: string[]
+          title?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      questions: {
+        Row: {
+          answer_explanation: string | null
+          context_text: string | null
+          correct_answer: string | null
+          created_at: string
+          difficulty: Database["public"]["Enums"]["difficulty_level"]
+          discipline: Database["public"]["Enums"]["discipline"]
+          discursive_answer: string | null
+          id: string
+          option_a: string | null
+          option_b: string | null
+          option_c: string | null
+          option_d: string | null
+          option_e: string | null
+          question_type: Database["public"]["Enums"]["question_type"]
+          statement: string
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          answer_explanation?: string | null
+          context_text?: string | null
+          correct_answer?: string | null
+          created_at?: string
+          difficulty?: Database["public"]["Enums"]["difficulty_level"]
+          discipline: Database["public"]["Enums"]["discipline"]
+          discursive_answer?: string | null
+          id?: string
+          option_a?: string | null
+          option_b?: string | null
+          option_c?: string | null
+          option_d?: string | null
+          option_e?: string | null
+          question_type?: Database["public"]["Enums"]["question_type"]
+          statement: string
+          topic: string
+          updated_at?: string
+        }
+        Update: {
+          answer_explanation?: string | null
+          context_text?: string | null
+          correct_answer?: string | null
+          created_at?: string
+          difficulty?: Database["public"]["Enums"]["difficulty_level"]
+          discipline?: Database["public"]["Enums"]["discipline"]
+          discursive_answer?: string | null
+          id?: string
+          option_a?: string | null
+          option_b?: string | null
+          option_c?: string | null
+          option_d?: string | null
+          option_e?: string | null
+          question_type?: Database["public"]["Enums"]["question_type"]
+          statement?: string
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "professor"
+      difficulty_level: "easy" | "medium" | "hard"
+      discipline:
+        | "engenharia-software-1"
+        | "engenharia-software-2"
+        | "projetos-interface"
+      question_type: "multiple_choice" | "discursive"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +290,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "professor"],
+      difficulty_level: ["easy", "medium", "hard"],
+      discipline: [
+        "engenharia-software-1",
+        "engenharia-software-2",
+        "projetos-interface",
+      ],
+      question_type: ["multiple_choice", "discursive"],
+    },
   },
 } as const
