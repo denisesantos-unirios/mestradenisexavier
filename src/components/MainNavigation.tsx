@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList } from "lucide-react";
 
 const menuItems = [
   {
@@ -77,6 +77,16 @@ const menuItems = [
     icon: FlaskConical,
     submenu: [
       { title: "Framework DECIDE - Experimentos de Usabilidade", path: "/protocolos/framework-decide" }
+    ]
+  },
+  {
+    id: "provas",
+    title: "Provas",
+    icon: ClipboardList,
+    submenu: [
+      { title: "Login Professor", path: "/provas/login" },
+      { title: "Banco de Questões", path: "/provas/banco-questoes" },
+      { title: "Gerar Prova", path: "/provas/gerar-prova" }
     ]
   }
 ];
