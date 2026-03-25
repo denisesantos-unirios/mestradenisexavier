@@ -47,6 +47,7 @@ const BancoQuestoes = () => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showAnswers, setShowAnswers] = useState<Set<string>>(new Set());
   const [loadingQuestions, setLoadingQuestions] = useState(true);
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   useEffect(() => {
     if (!loading && (!user || !isProfessor)) {
