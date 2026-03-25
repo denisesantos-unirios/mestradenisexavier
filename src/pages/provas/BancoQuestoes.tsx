@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { BookOpen, Filter, FileText, LogOut, Plus, Trash2, CheckCircle2, XCircle, Image as ImageIcon } from "lucide-react";
+import { BookOpen, Filter, FileText, LogOut, Plus, Trash2, CheckCircle2, XCircle, Image as ImageIcon, ClipboardList } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
 import QuestionFormDialog from "@/components/provas/QuestionFormDialog";
 
@@ -146,6 +146,10 @@ const BancoQuestoes = () => {
               <Button onClick={handleGenerateExam} disabled={selectedIds.size === 0}>
                 <FileText className="w-4 h-4 mr-2" />
                 Gerar Prova ({selectedIds.size})
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/provas/lista")}>
+                <ClipboardList className="w-4 h-4 mr-2" />
+                Provas Salvas
               </Button>
               <Button variant="outline" onClick={signOut}>
                 <LogOut className="w-4 h-4 mr-2" />

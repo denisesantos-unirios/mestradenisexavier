@@ -53,6 +53,7 @@ import FrameworkDECIDE from "./pages/protocolos/FrameworkDECIDE";
 import ProvasLogin from "./pages/provas/Login";
 import BancoQuestoes from "./pages/provas/BancoQuestoes";
 import GerarProva from "./pages/provas/GerarProva";
+import ListaProvas from "./pages/provas/ListaProvas";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -114,6 +115,7 @@ const App = () => (
           <Route path="/provas/login" element={<ProvasLogin />} />
           <Route path="/provas/banco-questoes" element={<BancoQuestoes />} />
           <Route path="/provas/gerar-prova" element={<GerarProva />} />
+          <Route path="/provas/lista" element={<ListaProvas />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
