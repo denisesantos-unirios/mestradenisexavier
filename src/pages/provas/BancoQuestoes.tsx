@@ -44,6 +44,7 @@ const BancoQuestoes = () => {
   const [filterDiscipline, setFilterDiscipline] = useState<string>("all");
   const [filterType, setFilterType] = useState<string>("all");
   const [filterDifficulty, setFilterDifficulty] = useState<string>("all");
+  const [filterTopic, setFilterTopic] = useState<string>("all");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showAnswers, setShowAnswers] = useState<Set<string>>(new Set());
   const [loadingQuestions, setLoadingQuestions] = useState(true);
