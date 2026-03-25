@@ -9,8 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { BookOpen, Filter, FileText, LogOut, Plus, Trash2, CheckCircle2, XCircle } from "lucide-react";
+import { BookOpen, Filter, FileText, LogOut, Plus, Trash2, CheckCircle2, XCircle, Image as ImageIcon } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
+import QuestionFormDialog from "@/components/provas/QuestionFormDialog";
 
 type Question = Database["public"]["Tables"]["questions"]["Row"];
 type Discipline = Database["public"]["Enums"]["discipline"];
@@ -46,6 +47,7 @@ const BancoQuestoes = () => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showAnswers, setShowAnswers] = useState<Set<string>>(new Set());
   const [loadingQuestions, setLoadingQuestions] = useState(true);
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   useEffect(() => {
     if (!loading && (!user || !isProfessor)) {
@@ -133,6 +135,10 @@ const BancoQuestoes = () => {
               <p className="text-muted-foreground mt-1">{questions.length} questões cadastradas</p>
             </div>
             <div className="flex gap-3">
+              <Button onClick={() => setShowCreateDialog(true)} variant="secondary">
+                <Plus className="w-4 h-4 mr-2" />
+                Nova Questão
+              </Button>
               <Button onClick={handleGenerateExam} disabled={selectedIds.size === 0}>
                 <FileText className="w-4 h-4 mr-2" />
                 Gerar Prova ({selectedIds.size})
@@ -246,6 +252,11 @@ const BancoQuestoes = () => {
 
                       <p className="text-foreground font-medium mb-3">{q.statement}</p>
 
+                      {(q as any).image_url && (
+                        <div className="mb-3">
+                          <img src={(q as any).image_url} alt="Imagem da questão" className="max-h-48 rounded-lg border border-border" />
+                        </div>
+                      )}
                       {q.question_type === "multiple_choice" && (
                         <div className="space-y-2 mb-3">
                           {[
@@ -317,6 +328,11 @@ const BancoQuestoes = () => {
           )}
         </div>
       </div>
+      <QuestionFormDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+        onSuccess={fetchQuestions}
+      />
     </main>
   );
 };

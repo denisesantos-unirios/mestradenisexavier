@@ -75,6 +75,7 @@ export type Database = {
           discipline: Database["public"]["Enums"]["discipline"]
           discursive_answer: string | null
           id: string
+          image_url: string | null
           option_a: string | null
           option_b: string | null
           option_c: string | null
@@ -94,6 +95,7 @@ export type Database = {
           discipline: Database["public"]["Enums"]["discipline"]
           discursive_answer?: string | null
           id?: string
+          image_url?: string | null
           option_a?: string | null
           option_b?: string | null
           option_c?: string | null
@@ -113,6 +115,7 @@ export type Database = {
           discipline?: Database["public"]["Enums"]["discipline"]
           discursive_answer?: string | null
           id?: string
+          image_url?: string | null
           option_a?: string | null
           option_b?: string | null
           option_c?: string | null
