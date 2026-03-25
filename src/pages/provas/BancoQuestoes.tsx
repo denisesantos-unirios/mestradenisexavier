@@ -135,6 +135,10 @@ const BancoQuestoes = () => {
               <p className="text-muted-foreground mt-1">{questions.length} questões cadastradas</p>
             </div>
             <div className="flex gap-3">
+              <Button onClick={() => setShowCreateDialog(true)} variant="secondary">
+                <Plus className="w-4 h-4 mr-2" />
+                Nova Questão
+              </Button>
               <Button onClick={handleGenerateExam} disabled={selectedIds.size === 0}>
                 <FileText className="w-4 h-4 mr-2" />
                 Gerar Prova ({selectedIds.size})
