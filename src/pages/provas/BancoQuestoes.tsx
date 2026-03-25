@@ -109,7 +109,7 @@ const BancoQuestoes = () => {
       return;
     }
     const ids = Array.from(selectedIds).join(",");
-    navigate(`/provas/gerar?ids=${ids}`);
+    navigate(`/provas/gerar-prova?ids=${ids}`);
   };
 
   if (loading || !isProfessor) {
