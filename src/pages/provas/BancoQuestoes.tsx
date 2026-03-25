@@ -77,10 +77,13 @@ const BancoQuestoes = () => {
     setLoadingQuestions(false);
   };
 
+  const topics = Array.from(new Set(questions.map((q) => q.topic))).sort();
+
   const filtered = questions.filter((q) => {
     if (filterDiscipline !== "all" && q.discipline !== filterDiscipline) return false;
     if (filterType !== "all" && q.question_type !== filterType) return false;
     if (filterDifficulty !== "all" && q.difficulty !== filterDifficulty) return false;
+    if (filterTopic !== "all" && q.topic !== filterTopic) return false;
     return true;
   });
 
@@ -162,7 +165,7 @@ const BancoQuestoes = () => {
               <Filter className="w-5 h-5 text-primary" />
               <h2 className="font-semibold text-foreground">Filtros</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Select value={filterDiscipline} onValueChange={setFilterDiscipline}>
                 <SelectTrigger>
                   <SelectValue placeholder="Disciplina" />
@@ -195,6 +198,18 @@ const BancoQuestoes = () => {
                   <SelectItem value="easy">Fácil</SelectItem>
                   <SelectItem value="medium">Médio</SelectItem>
                   <SelectItem value="hard">Difícil</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={filterTopic} onValueChange={setFilterTopic}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Tópico" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os tópicos</SelectItem>
+                  {topics.map((topic) => (
+                    <SelectItem key={topic} value={topic}>{topic}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
