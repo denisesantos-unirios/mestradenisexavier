@@ -9,8 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { BookOpen, Filter, FileText, LogOut, Plus, Trash2, CheckCircle2, XCircle } from "lucide-react";
+import { BookOpen, Filter, FileText, LogOut, Plus, Trash2, CheckCircle2, XCircle, Image as ImageIcon } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
+import QuestionFormDialog from "@/components/provas/QuestionFormDialog";
 
 type Question = Database["public"]["Tables"]["questions"]["Row"];
 type Discipline = Database["public"]["Enums"]["discipline"];
