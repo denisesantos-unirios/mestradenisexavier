@@ -328,6 +328,11 @@ const BancoQuestoes = () => {
           )}
         </div>
       </div>
+      <QuestionFormDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+        onSuccess={fetchQuestions}
+      />
     </main>
   );
 };
