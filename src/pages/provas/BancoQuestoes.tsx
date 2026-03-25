@@ -252,6 +252,11 @@ const BancoQuestoes = () => {
 
                       <p className="text-foreground font-medium mb-3">{q.statement}</p>
 
+                      {(q as any).image_url && (
+                        <div className="mb-3">
+                          <img src={(q as any).image_url} alt="Imagem da questão" className="max-h-48 rounded-lg border border-border" />
+                        </div>
+                      )}
                       {q.question_type === "multiple_choice" && (
                         <div className="space-y-2 mb-3">
                           {[
