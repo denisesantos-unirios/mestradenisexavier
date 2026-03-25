@@ -7,7 +7,7 @@ import MainNavigation from "@/components/MainNavigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { FileText, Printer, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { FileText, Printer, ArrowLeft, CheckCircle2, Save } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
 
 type Question = Database["public"]["Tables"]["questions"]["Row"];
@@ -26,6 +26,8 @@ const GerarProva = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [examTitle, setExamTitle] = useState("Prova - 1ª Etapa");
   const [showAnswerKey, setShowAnswerKey] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [examId, setExamId] = useState<string | null>(null);
   const printRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,9 +38,12 @@ const GerarProva = () => {
 
   useEffect(() => {
     const ids = searchParams.get("ids");
+    const titleParam = searchParams.get("title");
+    const examIdParam = searchParams.get("examId");
+    if (titleParam) setExamTitle(decodeURIComponent(titleParam));
+    if (examIdParam) setExamId(examIdParam);
     if (ids && isProfessor) {
-      const idArray = ids.split(",");
-      fetchQuestions(idArray);
+      fetchQuestions(ids.split(","));
     }
   }, [searchParams, isProfessor]);
 
@@ -53,6 +58,42 @@ const GerarProva = () => {
     } else {
       setQuestions(data || []);
     }
+  };
+
+  const handleSave = async () => {
+    if (!user || questions.length === 0) return;
+    setSaving(true);
+
+    const disciplines = [...new Set(questions.map((q) => q.discipline))];
+    const discipline = disciplines[0];
+    const questionIds = questions.map((q) => q.id);
+
+    if (examId) {
+      const { error } = await supabase
+        .from("exams")
+        .update({ title: examTitle, question_ids: questionIds, discipline })
+        .eq("id", examId);
+
+      if (error) {
+        toast({ title: "Erro ao atualizar", description: error.message, variant: "destructive" });
+      } else {
+        toast({ title: "Prova atualizada com sucesso!" });
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("exams")
+        .insert({ title: examTitle, question_ids: questionIds, discipline, created_by: user.id })
+        .select()
+        .single();
+
+      if (error) {
+        toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
+      } else {
+        setExamId(data.id);
+        toast({ title: "Prova salva com sucesso!" });
+      }
+    }
+    setSaving(false);
   };
 
   const handlePrint = () => {
@@ -91,6 +132,10 @@ const GerarProva = () => {
                   onClick={() => setShowAnswerKey(!showAnswerKey)}
                 >
                   {showAnswerKey ? "Ocultar Gabarito" : "Mostrar Gabarito"}
+                </Button>
+                <Button variant="secondary" onClick={handleSave} disabled={saving || questions.length === 0}>
+                  <Save className="w-4 h-4 mr-2" />
+                  {saving ? "Salvando..." : examId ? "Atualizar" : "Salvar"}
                 </Button>
                 <Button onClick={handlePrint}>
                   <Printer className="w-4 h-4 mr-2" />
@@ -168,6 +213,12 @@ const GerarProva = () => {
                       )}
 
                       <p className="text-foreground print:text-black font-medium mb-4">{q.statement}</p>
+
+                      {q.image_url && (
+                        <div className="mb-4">
+                          <img src={q.image_url} alt="Imagem da questão" className="max-h-48 rounded-lg border border-border print:border-gray-300" />
+                        </div>
+                      )}
 
                       {q.question_type === "multiple_choice" && (
                         <div className="space-y-2">
