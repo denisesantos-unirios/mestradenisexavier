@@ -47,6 +47,17 @@ import ProjetosInterfaceAula16 from "./pages/projetos-interface/Aula16";
 import ProjetosInterfaceAula17 from "./pages/projetos-interface/Aula17";
 import ProjetosInterfaceAula18 from "./pages/projetos-interface/Aula18";
 import ProjetosInterfaceAula19 from "./pages/projetos-interface/Aula19";
+// Engenharia de Software EAD
+import ESEADAula1 from "./pages/engenharia-software-ead/Aula1";
+import ESEADAula2 from "./pages/engenharia-software-ead/Aula2";
+import ESEADAula3 from "./pages/engenharia-software-ead/Aula3";
+import ESEADAula4 from "./pages/engenharia-software-ead/Aula4";
+import ESEADAula5 from "./pages/engenharia-software-ead/Aula5";
+import ESEADAula6 from "./pages/engenharia-software-ead/Aula6";
+import ESEADAula7 from "./pages/engenharia-software-ead/Aula7";
+import ESEADAula8 from "./pages/engenharia-software-ead/Aula8";
+import ESEADAula9 from "./pages/engenharia-software-ead/Aula9";
+import ESEADAula10 from "./pages/engenharia-software-ead/Aula10";
 // Protocolos
 import FrameworkDECIDE from "./pages/protocolos/FrameworkDECIDE";
 // Provas
@@ -109,6 +120,17 @@ const App = () => (
           <Route path="/projetos-interface/aula-17" element={<ProjetosInterfaceAula17 />} />
           <Route path="/projetos-interface/aula-18" element={<ProjetosInterfaceAula18 />} />
           <Route path="/projetos-interface/aula-19" element={<ProjetosInterfaceAula19 />} />
+          {/* Engenharia de Software EAD */}
+          <Route path="/engenharia-software-ead/aula-1" element={<ESEADAula1 />} />
+          <Route path="/engenharia-software-ead/aula-2" element={<ESEADAula2 />} />
+          <Route path="/engenharia-software-ead/aula-3" element={<ESEADAula3 />} />
+          <Route path="/engenharia-software-ead/aula-4" element={<ESEADAula4 />} />
+          <Route path="/engenharia-software-ead/aula-5" element={<ESEADAula5 />} />
+          <Route path="/engenharia-software-ead/aula-6" element={<ESEADAula6 />} />
+          <Route path="/engenharia-software-ead/aula-7" element={<ESEADAula7 />} />
+          <Route path="/engenharia-software-ead/aula-8" element={<ESEADAula8 />} />
+          <Route path="/engenharia-software-ead/aula-9" element={<ESEADAula9 />} />
+          <Route path="/engenharia-software-ead/aula-10" element={<ESEADAula10 />} />
           {/* Protocolos */}
           <Route path="/protocolos/framework-decide" element={<FrameworkDECIDE />} />
           {/* Provas */}

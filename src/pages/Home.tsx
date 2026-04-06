@@ -46,6 +46,25 @@ const courses = [
     ]
   },
   {
+    id: "engenharia-software-ead",
+    title: "Engenharia de Software EAD",
+    description: "ES com foco prático e de mercado, modalidade EAD",
+    icon: Code2,
+    color: "from-emerald-500 to-teal-500",
+    lessons: [
+      { id: "aula-1", title: "Aula 1", description: "ES e Mercado", path: "/engenharia-software-ead/aula-1" },
+      { id: "aula-2", title: "Aula 2", description: "Processos Tradicionais", path: "/engenharia-software-ead/aula-2" },
+      { id: "aula-3", title: "Aula 3", description: "Visão Ágil", path: "/engenharia-software-ead/aula-3" },
+      { id: "aula-4", title: "Aula 4", description: "Scrum na Prática", path: "/engenharia-software-ead/aula-4" },
+      { id: "aula-5", title: "Aula 5", description: "Requisitos de Software", path: "/engenharia-software-ead/aula-5" },
+      { id: "aula-6", title: "Aula 6", description: "Elicitação de Requisitos", path: "/engenharia-software-ead/aula-6" },
+      { id: "aula-7", title: "Aula 7", description: "UML e Casos de Uso", path: "/engenharia-software-ead/aula-7" },
+      { id: "aula-8", title: "Aula 8", description: "Modelagem: E-Commerce", path: "/engenharia-software-ead/aula-8" },
+      { id: "aula-9", title: "Aula 9", description: "Modelagem + Ágil", path: "/engenharia-software-ead/aula-9" },
+      { id: "aula-10", title: "Aula 10", description: "Revisão Integrada", path: "/engenharia-software-ead/aula-10" },
+    ]
+  },
+  {
     id: "projetos-interface",
     title: "Projetos de Interface",
     description: "Design de interfaces, UX/UI e prototipação",

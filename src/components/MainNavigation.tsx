@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi } from "lucide-react";
 
 const menuItems = [
   {
@@ -69,6 +69,23 @@ const menuItems = [
       { title: "Aula 17 - Prototipação de Papel", path: "/projetos-interface/aula-17" },
       { title: "Aula 18 - Introdução ao Figma", path: "/projetos-interface/aula-18" },
       { title: "Aula 19 - Componentes e Fluxos", path: "/projetos-interface/aula-19" }
+    ]
+  },
+  {
+    id: "engenharia-software-ead",
+    title: "ES EAD",
+    icon: Wifi,
+    submenu: [
+      { title: "Aula 1 - ES e Mercado", path: "/engenharia-software-ead/aula-1" },
+      { title: "Aula 2 - Processos Tradicionais", path: "/engenharia-software-ead/aula-2" },
+      { title: "Aula 3 - Visão Ágil", path: "/engenharia-software-ead/aula-3" },
+      { title: "Aula 4 - Scrum na Prática", path: "/engenharia-software-ead/aula-4" },
+      { title: "Aula 5 - Requisitos de Software", path: "/engenharia-software-ead/aula-5" },
+      { title: "Aula 6 - Elicitação de Requisitos", path: "/engenharia-software-ead/aula-6" },
+      { title: "Aula 7 - UML e Casos de Uso", path: "/engenharia-software-ead/aula-7" },
+      { title: "Aula 8 - Modelagem: E-Commerce", path: "/engenharia-software-ead/aula-8" },
+      { title: "Aula 9 - Modelagem + Ágil", path: "/engenharia-software-ead/aula-9" },
+      { title: "Aula 10 - Revisão Integrada", path: "/engenharia-software-ead/aula-10" },
     ]
   },
   {
