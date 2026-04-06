@@ -5,12 +5,14 @@ import HeroSection from "@/components/engenharia-software-ead/aula1/HeroSection"
 import OQueEsSection from "@/components/engenharia-software-ead/aula1/OQueEsSection";
 import PapeisSection from "@/components/engenharia-software-ead/aula1/PapeisSection";
 import TiposSistemasSection from "@/components/engenharia-software-ead/aula1/TiposSistemasSection";
+import EstudoCasoSection from "@/components/engenharia-software-ead/aula1/EstudoCasoSection";
 import AtividadeSection from "@/components/engenharia-software-ead/aula1/AtividadeSection";
 
 const sections = [
   { id: "o-que-e-es", title: "O que é ES" },
   { id: "papeis", title: "Papéis" },
   { id: "tipos-sistemas", title: "Sistemas" },
+  { id: "estudo-caso", title: "Estudo de Caso" },
   { id: "atividade", title: "Atividade" },
 ];
 
@@ -23,6 +25,7 @@ const Aula1 = () => (
       <OQueEsSection />
       <PapeisSection />
       <TiposSistemasSection />
+      <EstudoCasoSection />
       <AtividadeSection />
     </div>
     <footer className="py-12 border-t border-border">
