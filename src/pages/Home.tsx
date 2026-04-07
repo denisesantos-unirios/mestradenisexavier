@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { GraduationCap, Code2, Layers, Monitor, ChevronRight, BookOpen, Award, Briefcase, Heart, ExternalLink } from "lucide-react";
+import { GraduationCap, Code2, Layers, Monitor, ChevronRight, BookOpen, Award, Briefcase, Heart, ExternalLink, FolderKanban } from "lucide-react";
 import { Link } from "react-router-dom";
 import MainNavigation from "@/components/MainNavigation";
 import professoraImg from "@/assets/professora-denise.jpg";
@@ -90,6 +90,16 @@ const courses = [
       { id: "aula-17", title: "Aula 17", description: "Testes de Usabilidade", path: "/projetos-interface/aula-17" },
       { id: "aula-18", title: "Aula 18", description: "Interface no Figma", path: "/projetos-interface/aula-18" },
       { id: "aula-19", title: "Aula 19", description: "Componentes e Protótipo", path: "/projetos-interface/aula-19" }
+    ]
+  },
+  {
+    id: "gestao-projetos",
+    title: "Gestão de Projetos",
+    description: "Preparação ENADE com Scrum, Kanban e questões práticas",
+    icon: FolderKanban,
+    color: "from-rose-500 to-pink-500",
+    lessons: [
+      { id: "aula-1", title: "Aula 1", description: "Ágeis, Scrum & Kanban (ENADE)", path: "/gestao-projetos/aula-1" },
     ]
   }
 ];
