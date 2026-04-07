@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban } from "lucide-react";
 
 const menuItems = [
   {
@@ -86,6 +86,14 @@ const menuItems = [
       { title: "Aula 8 - Modelagem: E-Commerce", path: "/engenharia-software-ead/aula-8" },
       { title: "Aula 9 - Modelagem + Ágil", path: "/engenharia-software-ead/aula-9" },
       { title: "Aula 10 - Revisão Integrada", path: "/engenharia-software-ead/aula-10" },
+    ]
+  },
+  {
+    id: "gestao-projetos",
+    title: "Gestão de Projetos",
+    icon: FolderKanban,
+    submenu: [
+      { title: "Aula 1 - Ágeis, Scrum & Kanban (ENADE)", path: "/gestao-projetos/aula-1" },
     ]
   },
   {
