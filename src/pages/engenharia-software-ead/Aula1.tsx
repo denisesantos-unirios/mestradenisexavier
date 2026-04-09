@@ -2,38 +2,38 @@ import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/engenharia-software-ead/aula1/HeroSection";
-import OQueEsSection from "@/components/engenharia-software-ead/aula1/OQueEsSection";
-import PapeisSection from "@/components/engenharia-software-ead/aula1/PapeisSection";
-import TiposSistemasSection from "@/components/engenharia-software-ead/aula1/TiposSistemasSection";
+import IntroducaoSection from "@/components/engenharia-software-ead/aula1/IntroducaoSection";
+import HistoricoSection from "@/components/engenharia-software-ead/aula1/HistoricoSection";
+import EvolucaoSection from "@/components/engenharia-software-ead/aula1/EvolucaoSection";
+import ImportanciaSection from "@/components/engenharia-software-ead/aula1/ImportanciaSection";
 import EstudoCasoSection from "@/components/engenharia-software-ead/aula1/EstudoCasoSection";
-import AtividadeSection from "@/components/engenharia-software-ead/aula1/AtividadeSection";
 
 const sections = [
-  { id: "o-que-e-es", title: "O que é ES" },
-  { id: "papeis", title: "Papéis" },
-  { id: "tipos-sistemas", title: "Sistemas" },
+  { id: "introducao", title: "Introdução" },
+  { id: "historico", title: "Histórico" },
+  { id: "evolucao", title: "Evolução" },
+  { id: "importancia", title: "Importância" },
   { id: "estudo-caso", title: "Estudo de Caso" },
-  { id: "atividade", title: "Atividade" },
 ];
 
 const Aula1 = () => (
   <main className="min-h-screen relative" style={{ background: "var(--gradient-hero)" }}>
-    <LessonNavigation sections={sections} title="Aula 1 - ES e Mercado" course="Engenharia de Software EAD" />
+    <LessonNavigation sections={sections} title="Aula 1 - Conceitos da ES" course="Engenharia de Software EAD" />
     <div className="pt-16">
       <HeroSection />
       <LessonQRCode />
-      <OQueEsSection />
-      <PapeisSection />
-      <TiposSistemasSection />
+      <IntroducaoSection />
+      <HistoricoSection />
+      <EvolucaoSection />
+      <ImportanciaSection />
       <EstudoCasoSection />
-      <AtividadeSection />
     </div>
     <footer className="py-12 border-t border-border">
       <div className="container mx-auto px-6 text-center">
         <p className="text-muted-foreground">Prof.ª Denise Xavier • Engenharia de Software EAD</p>
       </div>
     </footer>
-    <PdfExportButton filename="ES-EAD_Aula-1_ES-e-Mercado.pdf" />
+    <PdfExportButton filename="ES-EAD_Aula-1_Conceitos-ES.pdf" />
   </main>
 );
 
