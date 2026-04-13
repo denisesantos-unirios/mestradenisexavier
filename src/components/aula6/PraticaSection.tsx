@@ -118,6 +118,81 @@ const PraticaSection = () => {
           </div>
         </ScrollReveal>
 
+        {/* DER Completo da Livraria */}
+        <ScrollReveal animation="scale" delay={0.45}>
+          <h3 className="text-2xl font-bold text-foreground mb-6">Diagrama Entidade-Relacionamento (DER) da Livraria</h3>
+          <div className="p-6 rounded-2xl bg-card/90 border border-border overflow-x-auto mb-12">
+            <svg viewBox="0 0 800 380" className="w-full max-w-3xl mx-auto" style={{ minWidth: 500 }}>
+              {/* Entidade Cliente */}
+              <rect x="30" y="140" width="140" height="55" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2.5" />
+              <text x="100" y="172" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="15" fontWeight="bold">CLIENTE</text>
+              <ellipse cx="40" cy="70" rx="35" ry="16" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+              <text x="40" y="74" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10" fontWeight="bold" textDecoration="underline">CPF</text>
+              <line x1="45" y1="86" x2="65" y2="140" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+              <ellipse cx="120" cy="70" rx="35" ry="16" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+              <text x="120" y="74" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10">Nome</text>
+              <line x1="115" y1="86" x2="105" y2="140" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+              <ellipse cx="40" cy="260" rx="35" ry="16" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+              <text x="40" y="264" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10">Telefone</text>
+              <line x1="50" y1="244" x2="70" y2="195" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+
+              {/* Relacionamento compra N:N */}
+              <polygon points="330,140 390,167.5 330,195 270,167.5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
+              <text x="330" y="172" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">compra</text>
+              <line x1="170" y1="167.5" x2="270" y2="167.5" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+              <line x1="390" y1="167.5" x2="490" y2="167.5" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+              <text x="190" y="158" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">N</text>
+              <text x="470" y="158" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">N</text>
+
+              {/* Entidade Livro */}
+              <rect x="490" y="140" width="130" height="55" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2.5" />
+              <text x="555" y="172" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="15" fontWeight="bold">LIVRO</text>
+              <ellipse cx="500" cy="70" rx="35" ry="16" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+              <text x="500" y="74" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10" fontWeight="bold" textDecoration="underline">ISBN</text>
+              <line x1="505" y1="86" x2="520" y2="140" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+              <ellipse cx="580" cy="70" rx="35" ry="16" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+              <text x="580" y="74" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10">Titulo</text>
+              <line x1="575" y1="86" x2="565" y2="140" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+              <ellipse cx="660" cy="70" rx="35" ry="16" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+              <text x="660" y="74" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10">Autor</text>
+              <line x1="645" y1="86" x2="600" y2="140" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+              <ellipse cx="740" cy="130" rx="35" ry="16" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+              <text x="740" y="134" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10">Valor</text>
+              <line x1="710" y1="138" x2="620" y2="155" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+
+              {/* Entidade Vendedor */}
+              <rect x="250" y="290" width="150" height="55" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2.5" />
+              <text x="325" y="322" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="15" fontWeight="bold">VENDEDOR</text>
+              <ellipse cx="460" cy="340" rx="30" ry="16" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+              <text x="460" y="344" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10" fontWeight="bold" textDecoration="underline">ID</text>
+              <line x1="430" y1="335" x2="400" y2="320" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+              <ellipse cx="460" cy="290" rx="42" ry="16" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+              <text x="460" y="294" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10">Comissao</text>
+              <line x1="420" y1="295" x2="400" y2="305" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+
+              {/* Relacionamento atende N:1 */}
+              <polygon points="130,290 170,317.5 130,345 90,317.5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
+              <text x="130" y="322" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="11" fontWeight="bold">atende</text>
+              <line x1="100" y1="195" x2="100" y2="275" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+              <line x1="100" y1="275" x2="90" y2="317.5" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+              <line x1="170" y1="317.5" x2="250" y2="317.5" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+              <text x="80" y="240" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">N</text>
+              <text x="210" y="310" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">1</text>
+
+              {/* Relacionamento vende N:N */}
+              <polygon points="555,250 595,277.5 555,305 515,277.5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
+              <text x="555" y="282" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="11" fontWeight="bold">vende</text>
+              <line x1="555" y1="195" x2="555" y2="250" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+              <line x1="515" y1="277.5" x2="400" y2="300" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+              <text x="545" y="230" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">N</text>
+              <text x="440" y="285" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">N</text>
+            </svg>
+          </div>
+          <p className="text-sm text-muted-foreground text-center">
+            DER completo do sistema de livraria com 3 entidades, 3 relacionamentos e seus atributos. Chaves primárias estão <strong className="text-amber-400">sublinhadas</strong>.
+          </p>
+        </ScrollReveal>
+
         {/* 7 Passos */}
         <ScrollReveal animation="fadeUp" delay={0.5}>
           <div className="bg-card/90 border border-primary/30 rounded-2xl p-8 mb-12">
