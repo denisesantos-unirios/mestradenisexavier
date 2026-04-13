@@ -189,7 +189,7 @@ const ElementosMERSection = () => {
           <p className="text-muted-foreground mb-6">
             Utilizamos <strong className="text-primary">verbos de ação</strong> para ler um relacionamento entre entidades.
           </p>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
             {cardinalidades.map((card) => (
               <motion.div
                 key={card.tipo}
@@ -204,6 +204,124 @@ const ElementosMERSection = () => {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </ScrollReveal>
+
+        {/* Diagramas ER Visuais */}
+        <ScrollReveal animation="fadeUp" delay={0.6}>
+          <h3 className="text-2xl font-bold text-foreground mb-6">Diagramas Entidade-Relacionamento (DER)</h3>
+          <p className="text-muted-foreground mb-8">
+            Representação visual usando a notação de <strong className="text-teal-400">Peter Chen</strong>: retângulos para entidades, losangos para relacionamentos e elipses para atributos.
+          </p>
+
+          {/* DER 1:1 */}
+          <div className="mb-8">
+            <h4 className="font-bold text-foreground mb-4 text-lg">Exemplo 1:1 — Aluno possui Bolsa</h4>
+            <div className="p-6 rounded-2xl bg-card/90 border border-border overflow-x-auto">
+              <svg viewBox="0 0 700 200" className="w-full max-w-2xl mx-auto" style={{ minWidth: 400 }}>
+                {/* Entidade Aluno */}
+                <rect x="30" y="70" width="130" height="60" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
+                <text x="95" y="105" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="16" fontWeight="bold">ALUNO</text>
+                {/* Relacionamento */}
+                <polygon points="350,70 410,100 350,130 290,100" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
+                <text x="350" y="105" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="13" fontWeight="bold">possui</text>
+                {/* Entidade Bolsa */}
+                <rect x="540" y="70" width="130" height="60" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
+                <text x="605" y="105" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="16" fontWeight="bold">BOLSA</text>
+                {/* Linhas */}
+                <line x1="160" y1="100" x2="290" y2="100" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+                <line x1="410" y1="100" x2="540" y2="100" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+                {/* Cardinalidades */}
+                <text x="175" y="90" fill="hsl(168,80%,50%)" fontSize="14" fontWeight="bold">1</text>
+                <text x="525" y="90" fill="hsl(168,80%,50%)" fontSize="14" fontWeight="bold">1</text>
+                {/* Atributos Aluno */}
+                <ellipse cx="60" cy="30" rx="45" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="60" y="35" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">RA</text>
+                <line x1="60" y1="48" x2="80" y2="70" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+                <ellipse cx="150" cy="30" rx="45" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="150" y="35" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">Nome</text>
+                <line x1="145" y1="48" x2="120" y2="70" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+                {/* Atributos Bolsa */}
+                <ellipse cx="570" cy="30" rx="45" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="570" y="35" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">Codigo</text>
+                <line x1="570" y1="48" x2="590" y2="70" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+                <ellipse cx="660" cy="30" rx="35" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="660" y="35" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">Valor</text>
+                <line x1="650" y1="48" x2="630" y2="70" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+              </svg>
+            </div>
+          </div>
+
+          {/* DER 1:N */}
+          <div className="mb-8">
+            <h4 className="font-bold text-foreground mb-4 text-lg">Exemplo 1:N — Proprietario possui Carros</h4>
+            <div className="p-6 rounded-2xl bg-card/90 border border-border overflow-x-auto">
+              <svg viewBox="0 0 700 200" className="w-full max-w-2xl mx-auto" style={{ minWidth: 400 }}>
+                <rect x="30" y="70" width="150" height="60" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
+                <text x="105" y="105" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="15" fontWeight="bold">PROPRIETARIO</text>
+                <polygon points="350,70 410,100 350,130 290,100" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
+                <text x="350" y="105" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="13" fontWeight="bold">possui</text>
+                <rect x="540" y="70" width="130" height="60" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
+                <text x="605" y="105" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="16" fontWeight="bold">CARRO</text>
+                <line x1="180" y1="100" x2="290" y2="100" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+                <line x1="410" y1="100" x2="540" y2="100" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+                <text x="200" y="90" fill="hsl(168,80%,50%)" fontSize="14" fontWeight="bold">1</text>
+                <text x="520" y="90" fill="hsl(168,80%,50%)" fontSize="14" fontWeight="bold">N</text>
+                {/* Atributos */}
+                <ellipse cx="65" cy="30" rx="45" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="65" y="35" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">CPF</text>
+                <line x1="75" y1="48" x2="90" y2="70" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+                <ellipse cx="160" cy="30" rx="45" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="160" y="35" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">Nome</text>
+                <line x1="150" y1="48" x2="130" y2="70" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+                <ellipse cx="570" cy="30" rx="45" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="570" y="35" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">Placa</text>
+                <line x1="575" y1="48" x2="590" y2="70" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+                <ellipse cx="660" cy="30" rx="40" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="660" y="35" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">Modelo</text>
+                <line x1="650" y1="48" x2="630" y2="70" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+              </svg>
+            </div>
+          </div>
+
+          {/* DER N:N */}
+          <div className="mb-8">
+            <h4 className="font-bold text-foreground mb-4 text-lg">Exemplo N:N — Operadora possui Clientes</h4>
+            <div className="p-6 rounded-2xl bg-card/90 border border-border overflow-x-auto">
+              <svg viewBox="0 0 700 220" className="w-full max-w-2xl mx-auto" style={{ minWidth: 400 }}>
+                <rect x="30" y="80" width="150" height="60" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
+                <text x="105" y="115" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="15" fontWeight="bold">OPERADORA</text>
+                <polygon points="350,80 410,110 350,140 290,110" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
+                <text x="350" y="115" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="13" fontWeight="bold">possui</text>
+                <rect x="540" y="80" width="130" height="60" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
+                <text x="605" y="115" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="15" fontWeight="bold">CLIENTE</text>
+                <line x1="180" y1="110" x2="290" y2="110" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+                <line x1="410" y1="110" x2="540" y2="110" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+                <text x="200" y="100" fill="hsl(168,80%,50%)" fontSize="14" fontWeight="bold">N</text>
+                <text x="520" y="100" fill="hsl(168,80%,50%)" fontSize="14" fontWeight="bold">N</text>
+                {/* Atributo do relacionamento (Plano) */}
+                <ellipse cx="350" cy="185" rx="45" ry="18" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="1.5" />
+                <text x="350" y="190" textAnchor="middle" fill="hsl(168,80%,50%)" fontSize="11">Plano</text>
+                <line x1="350" y1="140" x2="350" y2="167" stroke="hsl(168,80%,50%)" strokeWidth="1" />
+                {/* Atributos Operadora */}
+                <ellipse cx="60" cy="40" rx="45" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="60" y="45" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">CNPJ</text>
+                <line x1="70" y1="58" x2="85" y2="80" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+                <ellipse cx="160" cy="40" rx="45" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="160" y="45" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">Nome</text>
+                <line x1="150" y1="58" x2="130" y2="80" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+                {/* Atributos Cliente */}
+                <ellipse cx="570" cy="40" rx="40" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="570" y="45" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">CPF</text>
+                <line x1="575" y1="58" x2="590" y2="80" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+                <ellipse cx="660" cy="40" rx="40" ry="18" fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
+                <text x="660" y="45" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="11">Nome</text>
+                <line x1="650" y1="58" x2="630" y2="80" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
+              </svg>
+            </div>
+            <p className="text-sm text-muted-foreground mt-3 text-center">
+              No relacionamento N:N, o atributo <strong className="text-teal-400">Plano</strong> pertence ao relacionamento, não a nenhuma das entidades.
+            </p>
           </div>
         </ScrollReveal>
       </div>
