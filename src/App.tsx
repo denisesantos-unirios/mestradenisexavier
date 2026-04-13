@@ -47,6 +47,7 @@ import ProjetosInterfaceAula16 from "./pages/projetos-interface/Aula16";
 import ProjetosInterfaceAula17 from "./pages/projetos-interface/Aula17";
 import ProjetosInterfaceAula18 from "./pages/projetos-interface/Aula18";
 import ProjetosInterfaceAula19 from "./pages/projetos-interface/Aula19";
+import ProjetosInterfaceAula20 from "./pages/projetos-interface/Aula20";
 // Engenharia de Software EAD
 import ESEADAula1 from "./pages/engenharia-software-ead/Aula1";
 import ESEADAula2 from "./pages/engenharia-software-ead/Aula2";
@@ -122,6 +123,7 @@ const App = () => (
           <Route path="/projetos-interface/aula-17" element={<ProjetosInterfaceAula17 />} />
           <Route path="/projetos-interface/aula-18" element={<ProjetosInterfaceAula18 />} />
           <Route path="/projetos-interface/aula-19" element={<ProjetosInterfaceAula19 />} />
+          <Route path="/projetos-interface/aula-20" element={<ProjetosInterfaceAula20 />} />
           {/* Engenharia de Software EAD */}
           <Route path="/engenharia-software-ead/aula-1" element={<ESEADAula1 />} />
           <Route path="/engenharia-software-ead/aula-2" element={<ESEADAula2 />} />

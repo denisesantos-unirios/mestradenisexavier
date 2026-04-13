@@ -68,7 +68,8 @@ const menuItems = [
       { title: "Aula 16 - Fundamentos de Prototipação", path: "/projetos-interface/aula-16" },
       { title: "Aula 17 - Prototipação de Papel", path: "/projetos-interface/aula-17" },
       { title: "Aula 18 - Introdução ao Figma", path: "/projetos-interface/aula-18" },
-      { title: "Aula 19 - Componentes e Fluxos", path: "/projetos-interface/aula-19" }
+      { title: "Aula 19 - Componentes e Fluxos", path: "/projetos-interface/aula-19" },
+      { title: "Aula 20 - Framework DECIDE", path: "/projetos-interface/aula-20" }
     ]
   },
   {
