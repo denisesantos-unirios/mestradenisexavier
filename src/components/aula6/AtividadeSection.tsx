@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
-import { PenTool, Users, Clock, CheckSquare } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { PenTool, Users, Clock, CheckSquare, Eye, EyeOff } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 const cenarios = [
