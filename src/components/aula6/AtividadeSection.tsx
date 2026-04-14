@@ -22,6 +22,8 @@ const cenarios = [
 ];
 
 const AtividadeSection = () => {
+  const [showResultado, setShowResultado] = useState(false);
+
   return (
     <section id="atividade" className="min-h-screen py-20 px-6 relative overflow-hidden">
       <div className="max-w-6xl mx-auto relative z-10">
