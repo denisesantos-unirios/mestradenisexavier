@@ -3,15 +3,13 @@ import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/gestao-projetos/aula1/HeroSection";
 import RevisaoTeoricaSection from "@/components/gestao-projetos/aula1/RevisaoTeoricaSection";
-import PMBOKSection from "@/components/gestao-projetos/aula1/PMBOKSection";
 import EstudoCasoSection from "@/components/gestao-projetos/aula1/EstudoCasoSection";
 import QuestoesENADESection from "@/components/gestao-projetos/aula1/QuestoesENADESection";
 import FechamentoSection from "@/components/gestao-projetos/aula1/FechamentoSection";
 
 const sections = [
   { id: "hero", title: "Início" },
-  { id: "teoria", title: "Ágil & Scrum" },
-  { id: "pmbok", title: "PMBOK & EVM" },
+  { id: "teoria", title: "Scrum & Kanban" },
   { id: "estudo-caso", title: "Estudo de Caso" },
   { id: "questoes", title: "Questões ENADE" },
   { id: "fechamento", title: "Fechamento" },
@@ -24,7 +22,6 @@ const Aula1 = () => (
       <HeroSection />
       <LessonQRCode />
       <RevisaoTeoricaSection />
-      <PMBOKSection />
       <EstudoCasoSection />
       <QuestoesENADESection />
       <FechamentoSection />

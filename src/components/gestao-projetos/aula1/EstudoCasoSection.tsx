@@ -23,7 +23,7 @@ const EstudoCasoSection = () => {
               Estudos de Caso Guiados
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Formato ENADE com discussão em grupo — cenários reais de mercado
+              Formato ENADE com discussão em grupo — Projeto App Universitário
             </p>
           </div>
         </ScrollReveal>
@@ -37,7 +37,7 @@ const EstudoCasoSection = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground mb-2">📱 Caso 1: Projeto App Universitário</h3>
-                <p className="text-sm text-muted-foreground">Atividade em grupos de 3-5 alunos • 20 minutos + 10 min discussão</p>
+                <p className="text-sm text-muted-foreground">Atividade em grupos de 3-5 alunos • 25 minutos + 15 min discussão</p>
               </div>
             </div>
 
@@ -117,10 +117,10 @@ const EstudoCasoSection = () => {
                   <p className="text-sm text-muted-foreground"><strong className="text-foreground">a)</strong> Liste <strong className="text-primary">3 responsabilidades do Product Owner</strong> nesse projeto.</p>
                 </div>
                 <div className="bg-secondary/50 rounded-xl p-4">
-                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">b)</strong> Escreva <strong className="text-primary">5 User Stories</strong> para o Product Backlog inicial usando o formato "Como... quero... para...".</p>
+                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">b)</strong> Descreva o <strong className="text-primary">Product Backlog inicial</strong> (nomes dos itens, em alto nível).</p>
                 </div>
                 <div className="bg-secondary/50 rounded-xl p-4">
-                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">c)</strong> Proponha uma <strong className="text-primary">duração de Sprint</strong>, uma <strong className="text-primary">Definition of Done</strong> e justifique.</p>
+                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">c)</strong> Proponha uma <strong className="text-primary">duração de Sprint</strong> e justifique.</p>
                 </div>
               </div>
               <button onClick={() => toggle("a2")} className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1">
@@ -159,10 +159,10 @@ const EstudoCasoSection = () => {
               </h4>
               <div className="space-y-4 mb-4">
                 <div className="bg-secondary/50 rounded-xl p-4">
-                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">a)</strong> Desenhe um <strong className="text-emerald-400">quadro Kanban</strong> com pelo menos 5 colunas e sugira limites de WIP.</p>
+                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">a)</strong> Desenhe um <strong className="text-emerald-400">quadro Kanban simples</strong> para gerenciar tarefas desse projeto (colunas).</p>
                 </div>
                 <div className="bg-secondary/50 rounded-xl p-4">
-                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">b)</strong> Calcule: se o time tem <strong className="text-emerald-400">Lead Time médio de 8 dias</strong> e <strong className="text-emerald-400">Cycle Time de 3 dias</strong>, quanto tempo as tarefas ficam na fila? O que fazer?</p>
+                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">b)</strong> Sugira limites de WIP para <strong className="text-emerald-400">"Em Progresso"</strong> e explique a razão.</p>
                 </div>
               </div>
               <button onClick={() => toggle("a3")} className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1">
@@ -242,10 +242,10 @@ const EstudoCasoSection = () => {
         {/* Dicas de discussão */}
         <ScrollReveal animation="scale" delay={0.5}>
           <motion.div whileHover={{ scale: 1.01 }} className="bg-primary/10 border border-primary/30 rounded-2xl p-6 mt-10">
-            <h4 className="text-lg font-bold text-foreground mb-3">💡 Ao Corrigir os Casos, Enfatize</h4>
+              <h4 className="text-lg font-bold text-foreground mb-3">💡 Ao Corrigir, Enfatize</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>• <strong className="text-foreground">Justificativa do ágil:</strong> escopo mutável + feedback rápido + envolvimento do cliente</li>
-              <li>• <strong className="text-foreground">Papel do PO:</strong> priorização, interface com stakeholders, clareza do backlog, aceitar/rejeitar incremento</li>
+                <li>• <strong className="text-foreground">Justificativa do ágil:</strong> escopo mutável + feedback rápido + envolvimento da direção</li>
+                <li>• <strong className="text-foreground">Papel do PO:</strong> priorização, interface com stakeholders, clareza do backlog</li>
               <li>• <strong className="text-foreground">Kanban para bugs e suporte:</strong> fluxo contínuo, entradas imprevisíveis não cabem em Sprint</li>
               <li>• <strong className="text-foreground">Scrumban na prática:</strong> muitas empresas combinam Sprint + quadro visual + WIP</li>
               <li>• <strong className="text-foreground">Erros comuns no Scrum:</strong> Daily como cobrança, pular Retro, PO ausente, time grande demais</li>

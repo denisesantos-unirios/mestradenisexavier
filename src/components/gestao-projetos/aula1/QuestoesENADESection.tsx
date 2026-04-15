@@ -307,9 +307,7 @@ const QuestionCard = ({ question }: { question: Question }) => {
 };
 
 const QuestoesENADESection = () => {
-  const [score, setScore] = useState<Record<number, boolean>>({});
-  const answeredCount = Object.keys(score).length;
-  const correctCount = Object.values(score).filter(Boolean).length;
+  const displayedQuestions = questions.slice(0, 4);
 
   return (
     <section id="questoes" className="py-20 px-6 relative overflow-hidden">
@@ -318,23 +316,19 @@ const QuestoesENADESection = () => {
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6">
               <Target className="w-4 h-4" />
-              <span className="text-sm font-medium">Bloco 3 • 50 minutos</span>
+              <span className="text-sm font-medium">Bloco 3 • 40 minutos</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               Questões Estilo ENADE
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
-              12 questões cobrindo Scrum, Kanban, Manifesto Ágil, PMBOK, EVM e Riscos
+              Resolva individualmente (3-5 min cada) e depois discuta com a turma
             </p>
-            <div className="inline-flex items-center gap-4 bg-card/60 border border-border rounded-xl px-6 py-3">
-              <span className="text-sm text-muted-foreground">📝 Resolva individualmente (3-5 min cada)</span>
-              <span className="text-sm text-muted-foreground">💬 Depois discuta com a turma</span>
-            </div>
           </div>
         </ScrollReveal>
 
         <div className="space-y-8">
-          {questions.map((q, i) => (
+          {displayedQuestions.map((q, i) => (
             <ScrollReveal key={q.id} animation="fadeUp" delay={i * 0.05}>
               <QuestionCard question={q} />
             </ScrollReveal>

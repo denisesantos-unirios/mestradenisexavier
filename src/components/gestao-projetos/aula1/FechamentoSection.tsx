@@ -16,7 +16,7 @@ const FechamentoSection = () => {
               Fechamento & Dicas ENADE
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Macetes de prova, palavras-chave, referências e mini-atividade final
+              Macetes de prova, palavras-chave e mini-atividade final
             </p>
           </div>
         </ScrollReveal>
