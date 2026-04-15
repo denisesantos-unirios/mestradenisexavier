@@ -270,11 +270,13 @@ const RevisaoTeoricaSection = () => {
             </motion.div>
 
             {/* Imagem Scrum Framework */}
-            <motion.div whileHover={{ scale: 1.01 }} className="bg-card/60 border border-border rounded-2xl overflow-hidden mb-8">
-              <div className="bg-blue-500/10 p-3">
+            <motion.div whileHover={{ scale: 1.01 }} className="bg-card/60 border-2 border-primary/30 rounded-2xl overflow-hidden mb-8 shadow-lg shadow-primary/5">
+              <div className="bg-primary/10 p-3">
                 <h4 className="text-center font-bold text-foreground">📊 Visão Geral do Framework Scrum</h4>
               </div>
-              <img src={scrumFrameworkImg} alt="Diagrama do Framework Scrum mostrando Product Backlog, Sprint Planning, Sprint, Daily Scrum, Sprint Review, Sprint Retrospective e Incremento" loading="lazy" width={1280} height={720} className="w-full" />
+              <div className="bg-slate-800 p-2">
+                <img src={scrumFrameworkImg} alt="Diagrama do Framework Scrum mostrando Product Backlog, Sprint Planning, Sprint, Daily Scrum, Sprint Review, Sprint Retrospective e Incremento" className="w-full h-auto rounded-lg" />
+              </div>
             </motion.div>
 
             {/* Papéis */}
@@ -405,11 +407,13 @@ const RevisaoTeoricaSection = () => {
             </div>
 
             {/* Sprint Cycle Image */}
-            <motion.div whileHover={{ scale: 1.01 }} className="bg-card/60 border border-border rounded-2xl overflow-hidden mb-8">
-              <div className="bg-blue-500/10 p-3">
+            <motion.div whileHover={{ scale: 1.01 }} className="bg-card/60 border-2 border-primary/30 rounded-2xl overflow-hidden mb-8 shadow-lg shadow-primary/5">
+              <div className="bg-primary/10 p-3">
                 <h4 className="text-center font-bold text-foreground">🔄 Ciclo da Sprint — Fluxo Completo</h4>
               </div>
-              <img src={scrumSprintImg} alt="Ciclo da Sprint mostrando Sprint Planning, Development, Daily Standup, Sprint Review, Sprint Retrospective e Incremento" loading="lazy" width={1280} height={720} className="w-full" />
+              <div className="bg-slate-800 p-2">
+                <img src={scrumSprintImg} alt="Ciclo da Sprint mostrando Sprint Planning, Development, Daily Standup, Sprint Review, Sprint Retrospective e Incremento" className="w-full h-auto rounded-lg" />
+              </div>
             </motion.div>
 
             {/* Definition of Done */}
@@ -608,11 +612,13 @@ const RevisaoTeoricaSection = () => {
             </motion.div>
 
             {/* Kanban Board Image */}
-            <motion.div whileHover={{ scale: 1.01 }} className="bg-card/60 border border-border rounded-2xl overflow-hidden mb-8">
+            <motion.div whileHover={{ scale: 1.01 }} className="bg-card/60 border-2 border-emerald-500/30 rounded-2xl overflow-hidden mb-8 shadow-lg shadow-emerald-500/5">
               <div className="bg-emerald-500/10 p-3">
                 <h4 className="text-center font-bold text-foreground">📊 Quadro Kanban com Limites de WIP</h4>
               </div>
-              <img src={kanbanBoardImg} alt="Quadro Kanban com colunas Backlog, A Fazer, Em Progresso com WIP 3, Em Teste com WIP 2 e Concluído" loading="lazy" width={1280} height={720} className="w-full" />
+              <div className="bg-slate-800 p-2">
+                <img src={kanbanBoardImg} alt="Quadro Kanban com colunas Backlog, A Fazer, Em Progresso com WIP 3, Em Teste com WIP 2 e Concluído" className="w-full h-auto rounded-lg" />
+              </div>
             </motion.div>
 
             {/* 6 Práticas */}
