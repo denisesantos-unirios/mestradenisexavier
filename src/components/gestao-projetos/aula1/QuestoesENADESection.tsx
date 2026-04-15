@@ -134,6 +134,66 @@ const questions: Question[] = [
     correct: "b",
     explanation: "Lead Time = tempo total (pedido → entrega). Cycle Time = tempo de trabalho (início → conclusão). Se Lead Time >> Cycle Time, as tarefas estão esperando muito na fila. Aumentar WIP (e) pioraria o gargalo. Cycle Time ≤ Lead Time sempre (a é falsa). São métricas diferentes (c é falsa). O problema é a fila, não a execução (d)."
   },
+  {
+    id: 9,
+    title: "Questão 9 — EVM / Valor Agregado",
+    topic: "PMBOK/EVM",
+    enunciado: "Um projeto tem orçamento total (BAC) de R$ 200.000. No mês 4, o valor planejado (PV) é R$ 100.000, o valor agregado (EV) é R$ 80.000 e o custo real (AC) é R$ 120.000. Com base no Gerenciamento de Valor Agregado (EVM), é correto afirmar que:",
+    options: [
+      { letter: "a", text: "O projeto está adiantado e abaixo do orçamento." },
+      { letter: "b", text: "O CPI é 0,67 e o SPI é 0,80, indicando que o projeto está atrasado e acima do orçamento." },
+      { letter: "c", text: "O projeto está dentro do orçamento, pois o AC é menor que o BAC." },
+      { letter: "d", text: "O SPI indica que o projeto está adiantado, pois EV > 0." },
+      { letter: "e", text: "O EAC será de R$ 160.000, indicando economia no final do projeto." },
+    ],
+    correct: "b",
+    explanation: "CPI = EV/AC = 80.000/120.000 = 0,67 (gasta R$1 e gera R$0,67 de valor). SPI = EV/PV = 80.000/100.000 = 0,80 (só fez 80% do planejado). Ambos < 1 → atrasado E acima do orçamento. EAC = BAC/CPI = 200.000/0,67 ≈ R$298.507 (muito acima)."
+  },
+  {
+    id: 10,
+    title: "Questão 10 — Caminho Crítico",
+    topic: "PMBOK/Cronograma",
+    enunciado: "Em um diagrama de rede de um projeto, foram identificados três caminhos possíveis: Caminho 1 (A→B→D→F) com duração de 14 dias, Caminho 2 (A→C→E→F) com duração de 10 dias, e Caminho 3 (A→B→E→F) com duração de 13 dias. Sobre o caminho crítico desse projeto, é correto afirmar que:",
+    options: [
+      { letter: "a", text: "O caminho crítico é o Caminho 2, pois é o mais curto e permite terminar o projeto mais rápido." },
+      { letter: "b", text: "O caminho crítico é o Caminho 1, com duração de 14 dias, e as atividades C e E possuem folga total de 4 dias." },
+      { letter: "c", text: "Todos os caminhos são críticos, pois todos levam ao final do projeto." },
+      { letter: "d", text: "O caminho crítico não pode ser determinado sem conhecer os custos das atividades." },
+      { letter: "e", text: "A folga total das atividades no caminho crítico é de 1 dia." },
+    ],
+    correct: "b",
+    explanation: "O caminho crítico é o MAIS LONGO (14 dias), pois determina a duração mínima do projeto. As atividades no Caminho 2 têm folga = 14 - 10 = 4 dias. No caminho crítico, folga = 0. O caminho mais curto (a) é o que tem MAIS folga, não o crítico."
+  },
+  {
+    id: 11,
+    title: "Questão 11 — EAP (WBS)",
+    topic: "PMBOK/Escopo",
+    enunciado: "Sobre a Estrutura Analítica do Projeto (EAP), também conhecida como WBS (Work Breakdown Structure), assinale a alternativa INCORRETA.",
+    options: [
+      { letter: "a", text: "A EAP é uma decomposição hierárquica do escopo total do trabalho do projeto." },
+      { letter: "b", text: "O nível mais baixo da EAP é chamado de pacote de trabalho e pode ser estimado e atribuído." },
+      { letter: "c", text: "A regra dos 100% estabelece que a soma do trabalho dos níveis inferiores deve representar 100% do trabalho do nível superior." },
+      { letter: "d", text: "A EAP deve incluir todas as atividades detalhadas com duração, responsáveis e datas, funcionando também como cronograma do projeto." },
+      { letter: "e", text: "A linha de base do escopo é composta pela EAP, pelo dicionário da EAP e pela declaração de escopo." },
+    ],
+    correct: "d",
+    explanation: "A EAP decompõe ENTREGAS (deliverables), não atividades detalhadas. Ela NÃO é um cronograma — não contém datas nem durações. As atividades são derivadas da EAP posteriormente, no processo de definição de atividades do cronograma."
+  },
+  {
+    id: 12,
+    title: "Questão 12 — Gerenciamento de Riscos",
+    topic: "PMBOK/Riscos",
+    enunciado: "Uma equipe de projeto identificou o risco de que o fornecedor principal pode não entregar um componente crítico no prazo. O gerente de projetos decidiu contratar um segundo fornecedor como alternativa, caso o primeiro falhe. Essa estratégia de resposta a riscos é classificada como:",
+    options: [
+      { letter: "a", text: "Eliminar/Prevenir — pois o risco foi completamente removido do projeto." },
+      { letter: "b", text: "Transferir — pois o risco foi passado para o segundo fornecedor." },
+      { letter: "c", text: "Mitigar — pois a ação reduz o impacto caso o risco se concretize." },
+      { letter: "d", text: "Aceitar ativamente — pois foi criado um plano de contingência com reserva." },
+      { letter: "e", text: "Explorar — pois a equipe está aproveitando uma oportunidade de mercado." },
+    ],
+    correct: "c",
+    explanation: "Contratar um segundo fornecedor como backup é MITIGAÇÃO — reduz o impacto se o risco ocorrer (a entrega não para totalmente). NÃO é eliminação (o risco ainda existe). NÃO é transferência (o risco continua com o projeto, não foi passado via contrato/seguro). NÃO é aceitação ativa (reserva de contingência = dinheiro/tempo guardado, não plano B operacional). Explorar é para oportunidades, não ameaças."
+  },
 ];
 
 const QuestionCard = ({ question }: { question: Question }) => {
@@ -264,7 +324,7 @@ const QuestoesENADESection = () => {
               Questões Estilo ENADE
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
-              8 questões cobrindo Scrum, Kanban, Manifesto Ágil e modelos híbridos
+              12 questões cobrindo Scrum, Kanban, Manifesto Ágil, PMBOK, EVM e Riscos
             </p>
             <div className="inline-flex items-center gap-4 bg-card/60 border border-border rounded-xl px-6 py-3">
               <span className="text-sm text-muted-foreground">📝 Resolva individualmente (3-5 min cada)</span>
