@@ -100,6 +100,7 @@ const courses = [
     color: "from-rose-500 to-pink-500",
     lessons: [
       { id: "aula-1", title: "Aula 1", description: "Ágeis, Scrum & Kanban (ENADE)", path: "/gestao-projetos/aula-1" },
+      { id: "aula-2", title: "Aula 2", description: "Metodologias Ágeis e questões ENADE", path: "/gestao-projetos/aula-2" },
     ]
   }
 ];

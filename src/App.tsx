@@ -61,6 +61,7 @@ import ESEADAula9 from "./pages/engenharia-software-ead/Aula9";
 import ESEADAula10 from "./pages/engenharia-software-ead/Aula10";
 // Gestão de Projetos
 import GPAula1 from "./pages/gestao-projetos/Aula1";
+import GPAula2 from "./pages/gestao-projetos/Aula2";
 // Protocolos
 import FrameworkDECIDE from "./pages/protocolos/FrameworkDECIDE";
 // Provas
@@ -137,6 +138,7 @@ const App = () => (
           <Route path="/engenharia-software-ead/aula-10" element={<ESEADAula10 />} />
           {/* Gestão de Projetos */}
           <Route path="/gestao-projetos/aula-1" element={<GPAula1 />} />
+          <Route path="/gestao-projetos/aula-2" element={<GPAula2 />} />
           {/* Protocolos */}
           <Route path="/protocolos/framework-decide" element={<FrameworkDECIDE />} />
           {/* Provas */}
