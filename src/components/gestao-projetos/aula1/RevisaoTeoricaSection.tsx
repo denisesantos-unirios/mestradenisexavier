@@ -274,7 +274,7 @@ const RevisaoTeoricaSection = () => {
               <div className="bg-blue-500/10 p-3">
                 <h4 className="text-center font-bold text-foreground">📊 Visão Geral do Framework Scrum</h4>
               </div>
-              <img src={scrumFrameworkImg} alt="Diagrama do Framework Scrum mostrando Product Backlog, Sprint Planning, Sprint, Daily Scrum, Sprint Review, Sprint Retrospective e Incremento" loading="lazy" width={1280} height={720} className="w-full" />
+              <img src={scrumFrameworkImg} alt="Diagrama do Framework Scrum mostrando Product Backlog, Sprint Planning, Sprint, Daily Scrum, Sprint Review, Sprint Retrospective e Incremento" className="w-full h-auto" />
             </motion.div>
 
             {/* Papéis */}
