@@ -17,13 +17,13 @@ const RevisaoTeoricaSection = () => {
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6">
               <BookOpen className="w-4 h-4" />
-              <span className="text-sm font-medium">Bloco 1 • 40 minutos</span>
+              <span className="text-sm font-medium">Bloco 1 • 30 minutos</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Revisão Teórica Completa
+              Revisão Teórica
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Gestão de Projetos Ágeis, Manifesto Ágil, Scrum e Kanban — tudo que cai no ENADE
+              Gestão de Projetos Ágeis, Scrum e Kanban — conceitos essenciais para o ENADE
             </p>
           </div>
         </ScrollReveal>
@@ -231,8 +231,8 @@ const RevisaoTeoricaSection = () => {
                 <Repeat className="w-5 h-5 text-blue-400" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-foreground">2. Scrum — Framework Completo</h3>
-                <p className="text-sm text-muted-foreground">⏱ 15 minutos</p>
+                <h3 className="text-2xl font-bold text-foreground">2. Scrum — Estrutura e Papéis</h3>
+                <p className="text-sm text-muted-foreground">⏱ 10 minutos</p>
               </div>
             </div>
 
@@ -272,7 +272,7 @@ const RevisaoTeoricaSection = () => {
             {/* Imagem Scrum Framework */}
             <motion.div whileHover={{ scale: 1.01 }} className="bg-card/60 border-2 border-primary/30 rounded-2xl overflow-hidden mb-8 shadow-lg shadow-primary/5">
               <div className="bg-primary/10 p-3">
-                <h4 className="text-center font-bold text-foreground">📊 Visão Geral do Framework Scrum</h4>
+                <h4 className="text-center font-bold text-foreground">📊 Estrutura do Framework Scrum</h4>
               </div>
               <div className="bg-slate-800 p-2">
                 <img src={scrumFrameworkImg} alt="Diagrama do Framework Scrum mostrando Product Backlog, Sprint Planning, Sprint, Daily Scrum, Sprint Review, Sprint Retrospective e Incremento" className="w-full h-auto rounded-lg" />
@@ -597,7 +597,7 @@ const RevisaoTeoricaSection = () => {
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-foreground">3. Kanban — Fluxo Contínuo</h3>
-                <p className="text-sm text-muted-foreground">⏱ 15 minutos</p>
+                <p className="text-sm text-muted-foreground">⏱ 10 minutos</p>
               </div>
             </div>
 
