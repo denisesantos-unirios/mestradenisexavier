@@ -190,7 +190,7 @@ const PMBOKSection = () => {
                     ].map((item, i) => (
                       <g key={i}>
                         <line x1="300" y1="45" x2={item.x + 65} y2="70" stroke="hsl(var(--muted-foreground))" strokeWidth="1" opacity="0.3" />
-                        <rect x={item.x} y="70" width="130" height="30" rx="6" fill="hsl(217 91% 60%)" opacity="0.15" stroke="hsl(217 91% 60%)" strokeWidth="1" opacity2="0.4" />
+                        <rect x={item.x} y="70" width="130" height="30" rx="6" fill="hsl(217 91% 60%)" opacity="0.15" stroke="hsl(217 91% 60%)" strokeWidth="1" />
                         <text x={item.x + 65} y="90" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="9" fontWeight="bold">{item.label}</text>
                       </g>
                     ))}
