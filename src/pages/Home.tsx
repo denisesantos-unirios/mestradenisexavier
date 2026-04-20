@@ -42,7 +42,8 @@ const courses = [
       { id: "aula-13", title: "Aula 13", description: "Especificação de Casos de Uso", path: "/engenharia-software-2/aula-13" },
       { id: "aula-14", title: "Aula 14", description: "Workshop Prático", path: "/engenharia-software-2/aula-14" },
       { id: "aula-15", title: "Aula 15", description: "Entrega Fase 3", path: "/engenharia-software-2/aula-15" },
-      { id: "aula-16", title: "Aula 16", description: "User Stories & Kanban", path: "/engenharia-software-2/aula-16" }
+      { id: "aula-16", title: "Aula 16", description: "User Stories & Kanban", path: "/engenharia-software-2/aula-16" },
+      { id: "aula-17", title: "Aula 17", description: "Diagrama de Classes", path: "/engenharia-software-2/aula-17" }
     ]
   },
   {
