@@ -42,7 +42,9 @@ const menuItems = [
       { title: "Aula 12 - Casos de Uso: Fundamentos", path: "/engenharia-software-2/aula-12" },
       { title: "Aula 13 - JITT: Especificação UC", path: "/engenharia-software-2/aula-13" },
       { title: "Aula 14 - Workshop: Diagrama UC", path: "/engenharia-software-2/aula-14" },
-      { title: "Aula 15 - Entrega Fase 3: Casos de Uso", path: "/engenharia-software-2/aula-15" }
+      { title: "Aula 15 - Entrega Fase 3: Casos de Uso", path: "/engenharia-software-2/aula-15" },
+      { title: "Aula 16 - User Stories & Kanban", path: "/engenharia-software-2/aula-16" },
+      { title: "Aula 17 - Diagrama de Classes", path: "/engenharia-software-2/aula-17" }
     ]
   },
   {
@@ -95,6 +97,7 @@ const menuItems = [
     icon: FolderKanban,
     submenu: [
       { title: "Aula 1 - Ágeis, Scrum & Kanban (ENADE)", path: "/gestao-projetos/aula-1" },
+      { title: "Aula 2 - Metodologias Ágeis e ENADE", path: "/gestao-projetos/aula-2" },
     ]
   },
   {
