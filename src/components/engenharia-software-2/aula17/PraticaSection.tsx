@@ -2,6 +2,49 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, ArrowRight, Lightbulb, Target } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+import MermaidDiagram from "@/components/MermaidDiagram";
+
+const locacaoDiagram = `classDiagram
+  direction TB
+  class Veiculo {
+    -placa: String
+    -marca: String
+    -modelo: String
+    -valorKmRodado: Double
+    +calcularValor(km) Double
+  }
+  class Carro {
+    -numPortas: Integer
+  }
+  class Moto {
+    -cilindradas: Integer
+  }
+  class Cliente {
+    -nome: String
+    -cpf: String
+    -telefone: String
+    -cnh: String
+    +alugar() void
+  }
+  class Funcionario {
+    -matricula: String
+    -nome: String
+    -cargo: String
+    +registrarLocacao() void
+  }
+  class Locacao {
+    -dataRetirada: Date
+    -dataDevolucao: Date
+    -kmRodados: Integer
+    +calcularTotal() Double
+    +finalizar() void
+  }
+  Veiculo <|-- Carro
+  Veiculo <|-- Moto
+  Cliente "1" -- "0..*" Locacao : realiza
+  Locacao "0..*" -- "1" Veiculo : envolve
+  Funcionario "1" -- "0..*" Locacao : registra
+`;
 
 const passos = [
   {
