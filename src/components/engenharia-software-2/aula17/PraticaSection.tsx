@@ -211,6 +211,35 @@ const PraticaSection = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Diagrama de Classes Visual */}
+          <Card className="bg-gradient-to-br from-purple-500/5 to-pink-500/5 border-purple-500/30 mb-16">
+            <CardContent className="p-6 md:p-8">
+              <h4 className="font-bold text-purple-400 mb-2 flex items-center gap-2">
+                📊 Diagrama de Classes — Sistema de Locação
+              </h4>
+              <p className="text-sm text-muted-foreground mb-6">
+                Visualização UML do mini-cenário com herança (Carro/Moto → Veículo) e associações com multiplicidade.
+              </p>
+              <div className="bg-background/40 rounded-lg p-4 border border-purple-500/20">
+                <MermaidDiagram chart={locacaoDiagram} id="locacao-diagram" />
+              </div>
+              <div className="grid md:grid-cols-3 gap-3 mt-4 text-xs">
+                <div className="p-2 rounded bg-background/40 border border-border">
+                  <span className="text-purple-400 font-bold">▷ Generalização:</span>
+                  <span className="text-muted-foreground"> Carro/Moto herdam de Veículo</span>
+                </div>
+                <div className="p-2 rounded bg-background/40 border border-border">
+                  <span className="text-pink-400 font-bold">── Associação:</span>
+                  <span className="text-muted-foreground"> Cliente realiza Locação</span>
+                </div>
+                <div className="p-2 rounded bg-background/40 border border-border">
+                  <span className="text-cyan-400 font-bold">1..*  Multiplicidade:</span>
+                  <span className="text-muted-foreground"> definida em cada ponta</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </ScrollReveal>
 
         {/* Atividade */}
