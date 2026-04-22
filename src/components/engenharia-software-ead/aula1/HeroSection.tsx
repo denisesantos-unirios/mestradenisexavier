@@ -25,8 +25,11 @@ const HeroSection = () => {
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8">
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-4">
             Histórico, evolução e importância da disciplina que transformou o desenvolvimento de software
+          </p>
+          <p className="text-sm text-muted-foreground mb-8 italic">
+            Baseado em Zanin, A. <strong className="text-emerald-400 not-italic">Conceitos da Engenharia de Software</strong> • Sommerville (2011)
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 text-sm mb-8">
