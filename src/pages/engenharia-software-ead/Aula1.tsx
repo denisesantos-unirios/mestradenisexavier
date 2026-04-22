@@ -7,6 +7,7 @@ import HistoricoSection from "@/components/engenharia-software-ead/aula1/Histori
 import EvolucaoSection from "@/components/engenharia-software-ead/aula1/EvolucaoSection";
 import ImportanciaSection from "@/components/engenharia-software-ead/aula1/ImportanciaSection";
 import EstudoCasoSection from "@/components/engenharia-software-ead/aula1/EstudoCasoSection";
+import ReferenciasSection from "@/components/engenharia-software-ead/aula1/ReferenciasSection";
 
 const sections = [
   { id: "introducao", title: "Introdução" },
@@ -14,6 +15,7 @@ const sections = [
   { id: "evolucao", title: "Evolução" },
   { id: "importancia", title: "Importância" },
   { id: "estudo-caso", title: "Estudo de Caso" },
+  { id: "referencias", title: "Referências" },
 ];
 
 const Aula1 = () => (
@@ -27,10 +29,14 @@ const Aula1 = () => (
       <EvolucaoSection />
       <ImportanciaSection />
       <EstudoCasoSection />
+      <ReferenciasSection />
     </div>
     <footer className="py-12 border-t border-border">
       <div className="container mx-auto px-6 text-center">
         <p className="text-muted-foreground">Prof.ª Denise Xavier • Engenharia de Software EAD</p>
+        <p className="text-xs text-muted-foreground mt-2 italic">
+          Conteúdo baseado em Zanin, A. — "Conceitos da Engenharia de Software" (SAGAH, 2017)
+        </p>
       </div>
     </footer>
     <PdfExportButton filename="ES-EAD_Aula-1_Conceitos-ES.pdf" />
@@ -38,3 +44,4 @@ const Aula1 = () => (
 );
 
 export default Aula1;
+

@@ -1,6 +1,39 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Code, Cpu, Layers, ArrowDown, ArrowRight, RefreshCw, Repeat, Zap, Heart } from "lucide-react";
+import MermaidDiagram from "@/components/MermaidDiagram";
+
+const modeloDiagrams: Record<string, string> = {
+  "Modelo Cascata (1970)": `flowchart TD
+  A[Definição de Requisitos] --> B[Projeto de Sistema e Software]
+  B --> C[Implementação e Teste Unitário]
+  C --> D[Integração e Teste de Sistema]
+  D --> E[Operação e Manutenção]`,
+  "Modelo Iterativo e Incremental": `flowchart LR
+  A[Esboço de Requisitos] --> B[Atribuir aos Incrementos]
+  B --> C[Projetar Arquitetura]
+  C --> D[Desenvolver Incremento]
+  D --> E{Completo?}
+  E -- Nao --> F[Validar e Integrar]
+  F --> G[Implantar Incremento]
+  G --> D
+  E -- Sim --> H[Sistema Final]`,
+  "Modelo em Espiral": `flowchart TB
+  Q1[1. Determinar objetivos<br/>e restricoes] --> Q2[2. Avaliar riscos<br/>Prototipos 1, 2, 3]
+  Q2 --> Q3[3. Desenvolver e verificar<br/>Requisitos, Codigo, Testes]
+  Q3 --> Q4[4. Planejar proxima fase]
+  Q4 --> Q1
+  Q4 --> FIM[Sistema Final]`,
+  "Métodos Ágeis (2001)": `flowchart LR
+  A[Backlog do Produto] --> B[Sprint Planning]
+  B --> C[Sprint 1-4 semanas]
+  C --> D[Daily Meetings]
+  D --> C
+  C --> E[Incremento Entregavel]
+  E --> F[Sprint Review]
+  F --> G[Retrospectiva]
+  G --> A`,
+};
 
 const linguagens = [
   { era: "1725", nome: "Cartões Perfurados", desc: "Instruções mecânicas em cartões para teares automáticos — os primórdios da programação.", tipo: "Pré-computação" },
@@ -212,6 +245,13 @@ const EvolucaoSection = () => {
                         </span>
                       ))}
                     </div>
+
+                    {modeloDiagrams[modelo.title] && (
+                      <div className="mb-4 p-4 rounded-xl bg-background/40 border border-border">
+                        <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wider">📐 Diagrama do Modelo</p>
+                        <MermaidDiagram chart={modeloDiagrams[modelo.title]} />
+                      </div>
+                    )}
 
                     <div className="grid md:grid-cols-3 gap-3">
                       <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
