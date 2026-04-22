@@ -246,6 +246,13 @@ const EvolucaoSection = () => {
                       ))}
                     </div>
 
+                    {modeloDiagrams[modelo.title] && (
+                      <div className="mb-4 p-4 rounded-xl bg-background/40 border border-border">
+                        <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wider">📐 Diagrama do Modelo</p>
+                        <MermaidDiagram chart={modeloDiagrams[modelo.title]} />
+                      </div>
+                    )}
+
                     <div className="grid md:grid-cols-3 gap-3">
                       <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
                         <p className="font-semibold text-emerald-400 text-xs mb-1">✅ Vantagens</p>
