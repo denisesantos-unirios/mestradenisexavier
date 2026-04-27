@@ -5,12 +5,14 @@ import HeroSection from "@/components/engenharia-software-2/aula17/HeroSection";
 import ConceitosSection from "@/components/engenharia-software-2/aula17/ConceitosSection";
 import RelacionamentosSection from "@/components/engenharia-software-2/aula17/RelacionamentosSection";
 import PraticaSection from "@/components/engenharia-software-2/aula17/PraticaSection";
+import EstudoCasoSection from "@/components/engenharia-software-2/aula17/EstudoCasoSection";
 
 const sections = [
   { id: "hero", title: "Início" },
   { id: "conceitos", title: "Conceitos" },
   { id: "relacionamentos", title: "Relacionamentos" },
-  { id: "pratica", title: "Prática" }
+  { id: "pratica", title: "Prática" },
+  { id: "estudo-caso", title: "Estudo de Caso" }
 ];
 
 const Aula17 = () => {
@@ -38,6 +40,10 @@ const Aula17 = () => {
         
         <div id="pratica">
           <PraticaSection />
+        </div>
+
+        <div id="estudo-caso">
+          <EstudoCasoSection />
         </div>
       </div>
       <PdfExportButton filename="ES2_Aula-17_Diagrama-Classes.pdf" />
