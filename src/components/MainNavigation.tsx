@@ -280,21 +280,22 @@ const MainNavigation = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="ml-8 mt-2 space-y-1"
+                            className="ml-4 mt-2 space-y-1 max-h-[50vh] overflow-y-auto pr-2 border-l-2 border-border/50 pl-3"
                           >
                             {item.submenu.length > 0 ? (
-                              item.submenu.map((subitem) => (
+                              item.submenu.map((subitem, idx) => (
                                 <Link
                                   key={subitem.path}
                                   to={subitem.path}
                                   onClick={() => setIsOpen(false)}
-                                  className={`block px-4 py-2 rounded-lg text-sm transition-colors ${
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                                     location.pathname === subitem.path
                                       ? "bg-primary/10 text-primary"
                                       : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                                   }`}
                                 >
-                                  {subitem.title}
+                                  <span className="text-[10px] font-mono text-muted-foreground/60 w-6 shrink-0">{String(idx + 1).padStart(2, "0")}</span>
+                                  <span className="flex-1">{subitem.title}</span>
                                 </Link>
                               ))
                             ) : (
