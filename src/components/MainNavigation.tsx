@@ -178,20 +178,27 @@ const MainNavigation = () => {
 
                 {/* Desktop Submenu */}
                 {item.submenu && item.submenu.length > 0 && (
-                  <div className="absolute top-full left-0 mt-1 py-2 min-w-[280px] bg-background/95 backdrop-blur-xl border border-border rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                    {item.submenu.map((subitem) => (
-                      <Link
-                        key={subitem.path}
-                        to={subitem.path}
-                        className={`block px-4 py-3 text-sm transition-colors ${
-                          location.pathname === subitem.path
-                            ? "bg-primary/10 text-primary"
-                            : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                        }`}
-                      >
-                        {subitem.title}
-                      </Link>
-                    ))}
+                  <div className="absolute top-full left-0 mt-1 min-w-[320px] bg-background/95 backdrop-blur-xl border border-border rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 flex flex-col max-h-[75vh]">
+                    <div className="px-4 py-2 border-b border-border/50 sticky top-0 bg-background/95 backdrop-blur-xl rounded-t-xl">
+                      <p className="text-xs font-semibold text-primary uppercase tracking-wider">{item.title}</p>
+                      <p className="text-[10px] text-muted-foreground">{item.submenu.length} {item.submenu.length === 1 ? "item" : "itens"}</p>
+                    </div>
+                    <div className="overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
+                      {item.submenu.map((subitem, idx) => (
+                        <Link
+                          key={subitem.path}
+                          to={subitem.path}
+                          className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${
+                            location.pathname === subitem.path
+                              ? "bg-primary/10 text-primary border-l-2 border-primary"
+                              : "text-muted-foreground hover:text-foreground hover:bg-secondary/50 border-l-2 border-transparent"
+                          }`}
+                        >
+                          <span className="text-[10px] font-mono text-muted-foreground/60 w-6 shrink-0">{String(idx + 1).padStart(2, "0")}</span>
+                          <span className="flex-1">{subitem.title}</span>
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
 
@@ -226,9 +233,9 @@ const MainNavigation = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border"
+            className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border max-h-[calc(100vh-4rem)] overflow-y-auto"
           >
-            <div className="px-6 py-4 space-y-2">
+            <div className="px-6 py-4 space-y-2 pb-8">
               {menuItems.map((item) => (
                 <div key={item.id}>
                   {item.path ? (
@@ -273,21 +280,22 @@ const MainNavigation = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="ml-8 mt-2 space-y-1"
+                            className="ml-4 mt-2 space-y-1 max-h-[50vh] overflow-y-auto pr-2 border-l-2 border-border/50 pl-3"
                           >
                             {item.submenu.length > 0 ? (
-                              item.submenu.map((subitem) => (
+                              item.submenu.map((subitem, idx) => (
                                 <Link
                                   key={subitem.path}
                                   to={subitem.path}
                                   onClick={() => setIsOpen(false)}
-                                  className={`block px-4 py-2 rounded-lg text-sm transition-colors ${
+                                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                                     location.pathname === subitem.path
                                       ? "bg-primary/10 text-primary"
                                       : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                                   }`}
                                 >
-                                  {subitem.title}
+                                  <span className="text-[10px] font-mono text-muted-foreground/60 w-6 shrink-0">{String(idx + 1).padStart(2, "0")}</span>
+                                  <span className="flex-1">{subitem.title}</span>
                                 </Link>
                               ))
                             ) : (
