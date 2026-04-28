@@ -233,9 +233,9 @@ const MainNavigation = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border"
+            className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border max-h-[calc(100vh-4rem)] overflow-y-auto"
           >
-            <div className="px-6 py-4 space-y-2">
+            <div className="px-6 py-4 space-y-2 pb-8">
               {menuItems.map((item) => (
                 <div key={item.id}>
                   {item.path ? (
