@@ -3,12 +3,14 @@ import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/engenharia-software-2/aula18/HeroSection";
 import ConceitosSection from "@/components/engenharia-software-2/aula18/ConceitosSection";
+import AtendimentoBancarioSection from "@/components/engenharia-software-2/aula18/AtendimentoBancarioSection";
 import EstudoCasoSection from "@/components/engenharia-software-2/aula18/EstudoCasoSection";
 import PraticaSection from "@/components/engenharia-software-2/aula18/PraticaSection";
 
 const sections = [
   { id: "hero", title: "Início" },
   { id: "conceitos", title: "Conceitos" },
+  { id: "atendimento-bancario", title: "Atendimento Bancário" },
   { id: "estudo-caso", title: "Estudo de Caso" },
   { id: "pratica", title: "Prática" },
 ];
