@@ -34,6 +34,10 @@ const Aula18 = () => {
           <ConceitosSection />
         </div>
 
+        <div id="atendimento-bancario">
+          <AtendimentoBancarioSection />
+        </div>
+
         <div id="estudo-caso">
           <EstudoCasoSection />
         </div>
