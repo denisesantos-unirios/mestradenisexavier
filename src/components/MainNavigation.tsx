@@ -44,7 +44,8 @@ const menuItems = [
       { title: "Aula 14 - Workshop: Diagrama UC", path: "/engenharia-software-2/aula-14" },
       { title: "Aula 15 - Entrega Fase 3: Casos de Uso", path: "/engenharia-software-2/aula-15" },
       { title: "Aula 16 - User Stories & Kanban", path: "/engenharia-software-2/aula-16" },
-      { title: "Aula 17 - Diagrama de Classes", path: "/engenharia-software-2/aula-17" }
+      { title: "Aula 17 - Diagrama de Classes", path: "/engenharia-software-2/aula-17" },
+      { title: "Aula 18 - Diagrama de Atividades", path: "/engenharia-software-2/aula-18" }
     ]
   },
   {
