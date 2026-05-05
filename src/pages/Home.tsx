@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { GraduationCap, Code2, Layers, Monitor, ChevronRight, BookOpen, Award, Briefcase, Heart, ExternalLink, FolderKanban } from "lucide-react";
+import { GraduationCap, Code2, Layers, Monitor, ChevronRight, BookOpen, Award, Briefcase, Heart, ExternalLink, FolderKanban, Database } from "lucide-react";
 import { Link } from "react-router-dom";
 import MainNavigation from "@/components/MainNavigation";
 import professoraImg from "@/assets/professora-denise.jpg";
@@ -260,6 +260,35 @@ const Home = () => {
                 </a>
               </div>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Modelagem highlight */}
+      <section className="px-6 pb-12">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.55 }}
+          >
+            <Link
+              to="/modelagem"
+              className="block glass-card p-6 md:p-8 hover:border-blue-400/50 transition-all group"
+            >
+              <div className="flex items-center gap-5 flex-wrap">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Database className="w-8 h-8 text-white" />
+                </div>
+                <div className="flex-1 min-w-[200px]">
+                  <h3 className="text-xl md:text-2xl font-bold text-foreground mb-1">Estudos de Modelagem</h3>
+                  <p className="text-sm text-muted-foreground">
+                    9 mini-mundos completos com DER, Conceitual, Classes, Atividades, Requisitos, SQL e Histórias de Usuário.
+                  </p>
+                </div>
+                <ChevronRight className="w-6 h-6 text-blue-400 group-hover:translate-x-2 transition-transform" />
+              </div>
+            </Link>
           </motion.div>
         </div>
       </section>
