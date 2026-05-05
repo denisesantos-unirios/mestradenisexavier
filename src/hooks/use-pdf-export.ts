@@ -57,6 +57,25 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
       );
       elementsToRemove.forEach((el) => el.remove());
 
+      // Reveal all Radix Tabs panels (forceMount keeps them in DOM but hidden)
+      clone.querySelectorAll('[role="tabpanel"]').forEach((el) => {
+        const panel = el as HTMLElement;
+        panel.removeAttribute("hidden");
+        panel.removeAttribute("data-state");
+        panel.style.setProperty("display", "block", "important");
+        panel.style.setProperty("visibility", "visible", "important");
+        panel.style.setProperty("opacity", "1", "important");
+        panel.style.marginBottom = "24px";
+      });
+      // Also unhide anything with data-state=inactive (TabsContent uses utility class)
+      clone.querySelectorAll('[data-state="inactive"]').forEach((el) => {
+        (el as HTMLElement).style.setProperty("display", "block", "important");
+      });
+      // Hide tab triggers list (no need in PDF, all panels are visible)
+      clone.querySelectorAll('[role="tablist"]').forEach((el) => {
+        (el as HTMLElement).style.setProperty("display", "none", "important");
+      });
+
       // Apply print-friendly styles
       const applyPrintStyles = (element: HTMLElement) => {
         // Reset all backgrounds to white
