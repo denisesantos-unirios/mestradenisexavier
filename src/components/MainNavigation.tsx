@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban, Database } from "lucide-react";
 
 const menuItems = [
   {
@@ -100,6 +100,12 @@ const menuItems = [
       { title: "Aula 1 - Ágeis, Scrum & Kanban (ENADE)", path: "/gestao-projetos/aula-1" },
       { title: "Aula 2 - Metodologias Ágeis e ENADE", path: "/gestao-projetos/aula-2" },
     ]
+  },
+  {
+    id: "modelagem",
+    title: "Modelagem",
+    path: "/modelagem",
+    icon: Database
   },
   {
     id: "protocolos",
