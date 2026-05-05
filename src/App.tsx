@@ -66,6 +66,9 @@ import GPAula1 from "./pages/gestao-projetos/Aula1";
 import GPAula2 from "./pages/gestao-projetos/Aula2";
 // Protocolos
 import FrameworkDECIDE from "./pages/protocolos/FrameworkDECIDE";
+// Modelagem
+import ModelagemIndex from "./pages/modelagem/Index";
+import ModelagemCaseStudy from "./pages/modelagem/CaseStudyPage";
 // Provas
 import ProvasLogin from "./pages/provas/Login";
 import BancoQuestoes from "./pages/provas/BancoQuestoes";
@@ -143,6 +146,9 @@ const App = () => (
           {/* Gestão de Projetos */}
           <Route path="/gestao-projetos/aula-1" element={<GPAula1 />} />
           <Route path="/gestao-projetos/aula-2" element={<GPAula2 />} />
+          {/* Modelagem */}
+          <Route path="/modelagem" element={<ModelagemIndex />} />
+          <Route path="/modelagem/:slug" element={<ModelagemCaseStudy />} />
           {/* Protocolos */}
           <Route path="/protocolos/framework-decide" element={<FrameworkDECIDE />} />
           {/* Provas */}
