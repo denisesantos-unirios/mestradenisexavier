@@ -79,7 +79,7 @@ const CaseStudyPage = () => {
               <TabsTrigger value="hus" className="text-xs md:text-sm gap-1.5"><Users className="w-3.5 h-3.5" />Histórias</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="der">
+            <TabsContent value="der" forceMount className="data-[state=inactive]:hidden print-show">
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
                   <SectionTitle icon={Database} title="DER" subtitle="Diagrama Entidade-Relacionamento (notação crow's foot)" />
@@ -90,7 +90,7 @@ const CaseStudyPage = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="conceitual">
+            <TabsContent value="conceitual" forceMount className="data-[state=inactive]:hidden print-show">
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
                   <SectionTitle icon={Network} title="Modelagem Conceitual" subtitle="Visão de entidades, atributos e cardinalidades" />
@@ -101,7 +101,7 @@ const CaseStudyPage = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="classes">
+            <TabsContent value="classes" forceMount className="data-[state=inactive]:hidden print-show">
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
                   <SectionTitle icon={Code} title="Diagrama de Classes" subtitle="Visão UML orientada a objetos" />
@@ -112,7 +112,7 @@ const CaseStudyPage = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="atividades">
+            <TabsContent value="atividades" forceMount className="data-[state=inactive]:hidden print-show">
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
                   <SectionTitle icon={Workflow} title="Diagrama de Atividades" subtitle={`Fluxo principal: ${cs.atividadesTitulo}`} />
@@ -123,7 +123,7 @@ const CaseStudyPage = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="rfs">
+            <TabsContent value="rfs" forceMount className="data-[state=inactive]:hidden print-show">
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
                   <SectionTitle icon={ListChecks} title="Requisitos Funcionais" />
@@ -142,7 +142,7 @@ const CaseStudyPage = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="sql">
+            <TabsContent value="sql" forceMount className="data-[state=inactive]:hidden print-show">
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
                   <SectionTitle icon={FileText} title="Script de Banco de Dados" subtitle="DDL PostgreSQL" />
@@ -153,7 +153,7 @@ const CaseStudyPage = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="hus">
+            <TabsContent value="hus" forceMount className="data-[state=inactive]:hidden print-show">
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
                   <SectionTitle icon={Users} title="Histórias de Usuário" />
