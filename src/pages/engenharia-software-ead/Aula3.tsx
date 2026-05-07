@@ -28,6 +28,7 @@ const Aula3 = () => (
       <ManifestoSection />
       <PrincipiosSection />
       <ImpactoSection />
+      <PorqueManifestoSection />
       <div id="atividade">
         <ConteudoSection />
       </div>
