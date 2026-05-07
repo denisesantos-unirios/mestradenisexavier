@@ -6,6 +6,7 @@ import HistoriaSection from "@/components/engenharia-software-ead/aula3/Historia
 import ManifestoSection from "@/components/engenharia-software-ead/aula3/ManifestoSection";
 import PrincipiosSection from "@/components/engenharia-software-ead/aula3/PrincipiosSection";
 import ImpactoSection from "@/components/engenharia-software-ead/aula3/ImpactoSection";
+import PorqueManifestoSection from "@/components/engenharia-software-ead/aula3/PorqueManifestoSection";
 import ConteudoSection from "@/components/engenharia-software-ead/aula3/ConteudoSection";
 
 const sections = [
@@ -13,6 +14,7 @@ const sections = [
   { id: "manifesto", title: "4 Valores" },
   { id: "principios", title: "12 Princípios" },
   { id: "impacto", title: "Impacto nos Processos" },
+  { id: "porque-manifesto", title: "Por que ainda importa" },
   { id: "atividade", title: "Atividade Prática" },
 ];
 
@@ -26,6 +28,7 @@ const Aula3 = () => (
       <ManifestoSection />
       <PrincipiosSection />
       <ImpactoSection />
+      <PorqueManifestoSection />
       <div id="atividade">
         <ConteudoSection />
       </div>
