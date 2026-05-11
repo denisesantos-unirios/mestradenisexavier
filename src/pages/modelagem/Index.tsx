@@ -1,10 +1,14 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { Database, ChevronRight, Layers } from "lucide-react";
+import { Link, Navigate } from "react-router-dom";
+import { Database, ChevronRight, Layers, Loader2 } from "lucide-react";
 import MainNavigation from "@/components/MainNavigation";
 import { cases } from "@/data/modelagem/cases";
+import { useAuth } from "@/hooks/useAuth";
 
 const ModelagemIndex = () => {
+  const { isProfessor, loading } = useAuth();
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
+  if (!isProfessor) return <Navigate to="/provas/login" replace />;
   return (
     <main className="min-h-screen relative" style={{ background: "var(--gradient-hero)" }}>
       <MainNavigation />

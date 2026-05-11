@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban, Database } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban } from "lucide-react";
 
 const menuItems = [
   {
@@ -102,12 +102,6 @@ const menuItems = [
     ]
   },
   {
-    id: "modelagem",
-    title: "Modelagem",
-    path: "/modelagem",
-    icon: Database
-  },
-  {
     id: "protocolos",
     title: "Protocolos",
     icon: FlaskConical,
@@ -122,7 +116,8 @@ const menuItems = [
     submenu: [
       { title: "Login Professor", path: "/provas/login" },
       { title: "Banco de Questões", path: "/provas/banco-questoes" },
-      { title: "Gerar Prova", path: "/provas/gerar-prova" }
+      { title: "Gerar Prova", path: "/provas/gerar-prova" },
+      { title: "Estudos de Modelagem", path: "/modelagem" }
     ]
   }
 ];

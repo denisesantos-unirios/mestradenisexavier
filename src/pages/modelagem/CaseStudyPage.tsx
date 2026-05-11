@@ -1,6 +1,7 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, BookOpen, Database, Network, Workflow, ListChecks, Code, Users, FileText } from "lucide-react";
+import { ArrowLeft, BookOpen, Database, Network, Workflow, ListChecks, Code, Users, FileText, Loader2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 import MainNavigation from "@/components/MainNavigation";
 import LessonQRCode from "@/components/LessonQRCode";
 import PdfExportButton from "@/components/PdfExportButton";
@@ -24,8 +25,11 @@ const SectionTitle = ({ icon: Icon, title, subtitle }: { icon: any; title: strin
 );
 
 const CaseStudyPage = () => {
+  const { isProfessor, loading } = useAuth();
   const { slug } = useParams();
   const cs = getCaseBySlug(slug || "");
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
+  if (!isProfessor) return <Navigate to="/provas/login" replace />;
   if (!cs) return <Navigate to="/modelagem" replace />;
 
   return (
