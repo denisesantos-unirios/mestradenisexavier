@@ -166,6 +166,7 @@ export type Database = {
         | "engenharia-software-1"
         | "engenharia-software-2"
         | "projetos-interface"
+        | "engenharia-software-ead"
       question_type: "multiple_choice" | "discursive"
     }
     CompositeTypes: {
@@ -300,6 +301,7 @@ export const Constants = {
         "engenharia-software-1",
         "engenharia-software-2",
         "projetos-interface",
+        "engenharia-software-ead",
       ],
       question_type: ["multiple_choice", "discursive"],
     },

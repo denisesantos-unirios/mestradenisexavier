@@ -1,0 +1,1 @@
+ALTER TYPE discipline ADD VALUE IF NOT EXISTS 'engenharia-software-ead';
