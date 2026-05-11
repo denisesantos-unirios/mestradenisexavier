@@ -21,6 +21,7 @@ type Difficulty = Database["public"]["Enums"]["difficulty_level"];
 const disciplineLabels: Record<Discipline, string> = {
   "engenharia-software-1": "Engenharia de Software I",
   "engenharia-software-2": "Engenharia de Software II",
+  "engenharia-software-ead": "Engenharia de Software EAD",
   "projetos-interface": "Projetos de Interface",
 };
 
