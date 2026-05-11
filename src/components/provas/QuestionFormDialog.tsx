@@ -158,6 +158,7 @@ const QuestionFormDialog = ({ open, onOpenChange, onSuccess }: QuestionFormDialo
                 <SelectContent>
                   <SelectItem value="engenharia-software-1">Eng. Software I</SelectItem>
                   <SelectItem value="engenharia-software-2">Eng. Software II</SelectItem>
+                  <SelectItem value="engenharia-software-ead">Eng. Software EAD</SelectItem>
                   <SelectItem value="projetos-interface">Projetos de Interface</SelectItem>
                 </SelectContent>
               </Select>
