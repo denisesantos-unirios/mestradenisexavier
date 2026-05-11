@@ -21,6 +21,7 @@ type Difficulty = Database["public"]["Enums"]["difficulty_level"];
 const disciplineLabels: Record<Discipline, string> = {
   "engenharia-software-1": "Engenharia de Software I",
   "engenharia-software-2": "Engenharia de Software II",
+  "engenharia-software-ead": "Engenharia de Software EAD",
   "projetos-interface": "Projetos de Interface",
 };
 
@@ -178,6 +179,7 @@ const BancoQuestoes = () => {
                   <SelectItem value="all">Todas as disciplinas</SelectItem>
                   <SelectItem value="engenharia-software-1">Engenharia de Software I</SelectItem>
                   <SelectItem value="engenharia-software-2">Engenharia de Software II</SelectItem>
+                  <SelectItem value="engenharia-software-ead">Engenharia de Software EAD</SelectItem>
                   <SelectItem value="projetos-interface">Projetos de Interface</SelectItem>
                 </SelectContent>
               </Select>

@@ -15,6 +15,7 @@ type Question = Database["public"]["Tables"]["questions"]["Row"];
 const disciplineLabels: Record<string, string> = {
   "engenharia-software-1": "Engenharia de Software I",
   "engenharia-software-2": "Engenharia de Software II",
+  "engenharia-software-ead": "Engenharia de Software EAD",
   "projetos-interface": "Projetos de Interface",
 };
 
