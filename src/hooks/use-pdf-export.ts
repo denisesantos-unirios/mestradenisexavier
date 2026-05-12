@@ -33,7 +33,7 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
       // Keeping it at (0,0) but fully transparent avoids impacting UI while remaining
       // renderable.
       container.style.cssText = `
-        position: fixed;
+        position: absolute;
         left: 0;
         top: 0;
         width: 800px;
@@ -43,7 +43,8 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
         padding: 30px;
         box-sizing: border-box;
         pointer-events: none;
-        z-index: -1;
+        opacity: 0;
+        z-index: 2147483647;
       `;
 
       // Clone the main content
