@@ -33,7 +33,7 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
       // Keeping it at (0,0) but fully transparent avoids impacting UI while remaining
       // renderable.
       container.style.cssText = `
-        position: fixed;
+        position: absolute;
         left: 0;
         top: 0;
         width: 800px;
@@ -42,8 +42,7 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
         font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         padding: 30px;
         box-sizing: border-box;
-        pointer-events: none;
-        z-index: -1;
+        z-index: 2147483647;
       `;
 
       // Clone the main content
