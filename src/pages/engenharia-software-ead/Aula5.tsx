@@ -3,9 +3,17 @@ import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
 import { HeroSection } from "@/components/engenharia-software-ead/aula5/ConteudoSection";
 import ConteudoSection from "@/components/engenharia-software-ead/aula5/ConteudoSection";
+import ConceitosSection from "@/components/engenharia-software-ead/aula5/ConceitosSection";
+import ProcessoSection from "@/components/engenharia-software-ead/aula5/ProcessoSection";
+import ComoEscreverSection from "@/components/engenharia-software-ead/aula5/ComoEscreverSection";
+import UserStoriesSection from "@/components/engenharia-software-ead/aula5/UserStoriesSection";
 
 const sections = [
-  { id: "requisitos", title: "Requisitos" },
+  { id: "conceitos", title: "Conceitos" },
+  { id: "requisitos", title: "Tipos" },
+  { id: "processo", title: "Processo" },
+  { id: "como-escrever", title: "Como Escrever" },
+  { id: "user-stories", title: "User Stories" },
 ];
 
 const Aula5 = () => (
@@ -14,7 +22,11 @@ const Aula5 = () => (
     <div className="pt-16">
       <HeroSection />
       <LessonQRCode />
+      <ConceitosSection />
       <ConteudoSection />
+      <ProcessoSection />
+      <ComoEscreverSection />
+      <UserStoriesSection />
     </div>
     <footer className="py-12 border-t border-border">
       <div className="container mx-auto px-6 text-center">
