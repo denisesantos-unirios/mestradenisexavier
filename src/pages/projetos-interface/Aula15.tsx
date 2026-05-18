@@ -3,20 +3,18 @@ import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/projetos-interface/aula15/HeroSection";
-import TecnicasSection from "@/components/projetos-interface/aula15/TecnicasSection";
-import PrincipiosSection from "@/components/projetos-interface/aula15/PrincipiosSection";
-import WorkshopSection from "@/components/projetos-interface/aula15/WorkshopSection";
+import PreparacaoSection from "@/components/projetos-interface/aula15/PreparacaoSection";
+import TesteValidacaoSection from "@/components/projetos-interface/aula15/TesteValidacaoSection";
 
 const Aula15 = () => {
   const sections = [
     { id: "hero", title: "Início" },
-    { id: "tecnicas", title: "Técnicas" },
-    { id: "principios", title: "Princípios" },
-    { id: "workshop", title: "Workshop" },
+    { id: "preparacao", title: "2.4 Preparação (DECIDE)" },
+    { id: "teste-validacao", title: "4. Teste e Validação" },
   ];
 
   const lessonNavigation = {
-    title: "Ideação e Brainstorming",
+    title: "Modelo de Relatório do Experimento",
     course: "Projetos de Interface",
     currentLesson: 15,
     totalLessons: 19,
@@ -38,11 +36,10 @@ const Aula15 = () => {
       <main className="pt-16">
         <HeroSection />
         <LessonQRCode />
-        <TecnicasSection />
-        <PrincipiosSection />
-        <WorkshopSection />
+        <PreparacaoSection />
+        <TesteValidacaoSection />
       </main>
-      <PdfExportButton filename="Projetos-Interface_Aula-15_Ideacao.pdf" />
+      <PdfExportButton filename="Projetos-Interface_Aula-15_Relatorio-Experimento.pdf" />
     </div>
   );
 };
