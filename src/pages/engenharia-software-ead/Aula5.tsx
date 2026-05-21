@@ -7,6 +7,7 @@ import ConceitosSection from "@/components/engenharia-software-ead/aula5/Conceit
 import ProcessoSection from "@/components/engenharia-software-ead/aula5/ProcessoSection";
 import ComoEscreverSection from "@/components/engenharia-software-ead/aula5/ComoEscreverSection";
 import UserStoriesSection from "@/components/engenharia-software-ead/aula5/UserStoriesSection";
+import JudyDetranSection from "@/components/engenharia-software-ead/aula5/JudyDetranSection";
 
 const sections = [
   { id: "conceitos", title: "Conceitos" },
@@ -14,6 +15,7 @@ const sections = [
   { id: "processo", title: "Processo" },
   { id: "como-escrever", title: "Como Escrever" },
   { id: "user-stories", title: "User Stories" },
+  { id: "judy-detran", title: "Caso Judy/Detran" },
 ];
 
 const Aula5 = () => (
@@ -27,6 +29,7 @@ const Aula5 = () => (
       <ProcessoSection />
       <ComoEscreverSection />
       <UserStoriesSection />
+      <JudyDetranSection />
     </div>
     <footer className="py-12 border-t border-border">
       <div className="container mx-auto px-6 text-center">
