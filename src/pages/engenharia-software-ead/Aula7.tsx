@@ -1,16 +1,21 @@
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
-import { HeroSection } from "@/components/engenharia-software-ead/aula7/ConteudoSection";
-import ConteudoSection from "@/components/engenharia-software-ead/aula7/ConteudoSection";
+import ConteudoSection, { HeroSection } from "@/components/engenharia-software-ead/aula7/ConteudoSection";
 
 const sections = [
-  { id: "por-que-modelar", title: "Modelagem" },
+  { id: "objetivos", title: "Objetivos" },
+  { id: "conceitos", title: "Conceitos" },
+  { id: "diretrizes", title: "Diretrizes" },
+  { id: "notacao", title: "Notação" },
+  { id: "estudo-caso", title: "Estudo de Caso" },
+  { id: "atividade", title: "Atividade" },
+  { id: "referencias", title: "Referências" },
 ];
 
 const Aula7 = () => (
   <main className="min-h-screen relative" style={{ background: "var(--gradient-hero)" }}>
-    <LessonNavigation sections={sections} title="Aula 7 - UML e Casos de Uso" course="Engenharia de Software EAD" />
+    <LessonNavigation sections={sections} title="Aula 7 - Modelagem Conceitual" course="Engenharia de Software EAD" />
     <div className="pt-16">
       <HeroSection />
       <LessonQRCode />
@@ -21,7 +26,7 @@ const Aula7 = () => (
         <p className="text-muted-foreground">Prof.ª Denise Xavier • Engenharia de Software EAD</p>
       </div>
     </footer>
-    <PdfExportButton filename="ES-EAD_Aula-7_UML-Casos-Uso.pdf" />
+    <PdfExportButton filename="ES-EAD_Aula-7_Modelagem-Conceitual.pdf" />
   </main>
 );
 
