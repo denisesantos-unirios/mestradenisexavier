@@ -63,6 +63,7 @@ const courses = [
       { id: "aula-8", title: "Aula 8", description: "Modelagem: E-Commerce", path: "/engenharia-software-ead/aula-8" },
       { id: "aula-9", title: "Aula 9", description: "Modelagem + Ágil", path: "/engenharia-software-ead/aula-9" },
       { id: "aula-10", title: "Aula 10", description: "Revisão Integrada", path: "/engenharia-software-ead/aula-10" },
+      { id: "aula-11", title: "Aula 11", description: "Modelagem Conceitual", path: "/engenharia-software-ead/aula-11" },
     ]
   },
   {

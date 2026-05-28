@@ -9,7 +9,7 @@ export const HeroSection = () => (
     <div className="container mx-auto px-6 text-center relative z-10">
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-400 text-sm font-medium mb-8">
-          <Database className="w-4 h-4" /> Aula 7 • Modelagem Conceitual de Dados
+          <Database className="w-4 h-4" /> Aula 11 • Modelagem Conceitual de Dados
         </div>
         <h1 className="text-5xl md:text-7xl font-black mb-6">
           <span className="bg-gradient-to-r from-indigo-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">Modelagem Conceitual</span>
