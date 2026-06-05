@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      equipes: {
+        Row: {
+          alunos: Json
+          created_at: string
+          created_by: string
+          descricao: string | null
+          id: string
+          nome: string
+          periodo: string | null
+          semestre: string | null
+          updated_at: string
+        }
+        Insert: {
+          alunos?: Json
+          created_at?: string
+          created_by: string
+          descricao?: string | null
+          id?: string
+          nome: string
+          periodo?: string | null
+          semestre?: string | null
+          updated_at?: string
+        }
+        Update: {
+          alunos?: Json
+          created_at?: string
+          created_by?: string
+          descricao?: string | null
+          id?: string
+          nome?: string
+          periodo?: string | null
+          semestre?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       exams: {
         Row: {
           created_at: string
@@ -41,6 +77,65 @@ export type Database = {
         }
         Relationships: []
       }
+      experimentos: {
+        Row: {
+          created_at: string
+          created_by: string
+          data_aplicacao: string | null
+          hipoteses: Json
+          id: string
+          metricas: Json
+          objetivo: string | null
+          personas: Json
+          projeto_id: string
+          questoes: Json
+          resultados: Json
+          tarefas: Json
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          data_aplicacao?: string | null
+          hipoteses?: Json
+          id?: string
+          metricas?: Json
+          objetivo?: string | null
+          personas?: Json
+          projeto_id: string
+          questoes?: Json
+          resultados?: Json
+          tarefas?: Json
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          data_aplicacao?: string | null
+          hipoteses?: Json
+          id?: string
+          metricas?: Json
+          objetivo?: string | null
+          personas?: Json
+          projeto_id?: string
+          questoes?: Json
+          resultados?: Json
+          tarefas?: Json
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experimentos_projeto_id_fkey"
+            columns: ["projeto_id"]
+            isOneToOne: false
+            referencedRelation: "projetos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -64,6 +159,50 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      projetos: {
+        Row: {
+          created_at: string
+          created_by: string
+          descricao: string | null
+          equipe_id: string
+          id: string
+          nome: string
+          software_avaliado: string | null
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          descricao?: string | null
+          equipe_id: string
+          id?: string
+          nome: string
+          software_avaliado?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          descricao?: string | null
+          equipe_id?: string
+          id?: string
+          nome?: string
+          software_avaliado?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projetos_equipe_id_fkey"
+            columns: ["equipe_id"]
+            isOneToOne: false
+            referencedRelation: "equipes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       questions: {
         Row: {

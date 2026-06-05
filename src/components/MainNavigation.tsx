@@ -106,7 +106,10 @@ const menuItems = [
     title: "Protocolos",
     icon: FlaskConical,
     submenu: [
-      { title: "Framework DECIDE - Experimentos de Usabilidade", path: "/protocolos/framework-decide" }
+      { title: "Framework DECIDE - Experimentos de Usabilidade", path: "/protocolos/framework-decide" },
+      { title: "Gerenciar Equipes", path: "/protocolos/equipes" },
+      { title: "Gerenciar Projetos", path: "/protocolos/projetos" },
+      { title: "Gerenciar Experimentos", path: "/protocolos/experimentos" },
     ]
   },
   {
