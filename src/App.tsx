@@ -71,6 +71,9 @@ import ProtocolosEquipes from "./pages/protocolos/Equipes";
 import ProtocolosProjetos from "./pages/protocolos/Projetos";
 import ProtocolosExperimentos from "./pages/protocolos/Experimentos";
 import ProtocolosExperimentoDetalhe from "./pages/protocolos/ExperimentoDetalhe";
+import ProtocolosLogin from "./pages/protocolos/Login";
+import ProtocolosGestao from "./pages/protocolos/Gestao";
+import ProtocolosGuard from "./components/protocolos/ProtocolosGuard";
 // Modelagem
 import ModelagemIndex from "./pages/modelagem/Index";
 import ModelagemCaseStudy from "./pages/modelagem/CaseStudyPage";
