@@ -110,6 +110,7 @@ const menuItems = [
       { title: "Gerenciar Equipes", path: "/protocolos/equipes" },
       { title: "Gerenciar Projetos", path: "/protocolos/projetos" },
       { title: "Gerenciar Experimentos", path: "/protocolos/experimentos" },
+      { title: "Gestão de Acessos", path: "/protocolos/gestao" },
     ]
   },
   {
