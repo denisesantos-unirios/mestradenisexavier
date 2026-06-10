@@ -73,6 +73,7 @@ import ProtocolosExperimentos from "./pages/protocolos/Experimentos";
 import ProtocolosExperimentoDetalhe from "./pages/protocolos/ExperimentoDetalhe";
 import ProtocolosLogin from "./pages/protocolos/Login";
 import ProtocolosGestao from "./pages/protocolos/Gestao";
+import SistemaExperimentos from "./pages/protocolos/SistemaExperimentos";
 import ProtocolosGuard from "./components/protocolos/ProtocolosGuard";
 // Modelagem
 import ModelagemIndex from "./pages/modelagem/Index";
@@ -161,6 +162,7 @@ const App = () => (
           {/* Protocolos */}
           <Route path="/protocolos/login" element={<ProtocolosLogin />} />
           <Route path="/protocolos/framework-decide" element={<ProtocolosGuard><FrameworkDECIDE /></ProtocolosGuard>} />
+          <Route path="/protocolos/sistema" element={<ProtocolosGuard><SistemaExperimentos /></ProtocolosGuard>} />
           <Route path="/protocolos/equipes" element={<ProtocolosGuard><ProtocolosEquipes /></ProtocolosGuard>} />
           <Route path="/protocolos/projetos" element={<ProtocolosGuard><ProtocolosProjetos /></ProtocolosGuard>} />
           <Route path="/protocolos/experimentos" element={<ProtocolosGuard><ProtocolosExperimentos /></ProtocolosGuard>} />
