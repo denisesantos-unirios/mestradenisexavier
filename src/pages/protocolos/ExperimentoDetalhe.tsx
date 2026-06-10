@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -6,32 +6,48 @@ import MainNavigation from "@/components/MainNavigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Plus, Trash2, ArrowLeft } from "lucide-react";
+import { Save, Plus, Trash2, ArrowLeft, Target, Gauge, Smile } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend,
   PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
 } from "recharts";
 
-type MetricaTipo = "eficacia" | "eficiencia" | "satisfacao";
-type Metrica = { nome: string; tipo: MetricaTipo; formula?: string };
+type FatorTipo = "eficacia" | "eficiencia" | "satisfacao";
+type Metrica = { nome: string; tipo: FatorTipo; formula?: string };
 type Persona = { nome: string; perfil: string; contexto: string; objetivos: string };
-type Tarefa = { id: string; descricao: string; criterio_sucesso: string; tempo_esperado_seg: number };
+type Tarefa = { id: string; descricao: string; criterio_sucesso: string; tempo_esperado_seg: number; fator?: FatorTipo };
+type Hipotese = { fator: FatorTipo; texto: string };
+type Questao = { fator: FatorTipo; texto: string };
 type Resultado = { participante: string; tarefa_id: string; sucesso: boolean; tempo_seg: number; erros: number; sus_score: number; observacoes?: string };
 
 type Experimento = {
   id: string; titulo: string; data_aplicacao: string | null;
   objetivo: string | null;
-  hipoteses: string[]; questoes: string[];
+  fatores: FatorTipo[];
+  hipoteses: Hipotese[]; questoes: Questao[];
   metricas: Metrica[]; personas: Persona[];
   tarefas: Tarefa[]; resultados: Resultado[];
 };
 
 const uid = () => Math.random().toString(36).slice(2, 10);
+
+const FATOR_META: Record<FatorTipo, { label: string; desc: string; icon: any; color: string }> = {
+  eficacia: { label: "Eficácia", desc: "Capacidade do usuário em concluir a tarefa", icon: Target, color: "text-blue-500" },
+  eficiencia: { label: "Eficiência", desc: "Tempo / esforço para concluir a tarefa", icon: Gauge, color: "text-amber-500" },
+  satisfacao: { label: "Satisfação", desc: "Percepção subjetiva do usuário (SUS, etc.)", icon: Smile, color: "text-emerald-500" },
+};
+const ALL_FATORES: FatorTipo[] = ["eficacia", "eficiencia", "satisfacao"];
+
+// Normaliza strings antigas em objetos {fator, texto}
+const normalizeStrList = (arr: any[]): { fator: FatorTipo; texto: string }[] =>
+  (arr || []).map((it) =>
+    typeof it === "string" ? { fator: "eficacia" as FatorTipo, texto: it } : { fator: (it.fator || "eficacia") as FatorTipo, texto: it.texto ?? "" }
+  );
 
 export default function ExperimentoDetalhe() {
   const { id } = useParams<{ id: string }>();
@@ -47,14 +63,16 @@ export default function ExperimentoDetalhe() {
     const { data, error } = await supabase.from("experimentos").select("*").eq("id", id!).maybeSingle();
     if (error) return toast({ title: "Erro", description: error.message, variant: "destructive" });
     if (!data) return navigate("/protocolos/experimentos");
+    const d: any = data;
     setExp({
-      ...(data as any),
-      hipoteses: data.hipoteses ?? [],
-      questoes: data.questoes ?? [],
-      metricas: data.metricas ?? [],
-      personas: data.personas ?? [],
-      tarefas: data.tarefas ?? [],
-      resultados: data.resultados ?? [],
+      ...d,
+      fatores: Array.isArray(d.fatores) && d.fatores.length ? d.fatores : ALL_FATORES,
+      hipoteses: normalizeStrList(d.hipoteses ?? []),
+      questoes: normalizeStrList(d.questoes ?? []),
+      metricas: d.metricas ?? [],
+      personas: d.personas ?? [],
+      tarefas: (d.tarefas ?? []).map((t: any) => ({ ...t, fator: t.fator ?? "eficacia" })),
+      resultados: d.resultados ?? [],
     });
   };
   useEffect(() => { if (user && id) load(); }, [user, id]);
@@ -64,9 +82,11 @@ export default function ExperimentoDetalhe() {
     setSaving(true);
     const { error } = await supabase.from("experimentos").update({
       titulo: exp.titulo, data_aplicacao: exp.data_aplicacao,
-      objetivo: exp.objetivo, hipoteses: exp.hipoteses, questoes: exp.questoes,
-      metricas: exp.metricas, personas: exp.personas, tarefas: exp.tarefas,
-      resultados: exp.resultados,
+      objetivo: exp.objetivo,
+      fatores: exp.fatores as any,
+      hipoteses: exp.hipoteses as any, questoes: exp.questoes as any,
+      metricas: exp.metricas as any, personas: exp.personas as any,
+      tarefas: exp.tarefas as any, resultados: exp.resultados as any,
     }).eq("id", exp.id);
     setSaving(false);
     if (error) return toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
@@ -76,6 +96,12 @@ export default function ExperimentoDetalhe() {
   if (loading || !exp) return null;
 
   const update = <K extends keyof Experimento>(k: K, v: Experimento[K]) => setExp({ ...exp, [k]: v });
+
+  const toggleFator = (f: FatorTipo, on: boolean) => {
+    const set = new Set(exp.fatores);
+    on ? set.add(f) : set.delete(f);
+    update("fatores", ALL_FATORES.filter(x => set.has(x)));
+  };
 
   // === Análise ===
   const participantes = Array.from(new Set(exp.resultados.map(r => r.participante))).filter(Boolean);
@@ -89,6 +115,7 @@ export default function ExperimentoDetalhe() {
     const desvio = tempos.length ? Math.sqrt(tempos.reduce((s, x) => s + (x - tempoMedio) ** 2, 0) / tempos.length) : 0;
     return {
       tarefa: t.descricao.slice(0, 30) || t.id,
+      fator: t.fator ?? "eficacia",
       taxaSucesso: rs.length ? +(sucessos / rs.length * 100).toFixed(1) : 0,
       tempoMedio: +tempoMedio.toFixed(1),
       errosMedio: +errosMedio.toFixed(2),
@@ -104,8 +131,6 @@ export default function ExperimentoDetalhe() {
   const susMedio = susPorParticipante.length ? susPorParticipante.reduce((s, x) => s + x.sus, 0) / susPorParticipante.length : 0;
   const totalSucesso = exp.resultados.filter(r => r.sucesso).length;
   const totalFalha = exp.resultados.length - totalSucesso;
-
-  const COLORS = ["hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--destructive))", "hsl(var(--muted-foreground))"];
 
   return (
     <main className="min-h-screen bg-background">
@@ -143,47 +168,132 @@ export default function ExperimentoDetalhe() {
 
           {/* PROTOCOLO */}
           <TabsContent value="protocolo" className="space-y-6 mt-6">
+            {/* OBJETIVO + FATORES */}
             <Card>
               <CardHeader><CardTitle>D — Determine os objetivos</CardTitle></CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <Textarea rows={3} placeholder="Qual o propósito deste experimento de usabilidade?"
                   value={exp.objetivo ?? ""} onChange={e => update("objetivo", e.target.value)} />
-              </CardContent>
-            </Card>
 
-            <ListEditor title="E — Explore as questões/hipóteses (Hipóteses)"
-              items={exp.hipoteses} setItems={v => update("hipoteses", v)} placeholder="Ex: O sistema permite concluir tarefa X em menos de 30s" />
-
-            <ListEditor title="Questões de pesquisa"
-              items={exp.questoes} setItems={v => update("questoes", v)} placeholder="Ex: Os usuários conseguem localizar a função Y sem ajuda?" />
-
-            <Card>
-              <CardHeader><CardTitle>C — Choose as métricas (Eficácia, Eficiência, Satisfação)</CardTitle></CardHeader>
-              <CardContent className="space-y-2">
-                {exp.metricas.map((m, i) => (
-                  <div key={i} className="grid grid-cols-[2fr_1fr_2fr_auto] gap-2">
-                    <Input placeholder="Nome da métrica" value={m.nome}
-                      onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, nome: e.target.value }; update("metricas", arr); }} />
-                    <Select value={m.tipo} onValueChange={(v: MetricaTipo) => { const arr = [...exp.metricas]; arr[i] = { ...m, tipo: v }; update("metricas", arr); }}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="eficacia">Eficácia</SelectItem>
-                        <SelectItem value="eficiencia">Eficiência</SelectItem>
-                        <SelectItem value="satisfacao">Satisfação</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Input placeholder="Fórmula / como medir" value={m.formula ?? ""}
-                      onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, formula: e.target.value }; update("metricas", arr); }} />
-                    <Button size="icon" variant="ghost" onClick={() => update("metricas", exp.metricas.filter((_, idx) => idx !== i))}>
-                      <Trash2 className="w-4 h-4 text-destructive" /></Button>
+                <div>
+                  <p className="text-sm font-medium mb-2">Fatores do experimento</p>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Selecione os fatores que serão investigados. Para cada fator escolhido você definirá hipóteses, questões, métricas e tarefas específicas.
+                  </p>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    {ALL_FATORES.map(f => {
+                      const meta = FATOR_META[f];
+                      const Icon = meta.icon;
+                      const checked = exp.fatores.includes(f);
+                      return (
+                        <label key={f} className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition ${checked ? "border-primary bg-primary/5" : "border-border"}`}>
+                          <Checkbox checked={checked} onCheckedChange={v => toggleFator(f, !!v)} />
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <Icon className={`w-4 h-4 ${meta.color}`} />
+                              <span className="font-medium">{meta.label}</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground mt-0.5">{meta.desc}</p>
+                          </div>
+                        </label>
+                      );
+                    })}
                   </div>
-                ))}
-                <Button variant="outline" size="sm" onClick={() => update("metricas", [...exp.metricas, { nome: "", tipo: "eficacia" }])}>
-                  <Plus className="w-4 h-4 mr-2" />Adicionar métrica
-                </Button>
+                </div>
               </CardContent>
             </Card>
 
+            {/* SEÇÕES POR FATOR */}
+            {exp.fatores.length === 0 && (
+              <Card><CardContent className="py-8 text-center text-muted-foreground text-sm">
+                Selecione ao menos um fator no objetivo para configurar hipóteses, questões, métricas e tarefas.
+              </CardContent></Card>
+            )}
+
+            {exp.fatores.map(f => {
+              const meta = FATOR_META[f];
+              const Icon = meta.icon;
+              return (
+                <Card key={f} className="border-l-4" style={{ borderLeftColor: "hsl(var(--primary))" }}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Icon className={`w-5 h-5 ${meta.color}`} />
+                      Fator: {meta.label}
+                    </CardTitle>
+                    <p className="text-xs text-muted-foreground">{meta.desc}</p>
+                  </CardHeader>
+                  <CardContent className="space-y-5">
+                    {/* Hipóteses */}
+                    <FatorListEditor
+                      label="Hipóteses"
+                      placeholder={`Ex (${meta.label}): ...`}
+                      items={exp.hipoteses.filter(h => h.fator === f).map(h => h.texto)}
+                      onChange={(arr) => {
+                        const outros = exp.hipoteses.filter(h => h.fator !== f);
+                        update("hipoteses", [...outros, ...arr.map(texto => ({ fator: f, texto }))]);
+                      }}
+                    />
+                    {/* Questões */}
+                    <FatorListEditor
+                      label="Questões de pesquisa"
+                      placeholder="Ex: Os usuários conseguem...?"
+                      items={exp.questoes.filter(q => q.fator === f).map(q => q.texto)}
+                      onChange={(arr) => {
+                        const outros = exp.questoes.filter(q => q.fator !== f);
+                        update("questoes", [...outros, ...arr.map(texto => ({ fator: f, texto }))]);
+                      }}
+                    />
+                    {/* Métricas */}
+                    <div>
+                      <p className="text-sm font-medium mb-2">Métricas</p>
+                      <div className="space-y-2">
+                        {exp.metricas.map((m, i) => m.tipo === f && (
+                          <div key={i} className="grid grid-cols-[2fr_2fr_auto] gap-2">
+                            <Input placeholder="Nome da métrica" value={m.nome}
+                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, nome: e.target.value }; update("metricas", arr); }} />
+                            <Input placeholder="Fórmula / como medir" value={m.formula ?? ""}
+                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, formula: e.target.value }; update("metricas", arr); }} />
+                            <Button size="icon" variant="ghost" onClick={() => update("metricas", exp.metricas.filter((_, idx) => idx !== i))}>
+                              <Trash2 className="w-4 h-4 text-destructive" /></Button>
+                          </div>
+                        ))}
+                        <Button variant="outline" size="sm" onClick={() => update("metricas", [...exp.metricas, { nome: "", tipo: f, formula: "" }])}>
+                          <Plus className="w-4 h-4 mr-2" />Adicionar métrica
+                        </Button>
+                      </div>
+                    </div>
+                    {/* Tarefas */}
+                    <div>
+                      <p className="text-sm font-medium mb-2">Tarefas</p>
+                      <div className="space-y-3">
+                        {exp.tarefas.map((t, i) => t.fator === f && (
+                          <div key={t.id} className="border border-border rounded-lg p-3 space-y-2 relative">
+                            <p className="text-xs text-muted-foreground">Tarefa · id: <code>{t.id}</code></p>
+                            <Button size="icon" variant="ghost" className="absolute top-2 right-2"
+                              onClick={() => update("tarefas", exp.tarefas.filter(x => x.id !== t.id))}>
+                              <Trash2 className="w-4 h-4 text-destructive" /></Button>
+                            <Textarea rows={2} placeholder="Descrição da tarefa" value={t.descricao}
+                              onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, descricao: e.target.value } : x); update("tarefas", arr); }} />
+                            <div className="grid grid-cols-2 gap-2">
+                              <Input placeholder="Critério de sucesso" value={t.criterio_sucesso}
+                                onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, criterio_sucesso: e.target.value } : x); update("tarefas", arr); }} />
+                              <Input type="number" placeholder="Tempo esperado (s)" value={t.tempo_esperado_seg || ""}
+                                onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, tempo_esperado_seg: Number(e.target.value) } : x); update("tarefas", arr); }} />
+                            </div>
+                          </div>
+                        ))}
+                        <Button variant="outline" size="sm"
+                          onClick={() => update("tarefas", [...exp.tarefas, { id: uid(), descricao: "", criterio_sucesso: "", tempo_esperado_seg: 0, fator: f }])}>
+                          <Plus className="w-4 h-4 mr-2" />Adicionar tarefa
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+
+            {/* PERSONAS (transversal) */}
             <Card>
               <CardHeader><CardTitle>I — Identifique os usuários (Personas)</CardTitle></CardHeader>
               <CardContent className="space-y-3">
@@ -206,31 +316,6 @@ export default function ExperimentoDetalhe() {
                 ))}
                 <Button variant="outline" size="sm" onClick={() => update("personas", [...exp.personas, { nome: "", perfil: "", contexto: "", objetivos: "" }])}>
                   <Plus className="w-4 h-4 mr-2" />Adicionar persona
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader><CardTitle>D — Decida sobre as tarefas (E — Evaluate)</CardTitle></CardHeader>
-              <CardContent className="space-y-3">
-                {exp.tarefas.map((t, i) => (
-                  <div key={t.id} className="border border-border rounded-lg p-3 space-y-2 relative">
-                    <p className="text-xs text-muted-foreground">Tarefa {i + 1} · id: <code>{t.id}</code></p>
-                    <Button size="icon" variant="ghost" className="absolute top-2 right-2"
-                      onClick={() => update("tarefas", exp.tarefas.filter(x => x.id !== t.id))}>
-                      <Trash2 className="w-4 h-4 text-destructive" /></Button>
-                    <Textarea rows={2} placeholder="Descrição da tarefa" value={t.descricao}
-                      onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, descricao: e.target.value } : x); update("tarefas", arr); }} />
-                    <div className="grid grid-cols-2 gap-2">
-                      <Input placeholder="Critério de sucesso" value={t.criterio_sucesso}
-                        onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, criterio_sucesso: e.target.value } : x); update("tarefas", arr); }} />
-                      <Input type="number" placeholder="Tempo esperado (s)" value={t.tempo_esperado_seg || ""}
-                        onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, tempo_esperado_seg: Number(e.target.value) } : x); update("tarefas", arr); }} />
-                    </div>
-                  </div>
-                ))}
-                <Button variant="outline" size="sm" onClick={() => update("tarefas", [...exp.tarefas, { id: uid(), descricao: "", criterio_sucesso: "", tempo_esperado_seg: 0 }])}>
-                  <Plus className="w-4 h-4 mr-2" />Adicionar tarefa
                 </Button>
               </CardContent>
             </Card>
@@ -268,7 +353,7 @@ export default function ExperimentoDetalhe() {
                             <td className="p-1">
                               <Select value={r.tarefa_id} onValueChange={v => { const arr = [...exp.resultados]; arr[i] = { ...r, tarefa_id: v }; update("resultados", arr); }}>
                                 <SelectTrigger className="w-48"><SelectValue placeholder="Tarefa" /></SelectTrigger>
-                                <SelectContent>{exp.tarefas.map(t => <SelectItem key={t.id} value={t.id}>{t.descricao.slice(0, 40) || t.id}</SelectItem>)}</SelectContent>
+                                <SelectContent>{exp.tarefas.map(t => <SelectItem key={t.id} value={t.id}>[{FATOR_META[t.fator ?? "eficacia"].label}] {t.descricao.slice(0, 40) || t.id}</SelectItem>)}</SelectContent>
                               </Select>
                             </td>
                             <td className="p-1">
@@ -309,7 +394,7 @@ export default function ExperimentoDetalhe() {
               <CardContent className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead><tr className="border-b border-border text-left">
-                    <th className="p-2">Tarefa</th><th className="p-2">N</th>
+                    <th className="p-2">Tarefa</th><th className="p-2">Fator</th><th className="p-2">N</th>
                     <th className="p-2">Taxa Sucesso (Eficácia)</th>
                     <th className="p-2">Tempo Médio (s) (Eficiência)</th>
                     <th className="p-2">Desvio (s)</th><th className="p-2">Erros Médios</th>
@@ -317,14 +402,16 @@ export default function ExperimentoDetalhe() {
                   <tbody>
                     {tarefaStats.map((s, i) => (
                       <tr key={i} className="border-b border-border/50">
-                        <td className="p-2">{s.tarefa}</td><td className="p-2">{s.n}</td>
+                        <td className="p-2">{s.tarefa}</td>
+                        <td className="p-2">{FATOR_META[s.fator as FatorTipo]?.label ?? "—"}</td>
+                        <td className="p-2">{s.n}</td>
                         <td className="p-2">{s.taxaSucesso}%</td>
                         <td className="p-2">{s.tempoMedio}</td>
                         <td className="p-2">{s.desvio}</td>
                         <td className="p-2">{s.errosMedio}</td>
                       </tr>
                     ))}
-                    {tarefaStats.length === 0 && <tr><td colSpan={6} className="p-4 text-center text-muted-foreground">Sem dados coletados.</td></tr>}
+                    {tarefaStats.length === 0 && <tr><td colSpan={7} className="p-4 text-center text-muted-foreground">Sem dados coletados.</td></tr>}
                   </tbody>
                 </table>
               </CardContent>
@@ -391,24 +478,24 @@ function StatCard({ label, value, hint }: { label: string; value: string | numbe
   );
 }
 
-function ListEditor({ title, items, setItems, placeholder }: { title: string; items: string[]; setItems: (v: string[]) => void; placeholder: string }) {
+function FatorListEditor({ label, items, onChange, placeholder }: { label: string; items: string[]; onChange: (v: string[]) => void; placeholder: string }) {
   return (
-    <Card>
-      <CardHeader><CardTitle>{title}</CardTitle></CardHeader>
-      <CardContent className="space-y-2">
+    <div>
+      <p className="text-sm font-medium mb-2">{label}</p>
+      <div className="space-y-2">
         {items.map((it, i) => (
           <div key={i} className="flex gap-2">
             <Textarea rows={2} value={it} placeholder={placeholder}
-              onChange={e => { const arr = [...items]; arr[i] = e.target.value; setItems(arr); }} />
-            <Button size="icon" variant="ghost" onClick={() => setItems(items.filter((_, idx) => idx !== i))}>
+              onChange={e => { const arr = [...items]; arr[i] = e.target.value; onChange(arr); }} />
+            <Button size="icon" variant="ghost" onClick={() => onChange(items.filter((_, idx) => idx !== i))}>
               <Trash2 className="w-4 h-4 text-destructive" />
             </Button>
           </div>
         ))}
-        <Button variant="outline" size="sm" onClick={() => setItems([...items, ""])}>
+        <Button variant="outline" size="sm" onClick={() => onChange([...items, ""])}>
           <Plus className="w-4 h-4 mr-2" />Adicionar
         </Button>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
