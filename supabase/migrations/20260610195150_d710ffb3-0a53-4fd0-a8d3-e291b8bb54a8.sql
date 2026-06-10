@@ -1,0 +1,1 @@
+ALTER TABLE public.experimentos ADD COLUMN IF NOT EXISTS fatores jsonb NOT NULL DEFAULT '["eficacia","eficiencia","satisfacao"]'::jsonb;

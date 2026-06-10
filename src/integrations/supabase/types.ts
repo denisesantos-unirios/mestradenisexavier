@@ -82,6 +82,7 @@ export type Database = {
           created_at: string
           created_by: string
           data_aplicacao: string | null
+          fatores: Json
           hipoteses: Json
           id: string
           metricas: Json
@@ -98,6 +99,7 @@ export type Database = {
           created_at?: string
           created_by: string
           data_aplicacao?: string | null
+          fatores?: Json
           hipoteses?: Json
           id?: string
           metricas?: Json
@@ -114,6 +116,7 @@ export type Database = {
           created_at?: string
           created_by?: string
           data_aplicacao?: string | null
+          fatores?: Json
           hipoteses?: Json
           id?: string
           metricas?: Json
