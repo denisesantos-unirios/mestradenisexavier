@@ -81,6 +81,30 @@ export default function ExperimentoDetalhe() {
 
   useEffect(() => { if (!loading && !user) navigate("/provas/login"); }, [loading, user, navigate]);
 
+const TECNICAS_LABELS: Record<TecnicaTipo, string> = {
+  teste_usabilidade: "Teste de Usabilidade",
+  pensar_alto: "Protocolo Verbal (Pensar Alto / Think Aloud)",
+  questionario_pre: "Questionário pré-teste",
+  entrevista_pos: "Entrevista pós-teste semiestruturada",
+  sus: "Escala SUS (System Usability Scale)",
+  observacao_direta: "Observação direta",
+  avaliacao_heuristica: "Avaliação Heurística (Nielsen)",
+  percurso_cognitivo: "Percurso Cognitivo (Cognitive Walkthrough)",
+  focus_group: "Focus Group",
+};
+const TECNICAS_TIPOS: TecnicaTipo[] = ["teste_usabilidade", "pensar_alto", "questionario_pre", "entrevista_pos", "sus", "observacao_direta", "avaliacao_heuristica", "percurso_cognitivo", "focus_group"];
+
+export default function ExperimentoDetalhe() {
+  const { id } = useParams<{ id: string }>();
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [exp, setExp] = useState<Experimento | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [tcleOpen, setTcleOpen] = useState(false);
+
+  useEffect(() => { if (!loading && !user) navigate("/provas/login"); }, [loading, user, navigate]);
+
   const load = async () => {
     const { data, error } = await supabase.from("experimentos").select("*").eq("id", id!).maybeSingle();
     if (error) return toast({ title: "Erro", description: error.message, variant: "destructive" });
@@ -95,6 +119,8 @@ export default function ExperimentoDetalhe() {
       personas: d.personas ?? [],
       tarefas: (d.tarefas ?? []).map((t: any) => ({ ...t, fator: t.fator ?? "eficacia" })),
       resultados: d.resultados ?? [],
+      tecnicas: d.tecnicas ?? { complementares: [] },
+      tcle: d.tcle ?? {},
     });
   };
   useEffect(() => { if (user && id) load(); }, [user, id]);
@@ -109,11 +135,13 @@ export default function ExperimentoDetalhe() {
       hipoteses: exp.hipoteses as any, questoes: exp.questoes as any,
       metricas: exp.metricas as any, personas: exp.personas as any,
       tarefas: exp.tarefas as any, resultados: exp.resultados as any,
-    }).eq("id", exp.id);
+      tecnicas: exp.tecnicas as any, tcle: exp.tcle as any,
+    } as any).eq("id", exp.id);
     setSaving(false);
     if (error) return toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
     toast({ title: "Experimento salvo" });
   };
+
 
   if (loading || !exp) return null;
 
