@@ -683,3 +683,98 @@ function FatorListEditor({ label, items, onChange, placeholder }: { label: strin
     </div>
   );
 }
+
+function PhaseHeader({ letter, title, icon: Icon, desc }: { letter: string; title: string; icon: any; desc: string }) {
+  return (
+    <div className="flex items-start gap-3 pt-4">
+      <div className="w-12 h-12 rounded-xl bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold flex-shrink-0">
+        {letter}
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <Icon className="w-4 h-4 text-primary" />
+          <h2 className="text-lg font-bold text-foreground">{title}</h2>
+        </div>
+        <p className="text-sm text-muted-foreground">{desc}</p>
+      </div>
+    </div>
+  );
+}
+
+function TCLEPreview({ exp }: { exp: Experimento }) {
+  const t = exp.tcle ?? {};
+  const titulo = t.pesquisa_titulo || exp.titulo;
+  return (
+    <div className="text-sm leading-relaxed space-y-3 text-foreground">
+      <h2 className="text-center font-bold">TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO (TCLE)</h2>
+      <p className="text-center text-xs text-muted-foreground">Resolução CNS 510/2016 — Pesquisa com Seres Humanos</p>
+
+      <p><strong>Título da pesquisa:</strong> {titulo}</p>
+      <p><strong>Pesquisador(a) responsável:</strong> {t.pesquisador || "_________________________"}</p>
+      <p><strong>Instituição:</strong> {t.instituicao || "_________________________"}</p>
+      <p><strong>Contato:</strong> {t.contato || "_________________________"}</p>
+      <p><strong>Local:</strong> {t.local || "_________________________"} · <strong>Duração estimada:</strong> {t.duracao_estimada || "____"}</p>
+
+      <h3 className="font-semibold">1. Objetivo da pesquisa</h3>
+      <p>{t.objetivo_breve || exp.objetivo || "—"}</p>
+
+      <h3 className="font-semibold">2. Procedimentos</h3>
+      <p>{t.procedimentos || `Você será convidado(a) a participar de uma sessão de avaliação de usabilidade utilizando a técnica de ${TECNICAS_LABELS[exp.tecnicas?.principal as TecnicaTipo] || "avaliação"}. Durante a sessão, serão solicitadas tarefas no sistema avaliado, com observação do facilitador.`}</p>
+      {exp.tarefas.length > 0 && (
+        <ul className="list-disc pl-6">
+          {exp.tarefas.map(tk => <li key={tk.id}>{tk.descricao || "(tarefa sem descrição)"}</li>)}
+        </ul>
+      )}
+
+      <h3 className="font-semibold">3. Riscos</h3>
+      <p>{t.riscos || "Os riscos são mínimos, podendo haver eventual desconforto ou cansaço durante a execução das tarefas. Você poderá interromper a sessão a qualquer momento."}</p>
+
+      <h3 className="font-semibold">4. Benefícios</h3>
+      <p>{t.beneficios || "Sua participação contribuirá para a melhoria da usabilidade do sistema avaliado, beneficiando futuros usuários."}</p>
+
+      <h3 className="font-semibold">5. Sigilo e privacidade</h3>
+      <p>Os dados coletados serão tratados de forma confidencial, garantindo o anonimato. {t.gravacao ? "A sessão será gravada (tela e/ou áudio) exclusivamente para análise da equipe de pesquisa." : ""} {t.uso_imagem ? "Sua imagem poderá ser utilizada em relatórios acadêmicos, sempre preservando sua identidade." : ""} Em conformidade com a LGPD (Lei 13.709/2018), nenhum dado pessoal será divulgado.</p>
+
+      <h3 className="font-semibold">6. Direito de desistência</h3>
+      <p>Sua participação é voluntária. Você pode interromper ou encerrar sua participação a qualquer momento, sem necessidade de justificativa e sem qualquer prejuízo.</p>
+
+      <h3 className="font-semibold">7. Condições adicionais do participante</h3>
+      <p className="border-b border-foreground/30 min-h-[2.5rem]">&nbsp;</p>
+      <p className="border-b border-foreground/30 min-h-[2.5rem]">&nbsp;</p>
+
+      <h3 className="font-semibold">8. Declaração de consentimento</h3>
+      <p>Declaro que li e compreendi as informações acima, que minhas dúvidas foram esclarecidas e que concordo livremente em participar desta pesquisa nas condições aqui descritas.</p>
+
+      <div className="grid grid-cols-2 gap-6 mt-6 text-xs">
+        <div>
+          <p>Nome completo: ____________________________________</p>
+          <p className="mt-3">Data: ____/____/______</p>
+          <p className="mt-6">Assinatura do(a) participante:</p>
+          <p className="border-b border-foreground/50 mt-6">&nbsp;</p>
+        </div>
+        <div>
+          <p>Local: {t.local || "_________________________"}</p>
+          <p className="mt-3">&nbsp;</p>
+          <p className="mt-6">Assinatura do(a) responsável pela pesquisa:</p>
+          <p className="border-b border-foreground/50 mt-6">&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function imprimirTCLE() {
+  const node = document.getElementById("tcle-print");
+  if (!node) return;
+  const win = window.open("", "_blank", "width=900,height=900");
+  if (!win) return;
+  win.document.write(`<html><head><title>TCLE</title><style>
+    body{font-family: Arial, sans-serif; padding: 32px; color:#111; line-height:1.5;}
+    h2{font-size:16px; text-align:center;} h3{font-size:13px; margin-top:14px;}
+    p{font-size:12px;} ul{font-size:12px;}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px;}
+  </style></head><body>${node.innerHTML.replace(/class="grid[^"]*"/g, 'class="grid"')}</body></html>`);
+  win.document.close();
+  setTimeout(() => { win.print(); }, 300);
+}
+
