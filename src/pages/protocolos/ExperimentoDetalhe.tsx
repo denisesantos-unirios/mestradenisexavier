@@ -10,20 +10,39 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Plus, Trash2, ArrowLeft, Target, Gauge, Smile } from "lucide-react";
+import { Save, Plus, Trash2, ArrowLeft, Target, Gauge, Smile, FileText, Printer, BookOpen, Users, ClipboardList, Shield, BarChart3 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend,
   PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
 } from "recharts";
 
 type FatorTipo = "eficacia" | "eficiencia" | "satisfacao";
-type Metrica = { nome: string; tipo: FatorTipo; formula?: string };
+type Metrica = { nome: string; tipo: FatorTipo; formula?: string; pior?: string; almejado?: string; melhor?: string };
 type Persona = { nome: string; perfil: string; contexto: string; objetivos: string };
 type Tarefa = { id: string; descricao: string; criterio_sucesso: string; tempo_esperado_seg: number; fator?: FatorTipo };
 type Hipotese = { fator: FatorTipo; texto: string };
 type Questao = { fator: FatorTipo; texto: string };
 type Resultado = { participante: string; tarefa_id: string; sucesso: boolean; tempo_seg: number; erros: number; sus_score: number; observacoes?: string };
+
+type TecnicaTipo = "teste_usabilidade" | "pensar_alto" | "questionario_pre" | "entrevista_pos" | "sus" | "observacao_direta" | "avaliacao_heuristica" | "percurso_cognitivo" | "focus_group";
+type Tecnicas = { principal?: TecnicaTipo; complementares?: TecnicaTipo[]; justificativa?: string };
+
+type TCLE = {
+  pesquisa_titulo?: string;
+  pesquisador?: string;
+  instituicao?: string;
+  contato?: string;
+  local?: string;
+  duracao_estimada?: string;
+  objetivo_breve?: string;
+  procedimentos?: string;
+  riscos?: string;
+  beneficios?: string;
+  gravacao?: boolean;
+  uso_imagem?: boolean;
+};
 
 type Experimento = {
   id: string; titulo: string; data_aplicacao: string | null;
@@ -32,7 +51,10 @@ type Experimento = {
   hipoteses: Hipotese[]; questoes: Questao[];
   metricas: Metrica[]; personas: Persona[];
   tarefas: Tarefa[]; resultados: Resultado[];
+  tecnicas: Tecnicas;
+  tcle: TCLE;
 };
+
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
@@ -49,6 +71,20 @@ const normalizeStrList = (arr: any[]): { fator: FatorTipo; texto: string }[] =>
     typeof it === "string" ? { fator: "eficacia" as FatorTipo, texto: it } : { fator: (it.fator || "eficacia") as FatorTipo, texto: it.texto ?? "" }
   );
 
+
+const TECNICAS_LABELS: Record<TecnicaTipo, string> = {
+  teste_usabilidade: "Teste de Usabilidade",
+  pensar_alto: "Protocolo Verbal (Pensar Alto / Think Aloud)",
+  questionario_pre: "Questionário pré-teste",
+  entrevista_pos: "Entrevista pós-teste semiestruturada",
+  sus: "Escala SUS (System Usability Scale)",
+  observacao_direta: "Observação direta",
+  avaliacao_heuristica: "Avaliação Heurística (Nielsen)",
+  percurso_cognitivo: "Percurso Cognitivo (Cognitive Walkthrough)",
+  focus_group: "Focus Group",
+};
+const TECNICAS_TIPOS: TecnicaTipo[] = ["teste_usabilidade", "pensar_alto", "questionario_pre", "entrevista_pos", "sus", "observacao_direta", "avaliacao_heuristica", "percurso_cognitivo", "focus_group"];
+
 export default function ExperimentoDetalhe() {
   const { id } = useParams<{ id: string }>();
   const { user, loading } = useAuth();
@@ -56,6 +92,7 @@ export default function ExperimentoDetalhe() {
   const { toast } = useToast();
   const [exp, setExp] = useState<Experimento | null>(null);
   const [saving, setSaving] = useState(false);
+  const [tcleOpen, setTcleOpen] = useState(false);
 
   useEffect(() => { if (!loading && !user) navigate("/provas/login"); }, [loading, user, navigate]);
 
@@ -73,6 +110,8 @@ export default function ExperimentoDetalhe() {
       personas: d.personas ?? [],
       tarefas: (d.tarefas ?? []).map((t: any) => ({ ...t, fator: t.fator ?? "eficacia" })),
       resultados: d.resultados ?? [],
+      tecnicas: d.tecnicas ?? { complementares: [] },
+      tcle: d.tcle ?? {},
     });
   };
   useEffect(() => { if (user && id) load(); }, [user, id]);
@@ -87,11 +126,13 @@ export default function ExperimentoDetalhe() {
       hipoteses: exp.hipoteses as any, questoes: exp.questoes as any,
       metricas: exp.metricas as any, personas: exp.personas as any,
       tarefas: exp.tarefas as any, resultados: exp.resultados as any,
-    }).eq("id", exp.id);
+      tecnicas: exp.tecnicas as any, tcle: exp.tcle as any,
+    } as any).eq("id", exp.id);
     setSaving(false);
     if (error) return toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
     toast({ title: "Experimento salvo" });
   };
+
 
   if (loading || !exp) return null;
 
@@ -168,17 +209,30 @@ export default function ExperimentoDetalhe() {
 
           {/* PROTOCOLO */}
           <TabsContent value="protocolo" className="space-y-6 mt-6">
-            {/* OBJETIVO + FATORES */}
+
+            <Card className="bg-primary/5 border-primary/20">
+              <CardContent className="pt-6">
+                <p className="text-sm text-foreground/80">
+                  O <strong>Framework DECIDE</strong> (Rogers, Sharp & Preece) estrutura uma avaliação empírica de usabilidade em 6 fases:
+                  <strong> D</strong>etermine objetivos · <strong>E</strong>xplore questões · <strong>C</strong>hoose técnica ·
+                  <strong> I</strong>dentify usuários · <strong>D</strong>ecide ética · <strong>E</strong>valuate resultados.
+                  Preencha cada fase abaixo — os dados são reaproveitados na coleta, na análise e na geração do TCLE.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* D — DETERMINE */}
+            <PhaseHeader letter="D" title="Determine os objetivos da avaliação" icon={Target} desc="Defina o propósito geral e os fatores de usabilidade (ISO 9241-11) que serão investigados." />
             <Card>
-              <CardHeader><CardTitle>D — Determine os objetivos</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-base">Objetivo geral do experimento</CardTitle></CardHeader>
               <CardContent className="space-y-4">
-                <Textarea rows={3} placeholder="Qual o propósito deste experimento de usabilidade?"
+                <Textarea rows={4} placeholder="Ex.: Verificar se os usuários conseguem concluir as principais funcionalidades do sistema X com eficácia, eficiência e satisfação, mesmo sem treinamento prévio."
                   value={exp.objetivo ?? ""} onChange={e => update("objetivo", e.target.value)} />
 
                 <div>
-                  <p className="text-sm font-medium mb-2">Fatores do experimento</p>
+                  <p className="text-sm font-medium mb-2">Fatores de usabilidade investigados</p>
                   <p className="text-xs text-muted-foreground mb-3">
-                    Selecione os fatores que serão investigados. Para cada fator escolhido você definirá hipóteses, questões, métricas e tarefas específicas.
+                    Para cada fator marcado você definirá, nas fases <strong>E</strong> e <strong>E</strong> abaixo, hipóteses, questões de pesquisa, métricas e tarefas específicas.
                   </p>
                   <div className="grid md:grid-cols-3 gap-3">
                     {ALL_FATORES.map(f => {
@@ -203,10 +257,12 @@ export default function ExperimentoDetalhe() {
               </CardContent>
             </Card>
 
-            {/* SEÇÕES POR FATOR */}
+            {/* E — EXPLORE (Hipóteses + Questões por fator) */}
+            <PhaseHeader letter="E" title="Explore as perguntas específicas" icon={BookOpen} desc="Para cada fator selecionado, registre hipóteses (afirmações a testar) e questões de pesquisa (perguntas a responder)." />
+
             {exp.fatores.length === 0 && (
               <Card><CardContent className="py-8 text-center text-muted-foreground text-sm">
-                Selecione ao menos um fator no objetivo para configurar hipóteses, questões, métricas e tarefas.
+                Selecione ao menos um fator na fase D para liberar as próximas fases.
               </CardContent></Card>
             )}
 
@@ -214,26 +270,22 @@ export default function ExperimentoDetalhe() {
               const meta = FATOR_META[f];
               const Icon = meta.icon;
               return (
-                <Card key={f} className="border-l-4" style={{ borderLeftColor: "hsl(var(--primary))" }}>
+                <Card key={`eh-${f}`} className="border-l-4" style={{ borderLeftColor: "hsl(var(--primary))" }}>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Icon className={`w-5 h-5 ${meta.color}`} />
-                      Fator: {meta.label}
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Icon className={`w-5 h-5 ${meta.color}`} /> Fator: {meta.label}
                     </CardTitle>
-                    <p className="text-xs text-muted-foreground">{meta.desc}</p>
                   </CardHeader>
                   <CardContent className="space-y-5">
-                    {/* Hipóteses */}
                     <FatorListEditor
                       label="Hipóteses"
-                      placeholder={`Ex (${meta.label}): ...`}
+                      placeholder={`Ex (${meta.label}): O usuário concluirá a tarefa X em menos de Y segundos.`}
                       items={exp.hipoteses.filter(h => h.fator === f).map(h => h.texto)}
                       onChange={(arr) => {
                         const outros = exp.hipoteses.filter(h => h.fator !== f);
                         update("hipoteses", [...outros, ...arr.map(texto => ({ fator: f, texto }))]);
                       }}
                     />
-                    {/* Questões */}
                     <FatorListEditor
                       label="Questões de pesquisa"
                       placeholder="Ex: Os usuários conseguem...?"
@@ -243,21 +295,170 @@ export default function ExperimentoDetalhe() {
                         update("questoes", [...outros, ...arr.map(texto => ({ fator: f, texto }))]);
                       }}
                     />
+                  </CardContent>
+                </Card>
+              );
+            })}
+
+            {/* C — CHOOSE TÉCNICAS */}
+            <PhaseHeader letter="C" title="Choose o paradigma e as técnicas de avaliação" icon={ClipboardList} desc="Selecione a técnica principal e as complementares que serão aplicadas — e justifique a escolha." />
+            <Card>
+              <CardContent className="pt-6 space-y-4">
+                <div>
+                  <p className="text-sm font-medium mb-2">Técnica principal</p>
+                  <Select value={exp.tecnicas.principal ?? ""} onValueChange={(v) => update("tecnicas", { ...exp.tecnicas, principal: v as TecnicaTipo })}>
+                    <SelectTrigger><SelectValue placeholder="Selecione a técnica principal" /></SelectTrigger>
+                    <SelectContent>
+                      {TECNICAS_TIPOS.map(t => <SelectItem key={t} value={t}>{TECNICAS_LABELS[t]}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium mb-2">Técnicas complementares</p>
+                  <div className="grid md:grid-cols-2 gap-2">
+                    {TECNICAS_TIPOS.filter(t => t !== exp.tecnicas.principal).map(t => {
+                      const arr = exp.tecnicas.complementares ?? [];
+                      const checked = arr.includes(t);
+                      return (
+                        <label key={t} className={`flex items-center gap-2 p-2 rounded-md border cursor-pointer text-sm ${checked ? "border-primary bg-primary/5" : "border-border"}`}>
+                          <Checkbox checked={checked} onCheckedChange={v => {
+                            const next = v ? [...arr, t] : arr.filter(x => x !== t);
+                            update("tecnicas", { ...exp.tecnicas, complementares: next });
+                          }} />
+                          {TECNICAS_LABELS[t]}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium mb-2">Justificativa da escolha</p>
+                  <Textarea rows={3} placeholder="Por que estas técnicas são adequadas para medir os fatores deste experimento?"
+                    value={exp.tecnicas.justificativa ?? ""} onChange={e => update("tecnicas", { ...exp.tecnicas, justificativa: e.target.value })} />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* I — IDENTIFY USUÁRIOS */}
+            <PhaseHeader letter="I" title="Identify os usuários (Personas)" icon={Users} desc="Descreva os perfis dos participantes do teste — usados também na geração do TCLE e nos relatórios." />
+            <Card>
+              <CardContent className="pt-6 space-y-3">
+                {exp.personas.map((p, i) => (
+                  <div key={i} className="border border-border rounded-lg p-3 space-y-2 relative">
+                    <Button size="icon" variant="ghost" className="absolute top-2 right-2"
+                      onClick={() => update("personas", exp.personas.filter((_, idx) => idx !== i))}>
+                      <Trash2 className="w-4 h-4 text-destructive" /></Button>
+                    <Input placeholder="Nome da persona" value={p.nome}
+                      onChange={e => { const arr = [...exp.personas]; arr[i] = { ...p, nome: e.target.value }; update("personas", arr); }} />
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input placeholder="Perfil (idade, ocupação)" value={p.perfil}
+                        onChange={e => { const arr = [...exp.personas]; arr[i] = { ...p, perfil: e.target.value }; update("personas", arr); }} />
+                      <Input placeholder="Contexto de uso" value={p.contexto}
+                        onChange={e => { const arr = [...exp.personas]; arr[i] = { ...p, contexto: e.target.value }; update("personas", arr); }} />
+                    </div>
+                    <Textarea rows={2} placeholder="Objetivos da persona" value={p.objetivos}
+                      onChange={e => { const arr = [...exp.personas]; arr[i] = { ...p, objetivos: e.target.value }; update("personas", arr); }} />
+                  </div>
+                ))}
+                <Button variant="outline" size="sm" onClick={() => update("personas", [...exp.personas, { nome: "", perfil: "", contexto: "", objetivos: "" }])}>
+                  <Plus className="w-4 h-4 mr-2" />Adicionar persona
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* D — DECIDE ÉTICA + TCLE */}
+            <PhaseHeader letter="D" title="Decide como lidar com as questões éticas" icon={Shield} desc="Conforme a Resolução CNS 510/2016. Preencha os dados abaixo e gere o modelo de TCLE pronto para impressão." />
+            <Card>
+              <CardContent className="pt-6 space-y-3">
+                <div className="grid md:grid-cols-2 gap-3">
+                  <div><p className="text-xs text-muted-foreground mb-1">Título da pesquisa</p>
+                    <Input value={exp.tcle.pesquisa_titulo ?? exp.titulo} onChange={e => update("tcle", { ...exp.tcle, pesquisa_titulo: e.target.value })} /></div>
+                  <div><p className="text-xs text-muted-foreground mb-1">Pesquisador responsável</p>
+                    <Input value={exp.tcle.pesquisador ?? ""} onChange={e => update("tcle", { ...exp.tcle, pesquisador: e.target.value })} /></div>
+                  <div><p className="text-xs text-muted-foreground mb-1">Instituição</p>
+                    <Input value={exp.tcle.instituicao ?? ""} onChange={e => update("tcle", { ...exp.tcle, instituicao: e.target.value })} /></div>
+                  <div><p className="text-xs text-muted-foreground mb-1">Contato (e-mail / telefone)</p>
+                    <Input value={exp.tcle.contato ?? ""} onChange={e => update("tcle", { ...exp.tcle, contato: e.target.value })} /></div>
+                  <div><p className="text-xs text-muted-foreground mb-1">Local de realização</p>
+                    <Input value={exp.tcle.local ?? ""} onChange={e => update("tcle", { ...exp.tcle, local: e.target.value })} /></div>
+                  <div><p className="text-xs text-muted-foreground mb-1">Duração estimada da sessão</p>
+                    <Input placeholder="Ex.: 45 minutos" value={exp.tcle.duracao_estimada ?? ""} onChange={e => update("tcle", { ...exp.tcle, duracao_estimada: e.target.value })} /></div>
+                </div>
+                <div><p className="text-xs text-muted-foreground mb-1">Objetivo (versão para o participante)</p>
+                  <Textarea rows={2} value={exp.tcle.objetivo_breve ?? ""} onChange={e => update("tcle", { ...exp.tcle, objetivo_breve: e.target.value })} /></div>
+                <div><p className="text-xs text-muted-foreground mb-1">Procedimentos a serem realizados</p>
+                  <Textarea rows={2} value={exp.tcle.procedimentos ?? ""} onChange={e => update("tcle", { ...exp.tcle, procedimentos: e.target.value })} /></div>
+                <div className="grid md:grid-cols-2 gap-3">
+                  <div><p className="text-xs text-muted-foreground mb-1">Riscos previstos</p>
+                    <Textarea rows={2} value={exp.tcle.riscos ?? ""} onChange={e => update("tcle", { ...exp.tcle, riscos: e.target.value })} /></div>
+                  <div><p className="text-xs text-muted-foreground mb-1">Benefícios esperados</p>
+                    <Textarea rows={2} value={exp.tcle.beneficios ?? ""} onChange={e => update("tcle", { ...exp.tcle, beneficios: e.target.value })} /></div>
+                </div>
+                <div className="flex flex-wrap gap-4">
+                  <label className="flex items-center gap-2 text-sm">
+                    <Checkbox checked={!!exp.tcle.gravacao} onCheckedChange={v => update("tcle", { ...exp.tcle, gravacao: !!v })} />
+                    Haverá gravação de tela/áudio
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <Checkbox checked={!!exp.tcle.uso_imagem} onCheckedChange={v => update("tcle", { ...exp.tcle, uso_imagem: !!v })} />
+                    Uso de imagem do participante
+                  </label>
+                </div>
+
+                <Dialog open={tcleOpen} onOpenChange={setTcleOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="mt-2"><FileText className="w-4 h-4 mr-2" />Gerar modelo de TCLE</Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+                    <DialogHeader><DialogTitle>Termo de Consentimento Livre e Esclarecido (TCLE)</DialogTitle></DialogHeader>
+                    <div id="tcle-print" className="prose prose-sm dark:prose-invert max-w-none">
+                      <TCLEPreview exp={exp} />
+                    </div>
+                    <DialogFooter>
+                      <Button variant="outline" onClick={() => imprimirTCLE()}><Printer className="w-4 h-4 mr-2" />Imprimir / Salvar PDF</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </CardContent>
+            </Card>
+
+            {/* E — EVALUATE (Métricas + Tarefas por fator) */}
+            <PhaseHeader letter="E" title="Evaluate, interprete e apresente os dados" icon={BarChart3} desc="Defina métricas (com pior/almejado/melhor) e tarefas por fator. Os dados serão coletados na próxima aba." />
+
+            {exp.fatores.map(f => {
+              const meta = FATOR_META[f];
+              const Icon = meta.icon;
+              return (
+                <Card key={`em-${f}`} className="border-l-4" style={{ borderLeftColor: "hsl(var(--primary))" }}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Icon className={`w-5 h-5 ${meta.color}`} /> Fator: {meta.label}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-5">
                     {/* Métricas */}
                     <div>
                       <p className="text-sm font-medium mb-2">Métricas</p>
                       <div className="space-y-2">
                         {exp.metricas.map((m, i) => m.tipo === f && (
-                          <div key={i} className="grid grid-cols-[2fr_2fr_auto] gap-2">
-                            <Input placeholder="Nome da métrica" value={m.nome}
+                          <div key={i} className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr_auto] gap-2">
+                            <Input placeholder="Nome" value={m.nome}
                               onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, nome: e.target.value }; update("metricas", arr); }} />
-                            <Input placeholder="Fórmula / como medir" value={m.formula ?? ""}
+                            <Input placeholder="Como medir" value={m.formula ?? ""}
                               onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, formula: e.target.value }; update("metricas", arr); }} />
+                            <Input placeholder="Pior" value={m.pior ?? ""}
+                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, pior: e.target.value }; update("metricas", arr); }} />
+                            <Input placeholder="Almejado" value={m.almejado ?? ""}
+                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, almejado: e.target.value }; update("metricas", arr); }} />
+                            <Input placeholder="Melhor" value={m.melhor ?? ""}
+                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, melhor: e.target.value }; update("metricas", arr); }} />
                             <Button size="icon" variant="ghost" onClick={() => update("metricas", exp.metricas.filter((_, idx) => idx !== i))}>
                               <Trash2 className="w-4 h-4 text-destructive" /></Button>
                           </div>
                         ))}
-                        <Button variant="outline" size="sm" onClick={() => update("metricas", [...exp.metricas, { nome: "", tipo: f, formula: "" }])}>
+                        <Button variant="outline" size="sm" onClick={() => update("metricas", [...exp.metricas, { nome: "", tipo: f, formula: "", pior: "", almejado: "", melhor: "" }])}>
                           <Plus className="w-4 h-4 mr-2" />Adicionar métrica
                         </Button>
                       </div>
@@ -266,7 +467,7 @@ export default function ExperimentoDetalhe() {
                     <div>
                       <p className="text-sm font-medium mb-2">Tarefas</p>
                       <div className="space-y-3">
-                        {exp.tarefas.map((t, i) => t.fator === f && (
+                        {exp.tarefas.map((t) => t.fator === f && (
                           <div key={t.id} className="border border-border rounded-lg p-3 space-y-2 relative">
                             <p className="text-xs text-muted-foreground">Tarefa · id: <code>{t.id}</code></p>
                             <Button size="icon" variant="ghost" className="absolute top-2 right-2"
@@ -292,34 +493,8 @@ export default function ExperimentoDetalhe() {
                 </Card>
               );
             })}
-
-            {/* PERSONAS (transversal) */}
-            <Card>
-              <CardHeader><CardTitle>I — Identifique os usuários (Personas)</CardTitle></CardHeader>
-              <CardContent className="space-y-3">
-                {exp.personas.map((p, i) => (
-                  <div key={i} className="border border-border rounded-lg p-3 space-y-2 relative">
-                    <Button size="icon" variant="ghost" className="absolute top-2 right-2"
-                      onClick={() => update("personas", exp.personas.filter((_, idx) => idx !== i))}>
-                      <Trash2 className="w-4 h-4 text-destructive" /></Button>
-                    <Input placeholder="Nome da persona" value={p.nome}
-                      onChange={e => { const arr = [...exp.personas]; arr[i] = { ...p, nome: e.target.value }; update("personas", arr); }} />
-                    <div className="grid grid-cols-2 gap-2">
-                      <Input placeholder="Perfil (idade, ocupação)" value={p.perfil}
-                        onChange={e => { const arr = [...exp.personas]; arr[i] = { ...p, perfil: e.target.value }; update("personas", arr); }} />
-                      <Input placeholder="Contexto de uso" value={p.contexto}
-                        onChange={e => { const arr = [...exp.personas]; arr[i] = { ...p, contexto: e.target.value }; update("personas", arr); }} />
-                    </div>
-                    <Textarea rows={2} placeholder="Objetivos" value={p.objetivos}
-                      onChange={e => { const arr = [...exp.personas]; arr[i] = { ...p, objetivos: e.target.value }; update("personas", arr); }} />
-                  </div>
-                ))}
-                <Button variant="outline" size="sm" onClick={() => update("personas", [...exp.personas, { nome: "", perfil: "", contexto: "", objetivos: "" }])}>
-                  <Plus className="w-4 h-4 mr-2" />Adicionar persona
-                </Button>
-              </CardContent>
-            </Card>
           </TabsContent>
+
 
           {/* COLETA */}
           <TabsContent value="coleta" className="space-y-4 mt-6">
@@ -499,3 +674,98 @@ function FatorListEditor({ label, items, onChange, placeholder }: { label: strin
     </div>
   );
 }
+
+function PhaseHeader({ letter, title, icon: Icon, desc }: { letter: string; title: string; icon: any; desc: string }) {
+  return (
+    <div className="flex items-start gap-3 pt-4">
+      <div className="w-12 h-12 rounded-xl bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold flex-shrink-0">
+        {letter}
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <Icon className="w-4 h-4 text-primary" />
+          <h2 className="text-lg font-bold text-foreground">{title}</h2>
+        </div>
+        <p className="text-sm text-muted-foreground">{desc}</p>
+      </div>
+    </div>
+  );
+}
+
+function TCLEPreview({ exp }: { exp: Experimento }) {
+  const t = exp.tcle ?? {};
+  const titulo = t.pesquisa_titulo || exp.titulo;
+  return (
+    <div className="text-sm leading-relaxed space-y-3 text-foreground">
+      <h2 className="text-center font-bold">TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO (TCLE)</h2>
+      <p className="text-center text-xs text-muted-foreground">Resolução CNS 510/2016 — Pesquisa com Seres Humanos</p>
+
+      <p><strong>Título da pesquisa:</strong> {titulo}</p>
+      <p><strong>Pesquisador(a) responsável:</strong> {t.pesquisador || "_________________________"}</p>
+      <p><strong>Instituição:</strong> {t.instituicao || "_________________________"}</p>
+      <p><strong>Contato:</strong> {t.contato || "_________________________"}</p>
+      <p><strong>Local:</strong> {t.local || "_________________________"} · <strong>Duração estimada:</strong> {t.duracao_estimada || "____"}</p>
+
+      <h3 className="font-semibold">1. Objetivo da pesquisa</h3>
+      <p>{t.objetivo_breve || exp.objetivo || "—"}</p>
+
+      <h3 className="font-semibold">2. Procedimentos</h3>
+      <p>{t.procedimentos || `Você será convidado(a) a participar de uma sessão de avaliação de usabilidade utilizando a técnica de ${TECNICAS_LABELS[exp.tecnicas?.principal as TecnicaTipo] || "avaliação"}. Durante a sessão, serão solicitadas tarefas no sistema avaliado, com observação do facilitador.`}</p>
+      {exp.tarefas.length > 0 && (
+        <ul className="list-disc pl-6">
+          {exp.tarefas.map(tk => <li key={tk.id}>{tk.descricao || "(tarefa sem descrição)"}</li>)}
+        </ul>
+      )}
+
+      <h3 className="font-semibold">3. Riscos</h3>
+      <p>{t.riscos || "Os riscos são mínimos, podendo haver eventual desconforto ou cansaço durante a execução das tarefas. Você poderá interromper a sessão a qualquer momento."}</p>
+
+      <h3 className="font-semibold">4. Benefícios</h3>
+      <p>{t.beneficios || "Sua participação contribuirá para a melhoria da usabilidade do sistema avaliado, beneficiando futuros usuários."}</p>
+
+      <h3 className="font-semibold">5. Sigilo e privacidade</h3>
+      <p>Os dados coletados serão tratados de forma confidencial, garantindo o anonimato. {t.gravacao ? "A sessão será gravada (tela e/ou áudio) exclusivamente para análise da equipe de pesquisa." : ""} {t.uso_imagem ? "Sua imagem poderá ser utilizada em relatórios acadêmicos, sempre preservando sua identidade." : ""} Em conformidade com a LGPD (Lei 13.709/2018), nenhum dado pessoal será divulgado.</p>
+
+      <h3 className="font-semibold">6. Direito de desistência</h3>
+      <p>Sua participação é voluntária. Você pode interromper ou encerrar sua participação a qualquer momento, sem necessidade de justificativa e sem qualquer prejuízo.</p>
+
+      <h3 className="font-semibold">7. Condições adicionais do participante</h3>
+      <p className="border-b border-foreground/30 min-h-[2.5rem]">&nbsp;</p>
+      <p className="border-b border-foreground/30 min-h-[2.5rem]">&nbsp;</p>
+
+      <h3 className="font-semibold">8. Declaração de consentimento</h3>
+      <p>Declaro que li e compreendi as informações acima, que minhas dúvidas foram esclarecidas e que concordo livremente em participar desta pesquisa nas condições aqui descritas.</p>
+
+      <div className="grid grid-cols-2 gap-6 mt-6 text-xs">
+        <div>
+          <p>Nome completo: ____________________________________</p>
+          <p className="mt-3">Data: ____/____/______</p>
+          <p className="mt-6">Assinatura do(a) participante:</p>
+          <p className="border-b border-foreground/50 mt-6">&nbsp;</p>
+        </div>
+        <div>
+          <p>Local: {t.local || "_________________________"}</p>
+          <p className="mt-3">&nbsp;</p>
+          <p className="mt-6">Assinatura do(a) responsável pela pesquisa:</p>
+          <p className="border-b border-foreground/50 mt-6">&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function imprimirTCLE() {
+  const node = document.getElementById("tcle-print");
+  if (!node) return;
+  const win = window.open("", "_blank", "width=900,height=900");
+  if (!win) return;
+  win.document.write(`<html><head><title>TCLE</title><style>
+    body{font-family: Arial, sans-serif; padding: 32px; color:#111; line-height:1.5;}
+    h2{font-size:16px; text-align:center;} h3{font-size:13px; margin-top:14px;}
+    p{font-size:12px;} ul{font-size:12px;}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px;}
+  </style></head><body>${node.innerHTML.replace(/class="grid[^"]*"/g, 'class="grid"')}</body></html>`);
+  win.document.close();
+  setTimeout(() => { win.print(); }, 300);
+}
+
