@@ -71,15 +71,6 @@ const normalizeStrList = (arr: any[]): { fator: FatorTipo; texto: string }[] =>
     typeof it === "string" ? { fator: "eficacia" as FatorTipo, texto: it } : { fator: (it.fator || "eficacia") as FatorTipo, texto: it.texto ?? "" }
   );
 
-export default function ExperimentoDetalhe() {
-  const { id } = useParams<{ id: string }>();
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const [exp, setExp] = useState<Experimento | null>(null);
-  const [saving, setSaving] = useState(false);
-
-  useEffect(() => { if (!loading && !user) navigate("/provas/login"); }, [loading, user, navigate]);
 
 const TECNICAS_LABELS: Record<TecnicaTipo, string> = {
   teste_usabilidade: "Teste de Usabilidade",
