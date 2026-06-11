@@ -92,6 +92,8 @@ export type Database = {
           questoes: Json
           resultados: Json
           tarefas: Json
+          tcle: Json
+          tecnicas: Json
           titulo: string
           updated_at: string
         }
@@ -109,6 +111,8 @@ export type Database = {
           questoes?: Json
           resultados?: Json
           tarefas?: Json
+          tcle?: Json
+          tecnicas?: Json
           titulo: string
           updated_at?: string
         }
@@ -126,6 +130,8 @@ export type Database = {
           questoes?: Json
           resultados?: Json
           tarefas?: Json
+          tcle?: Json
+          tecnicas?: Json
           titulo?: string
           updated_at?: string
         }
