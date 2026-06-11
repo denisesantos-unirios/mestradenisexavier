@@ -10,20 +10,39 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Plus, Trash2, ArrowLeft, Target, Gauge, Smile } from "lucide-react";
+import { Save, Plus, Trash2, ArrowLeft, Target, Gauge, Smile, FileText, Printer, BookOpen, Users, ClipboardList, Shield, BarChart3 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend,
   PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
 } from "recharts";
 
 type FatorTipo = "eficacia" | "eficiencia" | "satisfacao";
-type Metrica = { nome: string; tipo: FatorTipo; formula?: string };
+type Metrica = { nome: string; tipo: FatorTipo; formula?: string; pior?: string; almejado?: string; melhor?: string };
 type Persona = { nome: string; perfil: string; contexto: string; objetivos: string };
 type Tarefa = { id: string; descricao: string; criterio_sucesso: string; tempo_esperado_seg: number; fator?: FatorTipo };
 type Hipotese = { fator: FatorTipo; texto: string };
 type Questao = { fator: FatorTipo; texto: string };
 type Resultado = { participante: string; tarefa_id: string; sucesso: boolean; tempo_seg: number; erros: number; sus_score: number; observacoes?: string };
+
+type TecnicaTipo = "teste_usabilidade" | "pensar_alto" | "questionario_pre" | "entrevista_pos" | "sus" | "observacao_direta" | "avaliacao_heuristica" | "percurso_cognitivo" | "focus_group";
+type Tecnicas = { principal?: TecnicaTipo; complementares?: TecnicaTipo[]; justificativa?: string };
+
+type TCLE = {
+  pesquisa_titulo?: string;
+  pesquisador?: string;
+  instituicao?: string;
+  contato?: string;
+  local?: string;
+  duracao_estimada?: string;
+  objetivo_breve?: string;
+  procedimentos?: string;
+  riscos?: string;
+  beneficios?: string;
+  gravacao?: boolean;
+  uso_imagem?: boolean;
+};
 
 type Experimento = {
   id: string; titulo: string; data_aplicacao: string | null;
@@ -32,7 +51,10 @@ type Experimento = {
   hipoteses: Hipotese[]; questoes: Questao[];
   metricas: Metrica[]; personas: Persona[];
   tarefas: Tarefa[]; resultados: Resultado[];
+  tecnicas: Tecnicas;
+  tcle: TCLE;
 };
+
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
