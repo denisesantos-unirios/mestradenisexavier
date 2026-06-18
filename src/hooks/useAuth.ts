@@ -24,22 +24,23 @@ const fetchRole = (userId: string): Promise<boolean> => {
     return Promise.resolve(roleCache.isProfessor);
   }
   if (rolePromise) return rolePromise;
-  rolePromise = supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", userId)
-    .eq("role", "professor")
-    .maybeSingle()
-    .then(({ data }) => {
+  rolePromise = (async () => {
+    try {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .eq("role", "professor")
+        .maybeSingle();
       const isProf = !!data;
       roleCache = { userId, isProfessor: isProf };
-      rolePromise = null;
       return isProf;
-    })
-    .catch(() => {
-      rolePromise = null;
+    } catch {
       return false;
-    });
+    } finally {
+      rolePromise = null;
+    }
+  })();
   return rolePromise;
 };
 
