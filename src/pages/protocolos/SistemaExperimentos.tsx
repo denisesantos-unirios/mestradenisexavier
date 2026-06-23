@@ -41,6 +41,7 @@ const steps = [
     path: "/protocolos/equipes",
     accent: "blue",
     meaning: "Azul — confiança & organização",
+    permission: "equipes" as const,
   },
   {
     n: 2,
@@ -51,6 +52,7 @@ const steps = [
     path: "/protocolos/projetos",
     accent: "orange",
     meaning: "Laranja — energia & ação criativa",
+    permission: "projetos" as const,
   },
   {
     n: 3,
@@ -61,6 +63,7 @@ const steps = [
     path: "/protocolos/experimentos",
     accent: "violet",
     meaning: "Roxo — conhecimento & investigação",
+    permission: "experimentos" as const,
   },
   {
     n: 4,
@@ -72,6 +75,7 @@ const steps = [
     accent: "emerald",
     meaning: "Verde — segurança & permissão",
     restricted: true,
+    gestorOnly: true,
   },
 ];
 
