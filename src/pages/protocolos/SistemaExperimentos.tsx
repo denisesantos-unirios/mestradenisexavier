@@ -107,7 +107,10 @@ const accentMap: Record<string, { ring: string; bg: string; text: string; chip: 
 };
 
 const SistemaExperimentos = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, hasPermission, isGestor } = useAuth();
+  const visibleSteps = steps.filter((s) =>
+    s.gestorOnly ? isGestor : hasPermission(s.permission!)
+  );
 
   return (
     <main className="min-h-screen" style={{ background: "var(--gradient-hero)" }}>
