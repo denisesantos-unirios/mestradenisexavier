@@ -170,7 +170,7 @@ const SistemaExperimentos = () => {
 
         {/* Trilha de etapas */}
         <div className="grid sm:grid-cols-2 gap-6">
-          {steps.map((step, i) => {
+          {visibleSteps.map((step, i) => {
             const c = accentMap[step.accent];
             return (
               <motion.div
