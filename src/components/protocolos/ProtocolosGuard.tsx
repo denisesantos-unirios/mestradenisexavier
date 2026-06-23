@@ -1,24 +1,25 @@
 import { ReactNode, useEffect } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { Link, Navigate, useLocation } from "react-router-dom";
+import { ShieldAlert } from "lucide-react";
+import { useAuth, type PermissionKey } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import MainNavigation from "@/components/MainNavigation";
+import { Button } from "@/components/ui/button";
 
-/**
- * Guards all Protocolos routes: requires user to be authenticated and to
- * have the `professor` role (granted by the gestor on the management page).
- *
- * The admin "bootstrap" call is fire-and-forget and only runs once per
- * browser session, so navigating between protocolos pages is instant.
- */
-const ProtocolosGuard = ({ children }: { children: ReactNode }) => {
-  const { user, isProfessor, loading } = useAuth();
+interface Props {
+  children: ReactNode;
+  permission?: PermissionKey;
+  requireGestor?: boolean;
+}
+
+const ProtocolosGuard = ({ children, permission, requireGestor }: Props) => {
+  const { user, isProfessor, isGestor, hasPermission, loading } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (sessionStorage.getItem("protocolos_bootstrap_done")) return;
     sessionStorage.setItem("protocolos_bootstrap_done", "1");
-    // Fire-and-forget: never block UI on this idempotent seed call.
     supabase.functions
       .invoke("admin-users", { body: { action: "bootstrap" } })
       .catch(() => sessionStorage.removeItem("protocolos_bootstrap_done"));
@@ -34,6 +35,31 @@ const ProtocolosGuard = ({ children }: { children: ReactNode }) => {
 
   if (!user || !isProfessor) {
     return <Navigate to="/protocolos/login" state={{ from: location.pathname }} replace />;
+  }
+
+  const denied =
+    (requireGestor && !isGestor) ||
+    (permission && !hasPermission(permission));
+
+  if (denied) {
+    return (
+      <main className="min-h-screen" style={{ background: "var(--gradient-hero)" }}>
+        <MainNavigation />
+        <div className="max-w-xl mx-auto pt-32 px-6 text-center">
+          <div className="glass-card p-10">
+            <ShieldAlert className="w-12 h-12 text-amber-500 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-foreground mb-2">Acesso restrito</h1>
+            <p className="text-muted-foreground mb-6">
+              Você ainda não tem permissão para acessar esta área dos Protocolos.
+              Solicite a liberação ao(à) gestor(a) do sistema.
+            </p>
+            <Button asChild>
+              <Link to="/protocolos/sistema">Voltar ao Sistema de Experimentos</Link>
+            </Button>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return <>{children}</>;

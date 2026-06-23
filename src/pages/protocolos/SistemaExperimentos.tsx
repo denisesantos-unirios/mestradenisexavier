@@ -41,6 +41,7 @@ const steps = [
     path: "/protocolos/equipes",
     accent: "blue",
     meaning: "Azul — confiança & organização",
+    permission: "equipes" as const,
   },
   {
     n: 2,
@@ -51,6 +52,7 @@ const steps = [
     path: "/protocolos/projetos",
     accent: "orange",
     meaning: "Laranja — energia & ação criativa",
+    permission: "projetos" as const,
   },
   {
     n: 3,
@@ -61,6 +63,7 @@ const steps = [
     path: "/protocolos/experimentos",
     accent: "violet",
     meaning: "Roxo — conhecimento & investigação",
+    permission: "experimentos" as const,
   },
   {
     n: 4,
@@ -72,6 +75,7 @@ const steps = [
     accent: "emerald",
     meaning: "Verde — segurança & permissão",
     restricted: true,
+    gestorOnly: true,
   },
 ];
 
@@ -103,7 +107,10 @@ const accentMap: Record<string, { ring: string; bg: string; text: string; chip: 
 };
 
 const SistemaExperimentos = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, hasPermission, isGestor } = useAuth();
+  const visibleSteps = steps.filter((s) =>
+    s.gestorOnly ? isGestor : hasPermission(s.permission!)
+  );
 
   return (
     <main className="min-h-screen" style={{ background: "var(--gradient-hero)" }}>
@@ -163,7 +170,7 @@ const SistemaExperimentos = () => {
 
         {/* Trilha de etapas */}
         <div className="grid sm:grid-cols-2 gap-6">
-          {steps.map((step, i) => {
+          {visibleSteps.map((step, i) => {
             const c = accentMap[step.accent];
             return (
               <motion.div

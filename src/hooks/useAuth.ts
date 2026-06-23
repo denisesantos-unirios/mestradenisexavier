@@ -2,46 +2,60 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
+export type PermissionKey = "framework-decide" | "equipes" | "projetos" | "experimentos";
+const ALL_PERMISSIONS: PermissionKey[] = ["framework-decide", "equipes", "projetos", "experimentos"];
+
 type AuthState = {
   user: User | null;
   isProfessor: boolean;
+  isGestor: boolean;
+  permissions: PermissionKey[];
   loading: boolean;
 };
 
-let state: AuthState = { user: null, isProfessor: false, loading: true };
+let state: AuthState = { user: null, isProfessor: false, isGestor: false, permissions: [], loading: true };
 const listeners = new Set<(s: AuthState) => void>();
 let initialized = false;
-let roleCache: { userId: string; isProfessor: boolean } | null = null;
-let rolePromise: Promise<boolean> | null = null;
+let accessCache: { userId: string; isProfessor: boolean; isGestor: boolean; permissions: PermissionKey[] } | null = null;
+let accessPromise: Promise<{ isProfessor: boolean; isGestor: boolean; permissions: PermissionKey[] }> | null = null;
 
 const setState = (next: Partial<AuthState>) => {
   state = { ...state, ...next };
   listeners.forEach((l) => l(state));
 };
 
-const fetchRole = (userId: string): Promise<boolean> => {
-  if (roleCache && roleCache.userId === userId) {
-    return Promise.resolve(roleCache.isProfessor);
+const fetchAccess = (userId: string) => {
+  if (accessCache && accessCache.userId === userId) {
+    return Promise.resolve({
+      isProfessor: accessCache.isProfessor,
+      isGestor: accessCache.isGestor,
+      permissions: accessCache.permissions,
+    });
   }
-  if (rolePromise) return rolePromise;
-  rolePromise = (async () => {
+  if (accessPromise) return accessPromise;
+  accessPromise = (async () => {
     try {
-      const { data } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", userId)
-        .eq("role", "professor")
-        .maybeSingle();
-      const isProf = !!data;
-      roleCache = { userId, isProfessor: isProf };
-      return isProf;
+      const [{ data: roles }, { data: profile }] = await Promise.all([
+        supabase.from("user_roles").select("role").eq("user_id", userId),
+        supabase.from("profiles").select("permissions").eq("user_id", userId).maybeSingle(),
+      ]);
+      const isProfessor = !!roles?.some((r: any) => r.role === "professor");
+      const isGestor = !!roles?.some((r: any) => r.role === "gestor");
+      const raw = (profile as any)?.permissions as string[] | null | undefined;
+      const permissions = isGestor
+        ? ALL_PERMISSIONS
+        : ((raw ?? ALL_PERMISSIONS) as string[]).filter((p): p is PermissionKey =>
+            ALL_PERMISSIONS.includes(p as PermissionKey)
+          );
+      accessCache = { userId, isProfessor, isGestor, permissions };
+      return { isProfessor, isGestor, permissions };
     } catch {
-      return false;
+      return { isProfessor: false, isGestor: false, permissions: [] as PermissionKey[] };
     } finally {
-      rolePromise = null;
+      accessPromise = null;
     }
   })();
-  return rolePromise;
+  return accessPromise;
 };
 
 const init = () => {
@@ -50,36 +64,39 @@ const init = () => {
 
   supabase.auth.onAuthStateChange((event, session) => {
     const currentUser = session?.user ?? null;
-
-    // Token refresh doesn't change the user — skip role refetch.
     if (event === "TOKEN_REFRESHED" && state.user?.id === currentUser?.id) {
       setState({ user: currentUser, loading: false });
       return;
     }
-
     if (!currentUser) {
-      roleCache = null;
-      setState({ user: null, isProfessor: false, loading: false });
+      accessCache = null;
+      setState({ user: null, isProfessor: false, isGestor: false, permissions: [], loading: false });
       return;
     }
-
     setState({ user: currentUser });
-    fetchRole(currentUser.id).then((isProf) =>
-      setState({ isProfessor: isProf, loading: false })
+    fetchAccess(currentUser.id).then((a) =>
+      setState({ ...a, loading: false })
     );
   });
 
   supabase.auth.getSession().then(({ data: { session } }) => {
     const currentUser = session?.user ?? null;
     if (!currentUser) {
-      setState({ user: null, isProfessor: false, loading: false });
+      setState({ user: null, isProfessor: false, isGestor: false, permissions: [], loading: false });
       return;
     }
     setState({ user: currentUser });
-    fetchRole(currentUser.id).then((isProf) =>
-      setState({ isProfessor: isProf, loading: false })
+    fetchAccess(currentUser.id).then((a) =>
+      setState({ ...a, loading: false })
     );
   });
+};
+
+export const invalidateAuthCache = () => {
+  accessCache = null;
+  if (state.user) {
+    fetchAccess(state.user.id).then((a) => setState({ ...a }));
+  }
 };
 
 export const useAuth = () => {
@@ -96,9 +113,11 @@ export const useAuth = () => {
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    roleCache = null;
-    setState({ user: null, isProfessor: false, loading: false });
+    accessCache = null;
+    setState({ user: null, isProfessor: false, isGestor: false, permissions: [], loading: false });
   };
 
-  return { ...s, signOut };
+  const hasPermission = (key: PermissionKey) => s.isGestor || s.permissions.includes(key);
+
+  return { ...s, signOut, hasPermission };
 };

@@ -76,12 +76,24 @@ Deno.serve(async (req) => {
       .select("role")
       .eq("user_id", user.id);
     const isProfessor = roles?.some((r) => r.role === "professor");
+    const isGestor = roles?.some((r) => r.role === "gestor");
     if (!isProfessor) return json({ error: "Forbidden" }, 403);
+
+    // Only the gestor can mutate users / permissions
+    const requireGestor = () => {
+      if (!isGestor) return json({ error: "Apenas o gestor pode executar esta ação" }, 403);
+      return null;
+    };
 
     if (req.method === "GET") {
       const { data: list } = await admin.auth.admin.listUsers({ page: 1, perPage: 200 });
       const { data: roleRows } = await admin.from("user_roles").select("user_id, role").eq("role", "professor");
       const allowedIds = new Set((roleRows ?? []).map((r) => r.user_id));
+      const { data: profiles } = await admin
+        .from("profiles")
+        .select("user_id, permissions")
+        .in("user_id", Array.from(allowedIds));
+      const permMap = new Map((profiles ?? []).map((p: any) => [p.user_id, p.permissions ?? []]));
       const users = (list?.users ?? [])
         .filter((u) => allowedIds.has(u.id))
         .map((u) => ({
@@ -91,12 +103,14 @@ Deno.serve(async (req) => {
           last_sign_in_at: u.last_sign_in_at,
           display_name: u.user_metadata?.full_name ?? u.email,
           is_admin: u.email === ADMIN_EMAIL,
+          permissions: permMap.get(u.id) ?? ["framework-decide", "equipes", "projetos", "experimentos"],
         }));
       return json({ users });
     }
 
     if (body.action === "create") {
-      const { email, password, display_name } = body;
+      const blocked = requireGestor(); if (blocked) return blocked;
+      const { email, password, display_name, permissions } = body;
       if (!email || !password) return json({ error: "email e senha são obrigatórios" }, 400);
       if (String(password).length < 6) return json({ error: "Senha deve ter no mínimo 6 caracteres" }, 400);
       const { data: created, error } = await admin.auth.admin.createUser({
@@ -106,15 +120,16 @@ Deno.serve(async (req) => {
         user_metadata: { full_name: display_name ?? email },
       });
       if (error) return json({ error: error.message }, 400);
-      // Grant professor role (trigger already gives it to the seeded admin email)
       await admin.from("user_roles").insert({ user_id: created.user!.id, role: "professor" });
+      const perms = Array.isArray(permissions) ? permissions : ["framework-decide", "equipes", "projetos", "experimentos"];
+      await admin.from("profiles").update({ permissions: perms }).eq("user_id", created.user!.id);
       return json({ ok: true, user_id: created.user!.id });
     }
 
     if (body.action === "delete") {
+      const blocked = requireGestor(); if (blocked) return blocked;
       const { user_id } = body;
       if (!user_id) return json({ error: "user_id obrigatório" }, 400);
-      // Protect the seeded admin
       const { data: target } = await admin.auth.admin.getUserById(user_id);
       if (target?.user?.email === ADMIN_EMAIL) {
         return json({ error: "Não é possível excluir o administrador principal" }, 400);
@@ -125,10 +140,22 @@ Deno.serve(async (req) => {
     }
 
     if (body.action === "reset_password") {
+      const blocked = requireGestor(); if (blocked) return blocked;
       const { user_id, password } = body;
       if (!user_id || !password) return json({ error: "Dados incompletos" }, 400);
       if (String(password).length < 6) return json({ error: "Senha deve ter no mínimo 6 caracteres" }, 400);
       const { error } = await admin.auth.admin.updateUserById(user_id, { password });
+      if (error) return json({ error: error.message }, 400);
+      return json({ ok: true });
+    }
+
+    if (body.action === "set_permissions") {
+      const blocked = requireGestor(); if (blocked) return blocked;
+      const { user_id, permissions } = body;
+      if (!user_id || !Array.isArray(permissions)) return json({ error: "Dados incompletos" }, 400);
+      const allowed = ["framework-decide", "equipes", "projetos", "experimentos"];
+      const clean = permissions.filter((p: string) => allowed.includes(p));
+      const { error } = await admin.from("profiles").update({ permissions: clean }).eq("user_id", user_id);
       if (error) return json({ error: error.message }, 400);
       return json({ ok: true });
     }
