@@ -163,11 +163,11 @@ const App = () => (
           <Route path="/protocolos/login" element={<ProtocolosLogin />} />
           <Route path="/protocolos/framework-decide" element={<ProtocolosGuard><FrameworkDECIDE /></ProtocolosGuard>} />
           <Route path="/protocolos/sistema" element={<ProtocolosGuard><SistemaExperimentos /></ProtocolosGuard>} />
-          <Route path="/protocolos/equipes" element={<ProtocolosGuard><ProtocolosEquipes /></ProtocolosGuard>} />
-          <Route path="/protocolos/projetos" element={<ProtocolosGuard><ProtocolosProjetos /></ProtocolosGuard>} />
-          <Route path="/protocolos/experimentos" element={<ProtocolosGuard><ProtocolosExperimentos /></ProtocolosGuard>} />
-          <Route path="/protocolos/experimentos/:id" element={<ProtocolosGuard><ProtocolosExperimentoDetalhe /></ProtocolosGuard>} />
-          <Route path="/protocolos/gestao" element={<ProtocolosGuard><ProtocolosGestao /></ProtocolosGuard>} />
+          <Route path="/protocolos/equipes" element={<ProtocolosGuard permission="equipes"><ProtocolosEquipes /></ProtocolosGuard>} />
+          <Route path="/protocolos/projetos" element={<ProtocolosGuard permission="projetos"><ProtocolosProjetos /></ProtocolosGuard>} />
+          <Route path="/protocolos/experimentos" element={<ProtocolosGuard permission="experimentos"><ProtocolosExperimentos /></ProtocolosGuard>} />
+          <Route path="/protocolos/experimentos/:id" element={<ProtocolosGuard permission="experimentos"><ProtocolosExperimentoDetalhe /></ProtocolosGuard>} />
+          <Route path="/protocolos/gestao" element={<ProtocolosGuard requireGestor><ProtocolosGestao /></ProtocolosGuard>} />
           {/* Provas */}
           <Route path="/provas/login" element={<ProvasLogin />} />
           <Route path="/provas/banco-questoes" element={<BancoQuestoes />} />
