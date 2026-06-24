@@ -463,32 +463,43 @@ export default function ExperimentoDetalhe() {
                         </Button>
                       </div>
                     </div>
-                    {/* Tarefas */}
-                    <div>
-                      <p className="text-sm font-medium mb-2">Tarefas</p>
-                      <div className="space-y-3">
-                        {exp.tarefas.map((t) => t.fator === f && (
-                          <div key={t.id} className="border border-border rounded-lg p-3 space-y-2 relative">
-                            <p className="text-xs text-muted-foreground">Tarefa · id: <code>{t.id}</code></p>
-                            <Button size="icon" variant="ghost" className="absolute top-2 right-2"
-                              onClick={() => update("tarefas", exp.tarefas.filter(x => x.id !== t.id))}>
-                              <Trash2 className="w-4 h-4 text-destructive" /></Button>
-                            <Textarea rows={2} placeholder="Descrição da tarefa" value={t.descricao}
-                              onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, descricao: e.target.value } : x); update("tarefas", arr); }} />
-                            <div className="grid grid-cols-2 gap-2">
-                              <Input placeholder="Critério de sucesso" value={t.criterio_sucesso}
-                                onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, criterio_sucesso: e.target.value } : x); update("tarefas", arr); }} />
-                              <Input type="number" placeholder="Tempo esperado (s)" value={t.tempo_esperado_seg || ""}
-                                onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, tempo_esperado_seg: Number(e.target.value) } : x); update("tarefas", arr); }} />
-                            </div>
-                          </div>
-                        ))}
-                        <Button variant="outline" size="sm"
-                          onClick={() => update("tarefas", [...exp.tarefas, { id: uid(), descricao: "", criterio_sucesso: "", tempo_esperado_seg: 0, fator: f }])}>
-                          <Plus className="w-4 h-4 mr-2" />Adicionar tarefa
-                        </Button>
+                    {/* Tarefas — Eficácia e Eficiência compartilham a mesma lista */}
+                    {f === "eficiencia" && exp.fatores.includes("eficacia") ? (
+                      <div className="rounded-lg border border-dashed border-amber-300 bg-amber-50 dark:bg-amber-950/20 p-3 text-sm text-amber-900 dark:text-amber-200">
+                        ℹ️ As <strong>tarefas de Eficiência</strong> são as mesmas da <strong>Eficácia</strong> (sucesso × tempo sobre a mesma execução). Edite-as no bloco <em>Fator: Eficácia</em> acima — não é necessário cadastrar novamente aqui.
                       </div>
-                    </div>
+                    ) : (
+                      <div>
+                        <p className="text-sm font-medium mb-2">
+                          Tarefas
+                          {f === "eficacia" && exp.fatores.includes("eficiencia") && (
+                            <span className="ml-2 text-xs font-normal text-muted-foreground">(compartilhadas com Eficiência)</span>
+                          )}
+                        </p>
+                        <div className="space-y-3">
+                          {exp.tarefas.map((t) => t.fator === f && (
+                            <div key={t.id} className="border border-border rounded-lg p-3 space-y-2 relative">
+                              <p className="text-xs text-muted-foreground">Tarefa · id: <code>{t.id}</code></p>
+                              <Button size="icon" variant="ghost" className="absolute top-2 right-2"
+                                onClick={() => update("tarefas", exp.tarefas.filter(x => x.id !== t.id))}>
+                                <Trash2 className="w-4 h-4 text-destructive" /></Button>
+                              <Textarea rows={2} placeholder="Descrição da tarefa" value={t.descricao}
+                                onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, descricao: e.target.value } : x); update("tarefas", arr); }} />
+                              <div className="grid grid-cols-2 gap-2">
+                                <Input placeholder="Critério de sucesso" value={t.criterio_sucesso}
+                                  onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, criterio_sucesso: e.target.value } : x); update("tarefas", arr); }} />
+                                <Input type="number" placeholder="Tempo esperado (s)" value={t.tempo_esperado_seg || ""}
+                                  onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, tempo_esperado_seg: Number(e.target.value) } : x); update("tarefas", arr); }} />
+                              </div>
+                            </div>
+                          ))}
+                          <Button variant="outline" size="sm"
+                            onClick={() => update("tarefas", [...exp.tarefas, { id: uid(), descricao: "", criterio_sucesso: "", tempo_esperado_seg: 0, fator: f }])}>
+                            <Plus className="w-4 h-4 mr-2" />Adicionar tarefa
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               );
