@@ -46,6 +46,7 @@ const BancoQuestoes = () => {
   const [filterType, setFilterType] = useState<string>("all");
   const [filterDifficulty, setFilterDifficulty] = useState<string>("all");
   const [filterTopic, setFilterTopic] = useState<string>("all");
+  const [filterProvaFinal, setFilterProvaFinal] = useState<string>("all");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showAnswers, setShowAnswers] = useState<Set<string>>(new Set());
   const [loadingQuestions, setLoadingQuestions] = useState(true);
@@ -85,6 +86,9 @@ const BancoQuestoes = () => {
     if (filterType !== "all" && q.question_type !== filterType) return false;
     if (filterDifficulty !== "all" && q.difficulty !== filterDifficulty) return false;
     if (filterTopic !== "all" && q.topic !== filterTopic) return false;
+    const isProvaFinal = q.topic?.toLowerCase().startsWith("prova final");
+    if (filterProvaFinal === "only" && !isProvaFinal) return false;
+    if (filterProvaFinal === "exclude" && isProvaFinal) return false;
     return true;
   });
 
@@ -170,7 +174,18 @@ const BancoQuestoes = () => {
               <Filter className="w-5 h-5 text-primary" />
               <h2 className="font-semibold text-foreground">Filtros</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <Select value={filterProvaFinal} onValueChange={setFilterProvaFinal}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Prova Final" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas (Prova Final + Normais)</SelectItem>
+                  <SelectItem value="only">Somente Prova Final</SelectItem>
+                  <SelectItem value="exclude">Excluir Prova Final</SelectItem>
+                </SelectContent>
+              </Select>
+
               <Select value={filterDiscipline} onValueChange={setFilterDiscipline}>
                 <SelectTrigger>
                   <SelectValue placeholder="Disciplina" />
@@ -263,7 +278,13 @@ const BancoQuestoes = () => {
                         <span className={`text-xs px-2 py-0.5 rounded-full ${difficultyColors[q.difficulty]}`}>
                           {difficultyLabels[q.difficulty]}
                         </span>
+                        {q.topic?.toLowerCase().startsWith("prova final") && (
+                          <Badge className="text-xs bg-orange-500/20 text-orange-400 border-orange-500/40">
+                            Prova Final
+                          </Badge>
+                        )}
                         <span className="text-xs text-muted-foreground">• {q.topic}</span>
+
                       </div>
 
                       {q.context_text && (
