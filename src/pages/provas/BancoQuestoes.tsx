@@ -174,7 +174,18 @@ const BancoQuestoes = () => {
               <Filter className="w-5 h-5 text-primary" />
               <h2 className="font-semibold text-foreground">Filtros</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <Select value={filterProvaFinal} onValueChange={setFilterProvaFinal}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Prova Final" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas (Prova Final + Normais)</SelectItem>
+                  <SelectItem value="only">Somente Prova Final</SelectItem>
+                  <SelectItem value="exclude">Excluir Prova Final</SelectItem>
+                </SelectContent>
+              </Select>
+
               <Select value={filterDiscipline} onValueChange={setFilterDiscipline}>
                 <SelectTrigger>
                   <SelectValue placeholder="Disciplina" />
