@@ -278,7 +278,13 @@ const BancoQuestoes = () => {
                         <span className={`text-xs px-2 py-0.5 rounded-full ${difficultyColors[q.difficulty]}`}>
                           {difficultyLabels[q.difficulty]}
                         </span>
+                        {q.topic?.toLowerCase().startsWith("prova final") && (
+                          <Badge className="text-xs bg-orange-500/20 text-orange-400 border-orange-500/40">
+                            Prova Final
+                          </Badge>
+                        )}
                         <span className="text-xs text-muted-foreground">• {q.topic}</span>
+
                       </div>
 
                       {q.context_text && (
