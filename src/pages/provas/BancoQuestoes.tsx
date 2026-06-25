@@ -86,6 +86,9 @@ const BancoQuestoes = () => {
     if (filterType !== "all" && q.question_type !== filterType) return false;
     if (filterDifficulty !== "all" && q.difficulty !== filterDifficulty) return false;
     if (filterTopic !== "all" && q.topic !== filterTopic) return false;
+    const isProvaFinal = q.topic?.toLowerCase().startsWith("prova final");
+    if (filterProvaFinal === "only" && !isProvaFinal) return false;
+    if (filterProvaFinal === "exclude" && isProvaFinal) return false;
     return true;
   });
 
