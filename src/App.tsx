@@ -10,6 +10,7 @@ import Aula3 from "./pages/Aula3";
 import Aula4 from "./pages/Aula4";
 import Aula5 from "./pages/Aula5";
 import Aula6 from "./pages/Aula6";
+import ES1Aula7 from "./pages/engenharia-software-1/Aula7";
 // Engenharia de Software 2
 import ES2Aula1 from "./pages/engenharia-software-2/Aula1";
 import ES2Aula2 from "./pages/engenharia-software-2/Aula2";
