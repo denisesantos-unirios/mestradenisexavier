@@ -20,8 +20,7 @@ const menuItems = [
       { title: "Aula 3 - Metodologias Ágeis", path: "/engenharia-software-1/aula-3" },
       { title: "Aula 4 - Engenharia de Requisitos", path: "/engenharia-software-1/aula-4" },
       { title: "Aula 5 - ES Assistida por IA", path: "/engenharia-software-1/aula-5" },
-      { title: "Aula 6 - Modelagem Conceitual", path: "/engenharia-software-1/aula-6" },
-      { title: "Aula 7 - Suporte de IA Generativa", path: "/engenharia-software-1/aula-7" }
+      { title: "Aula 6 - Modelagem Conceitual", path: "/engenharia-software-1/aula-6" }
     ]
   },
   {
@@ -119,7 +118,8 @@ const menuItems = [
       { title: "Login Professor", path: "/provas/login" },
       { title: "Banco de Questões", path: "/provas/banco-questoes" },
       { title: "Gerar Prova", path: "/provas/gerar-prova" },
-      { title: "Estudos de Modelagem", path: "/modelagem" }
+      { title: "Estudos de Modelagem", path: "/modelagem" },
+      { title: "Aula 7 - Suporte de IA Generativa (ES I)", path: "/engenharia-software-1/aula-7" }
     ]
   }
 ];

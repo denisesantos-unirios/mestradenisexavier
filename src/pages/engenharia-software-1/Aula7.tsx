@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
-import { Sparkles, ChevronDown, BookOpen, Brain, Layers, ShieldCheck, Target, Users, GitBranch, MessageCircleQuestion, Wand2, Ban, ClipboardCheck, AlertTriangle, Lightbulb, PenLine } from "lucide-react";
+import { Navigate } from "react-router-dom";
+import { Sparkles, ChevronDown, BookOpen, Brain, Layers, ShieldCheck, Target, Users, GitBranch, MessageCircleQuestion, Wand2, Ban, ClipboardCheck, AlertTriangle, Lightbulb, PenLine, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import LessonNavigation from "@/components/LessonNavigation";
 import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
+import { useAuth } from "@/hooks/useAuth";
 
 const sections = [
   { id: "identificacao", title: "Identificação" },
@@ -340,6 +342,9 @@ const SinteseSection = () => (
 );
 
 const Aula7 = () => {
+  const { isProfessor, loading } = useAuth();
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
+  if (!isProfessor) return <Navigate to="/provas/login" replace />;
   return (
     <div className="min-h-screen bg-background text-foreground">
       <LessonNavigation
