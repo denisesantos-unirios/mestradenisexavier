@@ -102,6 +102,7 @@ const App = () => (
           <Route path="/engenharia-software-1/aula-4" element={<Aula4 />} />
           <Route path="/engenharia-software-1/aula-5" element={<Aula5 />} />
           <Route path="/engenharia-software-1/aula-6" element={<Aula6 />} />
+          <Route path="/engenharia-software-1/aula-7" element={<ES1Aula7 />} />
           {/* Engenharia de Software 2 */}
           <Route path="/engenharia-software-2/aula-1" element={<ES2Aula1 />} />
           <Route path="/engenharia-software-2/aula-2" element={<ES2Aula2 />} />
