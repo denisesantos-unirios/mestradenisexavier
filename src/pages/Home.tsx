@@ -139,7 +139,7 @@ const Home = () => {
           >
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-secondary/80 backdrop-blur-sm mb-8">
               <GraduationCap className="w-6 h-6 text-primary" />
-              <span className="text-muted-foreground font-medium">Portal de Aulas • Semestre 2026.1</span>
+              <span className="text-muted-foreground font-medium">Portal de Aulas • Semestre 2026.2</span>
             </div>
           </motion.div>
 
