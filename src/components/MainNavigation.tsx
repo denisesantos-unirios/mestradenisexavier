@@ -118,7 +118,8 @@ const menuItems = [
       { title: "Login Professor", path: "/provas/login" },
       { title: "Banco de Questões", path: "/provas/banco-questoes" },
       { title: "Gerar Prova", path: "/provas/gerar-prova" },
-      { title: "Estudos de Modelagem", path: "/modelagem" }
+      { title: "Estudos de Modelagem", path: "/modelagem" },
+      { title: "Aula 7 - Suporte de IA Generativa (ES I)", path: "/engenharia-software-1/aula-7" }
     ]
   }
 ];
