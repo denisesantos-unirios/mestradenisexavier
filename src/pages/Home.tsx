@@ -17,7 +17,8 @@ const courses = [
       { id: "aula-3", title: "Aula 3", description: "Metodologias Ágeis", path: "/engenharia-software-1/aula-3" },
       { id: "aula-4", title: "Aula 4", description: "Engenharia de Requisitos", path: "/engenharia-software-1/aula-4" },
       { id: "aula-5", title: "Aula 5", description: "IA e Histórias de Usuário", path: "/engenharia-software-1/aula-5" },
-      { id: "aula-6", title: "Aula 6", description: "Modelagem Conceitual", path: "/engenharia-software-1/aula-6" }
+      { id: "aula-6", title: "Aula 6", description: "Modelagem Conceitual", path: "/engenharia-software-1/aula-6" },
+      { id: "aula-7", title: "Aula 7", description: "Suporte de IA Generativa", path: "/engenharia-software-1/aula-7" }
     ]
   },
   {
