@@ -6,12 +6,14 @@ import RequirementsTypesSection from "@/components/aula4/RequirementsTypesSectio
 import ElicitationTechniquesSection from "@/components/aula4/ElicitationTechniquesSection";
 import InterviewSimulationSection from "@/components/aula4/InterviewSimulationSection";
 import AVAActivitySection from "@/components/aula4/AVAActivitySection";
+import CanvasIASection from "@/components/aula4/CanvasIASection";
 
 const sections = [
   { id: "introducao", title: "Introdução" },
   { id: "tipos", title: "Tipos de Requisitos" },
   { id: "tecnicas", title: "Técnicas de Elicitação" },
   { id: "dinamica", title: "Simulação de Entrevista" },
+  { id: "canvas-ia", title: "Canvas com IA" },
   { id: "atividade-ava", title: "Atividade AVA" }
 ];
 
