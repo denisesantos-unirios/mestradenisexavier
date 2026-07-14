@@ -10,6 +10,7 @@ import Aula3 from "./pages/Aula3";
 import Aula4 from "./pages/Aula4";
 import Aula5 from "./pages/Aula5";
 import Aula6 from "./pages/Aula6";
+import ES1Aula7 from "./pages/engenharia-software-1/Aula7";
 // Engenharia de Software 2
 import ES2Aula1 from "./pages/engenharia-software-2/Aula1";
 import ES2Aula2 from "./pages/engenharia-software-2/Aula2";
@@ -101,6 +102,7 @@ const App = () => (
           <Route path="/engenharia-software-1/aula-4" element={<Aula4 />} />
           <Route path="/engenharia-software-1/aula-5" element={<Aula5 />} />
           <Route path="/engenharia-software-1/aula-6" element={<Aula6 />} />
+          <Route path="/engenharia-software-1/aula-7" element={<ES1Aula7 />} />
           {/* Engenharia de Software 2 */}
           <Route path="/engenharia-software-2/aula-1" element={<ES2Aula1 />} />
           <Route path="/engenharia-software-2/aula-2" element={<ES2Aula2 />} />
