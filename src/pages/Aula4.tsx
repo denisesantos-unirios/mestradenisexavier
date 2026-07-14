@@ -32,6 +32,7 @@ const Aula4 = () => {
         <RequirementsTypesSection />
         <ElicitationTechniquesSection />
         <InterviewSimulationSection />
+        <CanvasIASection />
         <AVAActivitySection />
       </main>
       <PdfExportButton filename="ES1_Aula-4_Engenharia-Requisitos.pdf" />
