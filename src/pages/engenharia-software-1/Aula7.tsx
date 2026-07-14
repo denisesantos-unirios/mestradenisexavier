@@ -342,6 +342,9 @@ const SinteseSection = () => (
 );
 
 const Aula7 = () => {
+  const { isProfessor, loading } = useAuth();
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
+  if (!isProfessor) return <Navigate to="/provas/login" replace />;
   return (
     <div className="min-h-screen bg-background text-foreground">
       <LessonNavigation
