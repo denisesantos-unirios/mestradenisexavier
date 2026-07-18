@@ -75,7 +75,7 @@ const TIPS: Record<string, TipSet> = {
     ],
   },
   default: {
-    titulo: "Olá! Sou o Deny 🦉",
+    titulo: "Olá! Sou a Prof Deny 👩‍🏫",
     dicas: [
       "Sou o mascote deste portal e vou te acompanhar em cada aula com dicas rápidas.",
       "Navegue pelo menu superior para acessar as disciplinas.",
