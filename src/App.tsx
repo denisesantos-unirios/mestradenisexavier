@@ -85,6 +85,7 @@ import BancoQuestoes from "./pages/provas/BancoQuestoes";
 import GerarProva from "./pages/provas/GerarProva";
 import ListaProvas from "./pages/provas/ListaProvas";
 import NotFound from "./pages/NotFound";
+import DenyMascot from "./components/DenyMascot";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +95,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <DenyMascot />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/engenharia-software-1/aula-1" element={<Aula1 />} />
