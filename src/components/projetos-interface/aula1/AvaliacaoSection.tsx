@@ -40,7 +40,7 @@ const nota2 = {
   title: "Resenha Crítica",
   pontos: "10,0 pontos",
   descricao: "Livro: \"Não me faça pensar\" de Steve Krug",
-  prazo: "Turma A: 06/04 | Turma B: 07/04",
+  prazo: "21/09/2026",
   color: "from-rose-500 to-pink-500"
 };
 
@@ -64,32 +64,46 @@ const avaliacoesEtapa2 = [
 const projetoFases = [
   {
     fase: "Fase 1",
-    titulo: "Requisitos (1,2 pts)",
+    titulo: "Requisitos",
+    pontosTotal: "1,2 pts",
+    data: "17/08",
     items: [
-      "1.1 Objetivo geral do sistema (0.2)",
-      "1.2 Nível de habilidade dos usuários (0.2)",
-      "1.3 Tarefas que os usuários irão realizar (0.2)",
-      "1.4 Perfis/Personas (0.2)",
-      "1.5 Equipe de desenvolvimento (0.2)",
-      "1.6 Ações/Responsabilidades/Cronograma (0.2)"
+      { desc: "1.1 Objetivo geral do sistema", pts: "0,2" },
+      { desc: "1.2 Nível de habilidade dos usuários", pts: "0,2" },
+      { desc: "1.3 Tarefas que os usuários irão realizar", pts: "0,2" },
+      { desc: "1.4 Perfis (com Persona - 3)", pts: "0,2" },
+      { desc: "1.5 Equipe de desenvolvimento", pts: "0,2" },
+      { desc: "1.6 Ações / Responsabilidades / Cronograma", pts: "0,2" }
     ]
   },
   {
     fase: "Fase 2",
-    titulo: "Planejamento Inicial (2,2 pts)",
+    titulo: "Planejamento Inicial",
+    pontosTotal: "2,2 pts",
+    data: "24/08",
     items: [
-      "2.1 Diagrama de atividades do fluxo principal (0.7)",
-      "2.2 Interface atual (0.5)",
-      "2.3 Protótipo no Figma (1.0)"
+      { desc: "2.1 Fluxo principal: Diagrama de Atividades (usuário e admin)", pts: "0,7" },
+      { desc: "2.2 Interface atual", pts: "0,5" },
+      { desc: "2.3 Protótipo (Figma)", pts: "1,0" }
     ]
   },
   {
     fase: "Fase 3",
-    titulo: "Desenvolvimento - Heurísticas (6,6 pts)",
+    titulo: "Desenvolvimento - Heurísticas",
+    pontosTotal: "6,6 pts",
+    data: "14/09",
     items: [
-      "3.1 Deixar o usuário no comando (1.8)",
-      "3.2 Reduzir a carga de memória (1.8)",
-      "3.3 Tornar a interface consistente (3.0)"
+      { desc: "3.1.1 Definir modos de interação", pts: "0,6" },
+      { desc: "3.1.2 Interação flexível (comandos de teclado)", pts: "0,6" },
+      { desc: "3.1.3 Permitir interromper e desfazer ações", pts: "0,6" },
+      { desc: "3.2.1 Definir ações intuitivas", pts: "0,6" },
+      { desc: "3.2.2 Layout com metáfora do mundo real", pts: "0,6" },
+      { desc: "3.2.3 Informações reveladas progressivamente", pts: "0,6" },
+      { desc: "3.3.1 Informações organizadas pelas regras do projeto", pts: "0,6" },
+      { desc: "3.3.2 Mecanismos de entradas restritas", pts: "0,6" },
+      { desc: "3.3.3 Mecanismos de navegação", pts: "0,6" },
+      { desc: "3.3.4 Título, janelas, ícones, cores", pts: "0,6" },
+      { desc: "3.3.5 Saber onde está e para onde está indo", pts: "0,6" }
     ]
   }
 ];
@@ -97,25 +111,29 @@ const projetoFases = [
 const projetoFasesEtapa2 = [
   {
     fase: "Fase 4",
-    titulo: "Planejamento Final - DECIDE (2,5 pts)",
+    titulo: "Planejamento Final - DECIDE",
+    pontosTotal: "2,5 pts",
+    data: "26/10",
     items: [
-      "2.4.1 Objetivo do teste (0.5)",
-      "2.4.2 Questionamentos (0.5)",
-      "2.4.3 Tarefas a serem avaliadas (0.5)",
-      "2.4.4 Medição/métricas (0.5)",
-      "Preparação do teste (0.5)"
+      { desc: "2.4 Preparação do Teste com DECIDE", pts: "0,5" },
+      { desc: "2.4.1 Objetivo", pts: "0,5" },
+      { desc: "2.4.2 Questionamentos", pts: "0,5" },
+      { desc: "2.4.3 Tarefas", pts: "0,5" },
+      { desc: "2.4.4 Medição", pts: "0,5" }
     ]
   },
   {
     fase: "Fase 5",
-    titulo: "Teste e Validação (7,5 pts)",
+    titulo: "Teste e Validação da Interface",
+    pontosTotal: "7,5 pts",
+    data: "16/11",
     items: [
-      "4.1 Recursos: Filmagem (1.0)",
-      "4.2 Coleta de dados (1.0)",
-      "4.3 Survey/questionário (1.0)",
-      "4.4 Análise dos resultados (1.0)",
-      "4.5 Relatório de resultados (1.5)",
-      "4.6 Apresentação final (2.0)"
+      { desc: "4.1 Recursos: Filmagem", pts: "1,0" },
+      { desc: "4.2 Coleta de Dados", pts: "1,0" },
+      { desc: "4.3 Survey", pts: "1,0" },
+      { desc: "4.4 Análise", pts: "1,0" },
+      { desc: "4.5 Resultados", pts: "1,5" },
+      { desc: "4.6 Apresentação", pts: "2,0" }
     ]
   }
 ];
@@ -285,20 +303,27 @@ const AvaliacaoSection = () => {
                 className="glass-card p-6 h-full"
                 whileHover={{ y: -5 }}
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-sm mb-4">
-                  <span className="font-bold">{fase.fase}</span>
+                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-sm">
+                    <span className="font-bold">{fase.fase}</span>
+                  </div>
+                  <span className="text-sm font-bold text-primary">{fase.pontosTotal}</span>
                 </div>
-                <h4 className="font-bold text-lg mb-4">{fase.titulo}</h4>
+                <h4 className="font-bold text-lg mb-2">{fase.titulo}</h4>
+                <div className="inline-flex items-center gap-1 text-xs text-muted-foreground mb-4">
+                  📅 Entrega: <span className="font-medium text-foreground">{fase.data}</span>
+                </div>
                 
                 <ul className="space-y-2">
                   {fase.items.map((item, i) => (
                     <motion.li
                       key={i}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
                       whileHover={{ x: 5 }}
                     >
-                      <ChevronRight className="w-4 h-4 text-primary shrink-0" />
-                      <span>{item}</span>
+                      <ChevronRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                      <span className="flex-1">{item.desc}</span>
+                      <span className="text-xs font-bold text-primary shrink-0">{item.pts}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -323,20 +348,27 @@ const AvaliacaoSection = () => {
                 className="glass-card p-6 h-full"
                 whileHover={{ y: -5 }}
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-sm mb-4">
-                  <span className="font-bold text-emerald-400">{fase.fase}</span>
+                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-sm">
+                    <span className="font-bold text-emerald-400">{fase.fase}</span>
+                  </div>
+                  <span className="text-sm font-bold text-emerald-400">{fase.pontosTotal}</span>
                 </div>
-                <h4 className="font-bold text-lg mb-4">{fase.titulo}</h4>
+                <h4 className="font-bold text-lg mb-2">{fase.titulo}</h4>
+                <div className="inline-flex items-center gap-1 text-xs text-muted-foreground mb-4">
+                  📅 Entrega: <span className="font-medium text-foreground">{fase.data}</span>
+                </div>
                 
                 <ul className="space-y-2">
                   {fase.items.map((item, i) => (
                     <motion.li
                       key={i}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
                       whileHover={{ x: 5 }}
                     >
-                      <ChevronRight className="w-4 h-4 text-primary shrink-0" />
-                      <span>{item}</span>
+                      <ChevronRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                      <span className="flex-1">{item.desc}</span>
+                      <span className="text-xs font-bold text-emerald-400 shrink-0">{item.pts}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -344,6 +376,8 @@ const AvaliacaoSection = () => {
             </ScrollReveal>
           ))}
         </div>
+
+
 
         {/* Narrativa UX */}
         <ScrollReveal>
