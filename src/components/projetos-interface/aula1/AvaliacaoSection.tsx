@@ -303,20 +303,27 @@ const AvaliacaoSection = () => {
                 className="glass-card p-6 h-full"
                 whileHover={{ y: -5 }}
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-sm mb-4">
-                  <span className="font-bold">{fase.fase}</span>
+                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-sm">
+                    <span className="font-bold">{fase.fase}</span>
+                  </div>
+                  <span className="text-sm font-bold text-primary">{fase.pontosTotal}</span>
                 </div>
-                <h4 className="font-bold text-lg mb-4">{fase.titulo}</h4>
+                <h4 className="font-bold text-lg mb-2">{fase.titulo}</h4>
+                <div className="inline-flex items-center gap-1 text-xs text-muted-foreground mb-4">
+                  📅 Entrega: <span className="font-medium text-foreground">{fase.data}</span>
+                </div>
                 
                 <ul className="space-y-2">
                   {fase.items.map((item, i) => (
                     <motion.li
                       key={i}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
                       whileHover={{ x: 5 }}
                     >
-                      <ChevronRight className="w-4 h-4 text-primary shrink-0" />
-                      <span>{item}</span>
+                      <ChevronRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                      <span className="flex-1">{item.desc}</span>
+                      <span className="text-xs font-bold text-primary shrink-0">{item.pts}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -324,6 +331,52 @@ const AvaliacaoSection = () => {
             </ScrollReveal>
           ))}
         </div>
+
+        {/* Fases da Etapa 2 */}
+        <ScrollReveal>
+          <div className="mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-sm">
+              <span className="font-bold text-emerald-400">2ª Etapa - 10 pontos</span>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
+          {projetoFasesEtapa2.map((fase, index) => (
+            <ScrollReveal key={index} delay={index * 0.1}>
+              <motion.div
+                className="glass-card p-6 h-full"
+                whileHover={{ y: -5 }}
+              >
+                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-sm">
+                    <span className="font-bold text-emerald-400">{fase.fase}</span>
+                  </div>
+                  <span className="text-sm font-bold text-emerald-400">{fase.pontosTotal}</span>
+                </div>
+                <h4 className="font-bold text-lg mb-2">{fase.titulo}</h4>
+                <div className="inline-flex items-center gap-1 text-xs text-muted-foreground mb-4">
+                  📅 Entrega: <span className="font-medium text-foreground">{fase.data}</span>
+                </div>
+                
+                <ul className="space-y-2">
+                  {fase.items.map((item, i) => (
+                    <motion.li
+                      key={i}
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                      whileHover={{ x: 5 }}
+                    >
+                      <ChevronRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                      <span className="flex-1">{item.desc}</span>
+                      <span className="text-xs font-bold text-emerald-400 shrink-0">{item.pts}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
+            </ScrollReveal>
+          ))}
+        </div>
+
 
         {/* Fases da Etapa 2 */}
         <ScrollReveal>
