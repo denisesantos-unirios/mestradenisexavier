@@ -86,6 +86,7 @@ import GerarProva from "./pages/provas/GerarProva";
 import ListaProvas from "./pages/provas/ListaProvas";
 import NotFound from "./pages/NotFound";
 import DenyMascot from "./components/DenyMascot";
+import PresentationMode from "./components/PresentationMode";
 
 const queryClient = new QueryClient();
 
@@ -96,6 +97,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <DenyMascot />
+        <PresentationMode />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/engenharia-software-1/aula-1" element={<Aula1 />} />

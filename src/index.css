@@ -396,3 +396,16 @@ html {
     border: 1px solid #e5e7eb !important;
   }
 }
+
+/* Presentation mode: hide chrome for a clean slide view */
+body.presentation-active nav,
+body.presentation-active header nav,
+body.presentation-active [data-lesson-nav],
+body.presentation-active .deny-mascot-root,
+body.presentation-active button[title="Gerar PDF da aula"],
+body.presentation-active button[title^="Modo de Apresentação"] {
+  display: none !important;
+}
+body.presentation-active main {
+  padding-top: 0 !important;
+}
