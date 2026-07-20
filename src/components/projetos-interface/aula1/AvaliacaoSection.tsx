@@ -378,43 +378,6 @@ const AvaliacaoSection = () => {
         </div>
 
 
-        {/* Fases da Etapa 2 */}
-        <ScrollReveal>
-          <div className="mb-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-sm">
-              <span className="font-bold text-emerald-400">2ª Etapa - 10 pontos</span>
-            </div>
-          </div>
-        </ScrollReveal>
-
-        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
-          {projetoFasesEtapa2.map((fase, index) => (
-            <ScrollReveal key={index} delay={index * 0.1}>
-              <motion.div
-                className="glass-card p-6 h-full"
-                whileHover={{ y: -5 }}
-              >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-sm mb-4">
-                  <span className="font-bold text-emerald-400">{fase.fase}</span>
-                </div>
-                <h4 className="font-bold text-lg mb-4">{fase.titulo}</h4>
-                
-                <ul className="space-y-2">
-                  {fase.items.map((item, i) => (
-                    <motion.li
-                      key={i}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
-                      whileHover={{ x: 5 }}
-                    >
-                      <ChevronRight className="w-4 h-4 text-primary shrink-0" />
-                      <span>{item}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-            </ScrollReveal>
-          ))}
-        </div>
 
         {/* Narrativa UX */}
         <ScrollReveal>
