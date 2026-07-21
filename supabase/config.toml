@@ -2,3 +2,6 @@ project_id = "zeigtebwcobettcdzofl"
 
 [functions.admin-users]
 verify_jwt = false
+
+[functions.deny-chat]
+verify_jwt = false
