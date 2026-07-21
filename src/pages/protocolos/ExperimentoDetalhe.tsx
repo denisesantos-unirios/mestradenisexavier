@@ -67,6 +67,11 @@ const fmtTime = (s: number) => {
   const sec = Math.floor(s % 60);
   return `${m.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
 };
+const shortTask = (desc: string) => {
+  const m = desc.match(/^TAREFA\s*(\d+)/i);
+  return m ? `T${m[1]}` : desc.slice(0, 6);
+};
+
 
 
 const FATOR_META: Record<FatorTipo, { label: string; desc: string; icon: any; color: string }> = {
