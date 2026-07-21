@@ -24,7 +24,7 @@ type Persona = { nome: string; perfil: string; contexto: string; objetivos: stri
 type Tarefa = { id: string; descricao: string; criterio_sucesso: string; criterios_sucesso?: string[]; personas_idx?: number[]; tempo_esperado_seg: number; fator?: FatorTipo };
 type Hipotese = { fator: FatorTipo; texto: string };
 type Questao = { fator: FatorTipo; texto: string };
-type Resultado = { participante: string; tarefa_id: string; sucesso: boolean; tempo_seg: number; erros: number; sus_score: number; observacoes?: string };
+type Resultado = { participante: string; persona_idx?: number | null; tarefa_id: string; sucesso: boolean; tempo_seg: number; erros: number; sus_score: number; observacoes?: string };
 
 type TecnicaTipo = "teste_usabilidade" | "pensar_alto" | "questionario_pre" | "entrevista_pos" | "sus" | "observacao_direta" | "avaliacao_heuristica" | "percurso_cognitivo" | "focus_group";
 type Tecnicas = { principal?: TecnicaTipo; complementares?: TecnicaTipo[]; justificativa?: string };
