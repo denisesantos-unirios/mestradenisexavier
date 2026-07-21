@@ -153,7 +153,37 @@ const TiposRequisitosSection = () => {
           </motion.div>
         </div>
 
-        {/* Comparativo */}
+        {/* Requisitos de Domínio */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-8 glass-card p-8 border-l-4 border-cyan-500"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
+              <Cog className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-foreground">Requisitos de Domínio</h3>
+              <p className="text-sm text-muted-foreground">Regras específicas do negócio</p>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Derivados do <strong className="text-foreground">domínio da aplicação</strong>. Podem ser requisitos funcionais novos, restrições sobre requisitos existentes ou <strong className="text-foreground">computações específicas</strong>.
+          </p>
+          <div className="grid md:grid-cols-2 gap-3">
+            <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/30">
+              <p className="text-xs text-cyan-300 font-semibold mb-1">Exemplo 1 — Cálculo</p>
+              <p className="text-sm text-muted-foreground">A média final é dada por: <code className="text-cyan-300">(Nota1 × 2 + Nota2 × 3) / 5</code></p>
+            </div>
+            <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/30">
+              <p className="text-xs text-cyan-300 font-semibold mb-1">Exemplo 2 — Restrição</p>
+              <p className="text-sm text-muted-foreground">Aluno só pode se matricular em disciplina se tiver sido aprovado nos pré-requisitos.</p>
+            </div>
+          </div>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
