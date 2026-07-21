@@ -746,6 +746,116 @@ export default function ExperimentoDetalhe() {
                 </Button>
               </CardContent>
             </Card>
+
+            {/* Coleta de Satisfação (Likert) */}
+            {(() => {
+              const satisfQ = exp.questoes.filter(q => q.fator === "satisfacao");
+              if (satisfQ.length === 0) return null;
+              const nQ = satisfQ.length;
+              const isSUS = nQ === 10;
+              const respostas = exp.satisfacao_respostas ?? [];
+              const setRespostas = (arr: SatisfacaoResposta[]) => update("satisfacao_respostas", arr);
+              const calcSUS = (r: number[]) => {
+                if (!isSUS || r.some(v => !v)) return 0;
+                let soma = 0;
+                for (let i = 0; i < 10; i++) {
+                  soma += (i % 2 === 0) ? (r[i] - 1) : (5 - r[i]);
+                }
+                return +(soma * 2.5).toFixed(1);
+              };
+              const calcLikertPct = (r: number[]) => {
+                const valid = r.filter(v => v);
+                if (!valid.length) return 0;
+                return +((valid.reduce((s, v) => s + v, 0) / (valid.length * 5)) * 100).toFixed(1);
+              };
+              return (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Smile className="w-5 h-5 text-emerald-500" /> Coleta de Satisfação — Questionário Likert (1–5)</CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Uma linha por participante. Escala: 1 (Discordo totalmente) → 5 (Concordo totalmente). {isSUS ? <span className="text-emerald-600 font-medium">Detectado SUS (10 itens): SUS 0–100 é calculado automaticamente.</span> : <>Índice normalizado (%) calculado a partir da média das respostas.</>}
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {respostas.map((sr, ri) => {
+                      const susCalc = calcSUS(sr.respostas);
+                      const pct = calcLikertPct(sr.respostas);
+                      return (
+                        <div key={ri} className="border border-border rounded-lg p-3 space-y-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <Input className="max-w-xs" placeholder="Nome / código do participante" value={sr.participante}
+                              onChange={e => {
+                                const arr = [...respostas];
+                                arr[ri] = { ...sr, participante: e.target.value };
+                                setRespostas(arr);
+                              }} />
+                            <div className="flex items-center gap-3 text-sm">
+                              {isSUS && <span className="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-700 font-medium">SUS: {susCalc || "—"}</span>}
+                              <span className="px-2 py-1 rounded-md bg-muted text-muted-foreground">Índice: {pct}%</span>
+                              <Button size="icon" variant="ghost" onClick={() => setRespostas(respostas.filter((_, i) => i !== ri))}>
+                                <Trash2 className="w-4 h-4 text-destructive" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            {satisfQ.map((q, qi) => (
+                              <div key={qi} className="grid grid-cols-[auto_1fr_auto] gap-3 items-center border-b border-border/40 pb-2">
+                                <span className="text-xs font-mono text-muted-foreground w-6 text-right">{qi + 1}.</span>
+                                <span className="text-sm">{q.texto}</span>
+                                <div className="flex gap-1">
+                                  {[1, 2, 3, 4, 5].map(v => {
+                                    const active = sr.respostas[qi] === v;
+                                    return (
+                                      <button key={v} type="button"
+                                        onClick={() => {
+                                          const nova = [...sr.respostas];
+                                          while (nova.length < nQ) nova.push(0);
+                                          nova[qi] = v;
+                                          const arr = [...respostas];
+                                          arr[ri] = { ...sr, respostas: nova };
+                                          setRespostas(arr);
+                                        }}
+                                        className={`w-8 h-8 rounded-md border text-sm font-medium transition ${active ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border hover:bg-muted"}`}>
+                                        {v}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <Textarea rows={2} placeholder="Comentário livre do participante (opcional)"
+                            value={sr.comentario ?? ""}
+                            onChange={e => {
+                              const arr = [...respostas];
+                              arr[ri] = { ...sr, comentario: e.target.value };
+                              setRespostas(arr);
+                            }} />
+                          {isSUS && susCalc > 0 && (
+                            <Button size="sm" variant="outline" onClick={() => {
+                              const nome = (sr.participante || "").trim();
+                              if (!nome) { toast({ title: "Informe o participante" }); return; }
+                              const jaTem = exp.resultados.some(r => r.participante === nome && r.sus_score);
+                              if (jaTem) {
+                                const arr = exp.resultados.map(r => r.participante === nome ? { ...r, sus_score: susCalc } : r);
+                                update("resultados", arr);
+                              } else {
+                                update("resultados", [...exp.resultados, { participante: nome, tarefa_id: exp.tarefas[0]?.id ?? "", sucesso: false, tempo_seg: 0, erros: 0, sus_score: susCalc, observacoes: "SUS (satisfação)" }]);
+                              }
+                              toast({ title: `SUS ${susCalc} aplicado ao participante ${nome}` });
+                            }}>Aplicar SUS na Coleta</Button>
+                          )}
+                        </div>
+                      );
+                    })}
+                    <Button variant="outline" size="sm"
+                      onClick={() => setRespostas([...respostas, { participante: "", respostas: Array(nQ).fill(0), comentario: "" }])}>
+                      <Plus className="w-4 h-4 mr-2" />Adicionar participante
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })()}
           </TabsContent>
 
           {/* ANALISE */}
