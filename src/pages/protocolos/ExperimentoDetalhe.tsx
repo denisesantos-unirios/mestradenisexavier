@@ -146,24 +146,43 @@ export default function ExperimentoDetalhe() {
 
   // === Análise ===
   const participantes = Array.from(new Set(exp.resultados.map(r => r.participante))).filter(Boolean);
-  const tarefaStats = exp.tarefas.map(t => {
-    const rs = exp.resultados.filter(r => r.tarefa_id === t.id);
-    const n = rs.length || 1;
-    const sucessos = rs.filter(r => r.sucesso).length;
-    const tempoMedio = rs.reduce((s, r) => s + (r.tempo_seg || 0), 0) / n;
-    const errosMedio = rs.reduce((s, r) => s + (r.erros || 0), 0) / n;
-    const tempos = rs.map(r => r.tempo_seg || 0);
-    const desvio = tempos.length ? Math.sqrt(tempos.reduce((s, x) => s + (x - tempoMedio) ** 2, 0) / tempos.length) : 0;
-    return {
-      tarefa: t.descricao.slice(0, 30) || t.id,
-      fator: t.fator ?? "eficacia",
-      taxaSucesso: rs.length ? +(sucessos / rs.length * 100).toFixed(1) : 0,
-      tempoMedio: +tempoMedio.toFixed(1),
-      errosMedio: +errosMedio.toFixed(2),
-      desvio: +desvio.toFixed(1),
-      n: rs.length,
-    };
-  });
+  // Agrupa por descrição da tarefa (dedup entre fatores) — 1 linha por tarefa
+  const tarefaStats = (() => {
+    const grupos = new Map<string, { ids: string[]; descricao: string; tempoEsperado: number }>();
+    exp.tarefas.forEach(t => {
+      const key = (t.descricao || t.id).trim().toLowerCase();
+      const g = grupos.get(key) ?? { ids: [], descricao: t.descricao || t.id, tempoEsperado: t.tempo_esperado_seg || 0 };
+      g.ids.push(t.id);
+      g.tempoEsperado = g.tempoEsperado || t.tempo_esperado_seg || 0;
+      grupos.set(key, g);
+    });
+    return Array.from(grupos.values()).map(g => {
+      const rs = exp.resultados.filter(r => g.ids.includes(r.tarefa_id));
+      const n = rs.length || 1;
+      const sucessos = rs.filter(r => r.sucesso).length;
+      const tempoMedio = rs.reduce((s, r) => s + (r.tempo_seg || 0), 0) / n;
+      const errosMedio = rs.reduce((s, r) => s + (r.erros || 0), 0) / n;
+      const tempos = rs.map(r => r.tempo_seg || 0);
+      const desvio = tempos.length ? Math.sqrt(tempos.reduce((s, x) => s + (x - tempoMedio) ** 2, 0) / tempos.length) : 0;
+      const susRs = rs.filter(r => r.sus_score);
+      const susMed = susRs.length ? susRs.reduce((s, r) => s + r.sus_score, 0) / susRs.length : 0;
+      const taxaSucesso = rs.length ? +(sucessos / rs.length * 100).toFixed(1) : 0;
+      // Eficiência: quanto o tempo médio se compara ao esperado (100% = igual ou melhor)
+      const eficiencia = g.tempoEsperado && tempoMedio ? +Math.min(100, (g.tempoEsperado / tempoMedio) * 100).toFixed(1) : 0;
+      return {
+        tarefa: g.descricao.slice(0, 32),
+        descricaoCompleta: g.descricao,
+        taxaSucesso,
+        eficiencia,
+        tempoMedio: +tempoMedio.toFixed(1),
+        tempoEsperado: g.tempoEsperado,
+        errosMedio: +errosMedio.toFixed(2),
+        desvio: +desvio.toFixed(1),
+        susMedio: +susMed.toFixed(1),
+        n: rs.length,
+      };
+    });
+  })();
   const susPorParticipante = participantes.map(p => {
     const rs = exp.resultados.filter(r => r.participante === p && r.sus_score);
     const media = rs.length ? rs.reduce((s, r) => s + r.sus_score, 0) / rs.length : 0;
@@ -574,52 +593,93 @@ export default function ExperimentoDetalhe() {
             </div>
 
             <Card>
-              <CardHeader><CardTitle>Estatísticas por Tarefa</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle>Análise Consolidada por Tarefa</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Cada linha reúne os fatores <strong>Eficácia</strong>, <strong>Eficiência</strong> e <strong>Satisfação</strong> para a mesma tarefa executada pelos participantes.
+                </p>
+              </CardHeader>
               <CardContent className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead><tr className="border-b border-border text-left">
-                    <th className="p-2">Tarefa</th><th className="p-2">Fator</th><th className="p-2">N</th>
-                    <th className="p-2">Taxa Sucesso (Eficácia)</th>
-                    <th className="p-2">Tempo Médio (s) (Eficiência)</th>
-                    <th className="p-2">Desvio (s)</th><th className="p-2">Erros Médios</th>
-                  </tr></thead>
+                  <thead>
+                    <tr className="border-b-2 border-border text-left">
+                      <th className="p-2" rowSpan={2}>Tarefa</th>
+                      <th className="p-2 text-center" rowSpan={2}>N</th>
+                      <th className="p-2 text-center bg-blue-500/10" colSpan={1}>Eficácia</th>
+                      <th className="p-2 text-center bg-amber-500/10" colSpan={3}>Eficiência</th>
+                      <th className="p-2 text-center bg-emerald-500/10" colSpan={1}>Satisfação</th>
+                      <th className="p-2 text-center" rowSpan={2}>Status</th>
+                    </tr>
+                    <tr className="border-b border-border text-left text-xs text-muted-foreground">
+                      <th className="p-2 bg-blue-500/5">Taxa Sucesso</th>
+                      <th className="p-2 bg-amber-500/5">Tempo Médio (s)</th>
+                      <th className="p-2 bg-amber-500/5">Desvio (s)</th>
+                      <th className="p-2 bg-amber-500/5">Erros</th>
+                      <th className="p-2 bg-emerald-500/5">SUS Médio</th>
+                    </tr>
+                  </thead>
                   <tbody>
-                    {tarefaStats.map((s, i) => (
-                      <tr key={i} className="border-b border-border/50">
-                        <td className="p-2">{s.tarefa}</td>
-                        <td className="p-2">{FATOR_META[s.fator as FatorTipo]?.label ?? "—"}</td>
-                        <td className="p-2">{s.n}</td>
-                        <td className="p-2">{s.taxaSucesso}%</td>
-                        <td className="p-2">{s.tempoMedio}</td>
-                        <td className="p-2">{s.desvio}</td>
-                        <td className="p-2">{s.errosMedio}</td>
-                      </tr>
-                    ))}
-                    {tarefaStats.length === 0 && <tr><td colSpan={7} className="p-4 text-center text-muted-foreground">Sem dados coletados.</td></tr>}
+                    {tarefaStats.map((s, i) => {
+                      const okSucesso = s.taxaSucesso >= 80;
+                      const okTempo = !s.tempoEsperado || s.tempoMedio <= s.tempoEsperado;
+                      const okSus = s.susMedio === 0 || s.susMedio >= 68;
+                      const passou = okSucesso && okTempo && okSus;
+                      return (
+                        <tr key={i} className="border-b border-border/50 hover:bg-muted/30">
+                          <td className="p-2 font-medium">{s.tarefa}</td>
+                          <td className="p-2 text-center">{s.n}</td>
+                          <td className="p-2 bg-blue-500/5">
+                            <span className={okSucesso ? "text-blue-600 font-semibold" : "text-destructive font-semibold"}>{s.taxaSucesso}%</span>
+                          </td>
+                          <td className="p-2 bg-amber-500/5">
+                            {s.tempoMedio}s {s.tempoEsperado ? <span className="text-xs text-muted-foreground">/ meta {s.tempoEsperado}s</span> : null}
+                          </td>
+                          <td className="p-2 bg-amber-500/5">±{s.desvio}</td>
+                          <td className="p-2 bg-amber-500/5">{s.errosMedio}</td>
+                          <td className="p-2 bg-emerald-500/5">
+                            {s.susMedio > 0 ? <span className={okSus ? "text-emerald-600 font-semibold" : "text-destructive font-semibold"}>{s.susMedio}</span> : <span className="text-muted-foreground">—</span>}
+                          </td>
+                          <td className="p-2 text-center">
+                            {s.n === 0 ? <span className="text-xs text-muted-foreground">sem dados</span> :
+                              passou ? <span className="inline-block px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 text-xs font-medium">✓ Atende</span>
+                                     : <span className="inline-block px-2 py-0.5 rounded-full bg-destructive/15 text-destructive text-xs font-medium">⚠ Revisar</span>}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    {tarefaStats.length === 0 && <tr><td colSpan={8} className="p-4 text-center text-muted-foreground">Sem dados coletados.</td></tr>}
                   </tbody>
                 </table>
+                <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
+                  <span>Critérios: Sucesso ≥ 80% · Tempo ≤ meta · SUS ≥ 68</span>
+                </div>
               </CardContent>
             </Card>
 
             {tarefaStats.length > 0 && (
               <div className="grid md:grid-cols-2 gap-6">
-                <Card><CardHeader><CardTitle>Eficácia — Taxa de Sucesso por Tarefa</CardTitle></CardHeader>
-                  <CardContent style={{ height: 280 }}>
+                <Card><CardHeader><CardTitle>Eficácia × Eficiência por Tarefa</CardTitle><p className="text-xs text-muted-foreground">Comparativo normalizado (%) — quanto maior, melhor</p></CardHeader>
+                  <CardContent style={{ height: 300 }}>
                     <ResponsiveContainer><BarChart data={tarefaStats}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="tarefa" tick={{ fontSize: 11 }} /><YAxis unit="%" />
-                      <Tooltip /><Bar dataKey="taxaSucesso" fill="hsl(var(--primary))" />
+                      <XAxis dataKey="tarefa" tick={{ fontSize: 11 }} /><YAxis unit="%" domain={[0, 100]} />
+                      <Tooltip />
+                      <Bar dataKey="taxaSucesso" name="Eficácia (%)" fill="hsl(217 91% 60%)" />
+                      <Bar dataKey="eficiencia" name="Eficiência (%)" fill="hsl(38 92% 50%)" />
                     </BarChart></ResponsiveContainer>
                   </CardContent></Card>
 
-                <Card><CardHeader><CardTitle>Eficiência — Tempo Médio por Tarefa</CardTitle></CardHeader>
-                  <CardContent style={{ height: 280 }}>
+                <Card><CardHeader><CardTitle>Tempo Médio vs. Meta por Tarefa</CardTitle><p className="text-xs text-muted-foreground">Em segundos</p></CardHeader>
+                  <CardContent style={{ height: 300 }}>
                     <ResponsiveContainer><BarChart data={tarefaStats}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="tarefa" tick={{ fontSize: 11 }} /><YAxis unit="s" />
-                      <Tooltip /><Bar dataKey="tempoMedio" fill="hsl(var(--accent))" />
+                      <Tooltip />
+                      <Bar dataKey="tempoEsperado" name="Meta (s)" fill="hsl(var(--muted-foreground))" fillOpacity={0.4} />
+                      <Bar dataKey="tempoMedio" name="Real (s)" fill="hsl(38 92% 50%)" />
                     </BarChart></ResponsiveContainer>
                   </CardContent></Card>
+
 
                 {susPorParticipante.length > 0 && (
                   <Card><CardHeader><CardTitle>Satisfação — SUS por Participante</CardTitle></CardHeader>
