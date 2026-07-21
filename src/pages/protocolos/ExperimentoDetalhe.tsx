@@ -62,6 +62,12 @@ type Experimento = {
 
 
 const uid = () => Math.random().toString(36).slice(2, 10);
+const fmtTime = (s: number) => {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
+};
+
 
 const FATOR_META: Record<FatorTipo, { label: string; desc: string; icon: any; color: string }> = {
   eficacia: { label: "Eficácia", desc: "Capacidade do usuário em concluir a tarefa", icon: Target, color: "text-blue-500" },
