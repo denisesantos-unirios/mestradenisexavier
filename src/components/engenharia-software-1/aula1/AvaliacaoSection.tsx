@@ -1,4 +1,4 @@
-import { ClipboardCheck, FileText, Calculator, AlertCircle, Mail, BookOpen } from "lucide-react";
+import { ClipboardCheck, FileText, Calculator, AlertCircle, Mail, BookOpen, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerContainer, { StaggerItem } from "@/components/animations/StaggerContainer";
@@ -10,6 +10,18 @@ const etapa1Avaliacoes = {
     pontos: 10.0,
     descricao: "3 atividades práticas pelo AVA",
     detalhes: ["Atividade 1: 3,0 pontos", "Atividade 2: 3,0 pontos", "Atividade 3: 4,0 pontos"]
+  },
+  nota2: {
+    title: "Seminários sobre Modelos de Processo de Software",
+    pontos: 10.0,
+    descricao: "Etapa 1 — Tarefa 1: abertura 20/07/2026 e vencimento 14/09/2026",
+    topicos: [
+      "Seminário Modelo Cascata",
+      "Seminário Modelo Incremental",
+      "Seminário Modelo Iterativo",
+      "Seminário Modelo em V (V-Model)",
+      "Seminário Modelo Espiral"
+    ]
   }
 };
 
@@ -105,6 +117,40 @@ const AvaliacaoSection = () => {
                   <span key={i} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
                     {detalhe}
                   </span>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="p-6 rounded-xl bg-secondary/50 border border-border/50 mt-6"
+              whileHover={{ borderColor: "hsl(var(--accent) / 0.3)" }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <BookOpen className="w-5 h-5 text-accent" />
+                  <span className="font-semibold text-foreground">{etapa1Avaliacoes.nota2.title}</span>
+                </div>
+                <span className="text-accent font-bold">{etapa1Avaliacoes.nota2.pontos} pts</span>
+              </div>
+              <p className="text-muted-foreground mb-4">{etapa1Avaliacoes.nota2.descricao}</p>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                <Calendar className="w-4 h-4 text-accent" />
+                <span>Aberto: 20/07/2026 às 00:00 • Vencimento: 14/09/2026 às 23:59</span>
+              </div>
+              <div className="grid md:grid-cols-2 gap-3">
+                {etapa1Avaliacoes.nota2.topicos.map((topico, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg bg-background/50"
+                    whileHover={{ x: 3 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <span className="w-6 h-6 rounded-full bg-accent/20 text-accent flex items-center justify-center text-xs font-bold">
+                      {i + 1}
+                    </span>
+                    <span className="text-sm text-foreground">{topico}</span>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
