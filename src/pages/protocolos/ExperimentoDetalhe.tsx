@@ -44,6 +44,8 @@ type TCLE = {
   uso_imagem?: boolean;
 };
 
+type SatisfacaoResposta = { participante: string; respostas: number[]; comentario?: string };
+
 type Experimento = {
   id: string; titulo: string; data_aplicacao: string | null;
   objetivo: string | null;
@@ -53,6 +55,7 @@ type Experimento = {
   tarefas: Tarefa[]; resultados: Resultado[];
   tecnicas: Tecnicas;
   tcle: TCLE;
+  satisfacao_respostas: SatisfacaoResposta[];
 };
 
 
