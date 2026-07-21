@@ -464,26 +464,87 @@ export default function ExperimentoDetalhe() {
                 </p>
               </CardHeader>
               <CardContent className="space-y-3">
-                {exp.tarefas.map((t) => (
-                  <div key={t.id} className="border border-border rounded-lg p-3 space-y-2 relative">
+                {exp.tarefas.map((t) => {
+                  const criterios = t.criterios_sucesso && t.criterios_sucesso.length
+                    ? t.criterios_sucesso
+                    : (t.criterio_sucesso ? [t.criterio_sucesso] : [""]);
+                  const personasIdx = t.personas_idx ?? [];
+                  const updateTarefa = (patch: Partial<Tarefa>) => {
+                    const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, ...patch } : x);
+                    update("tarefas", arr);
+                  };
+                  return (
+                  <div key={t.id} className="border border-border rounded-lg p-3 space-y-3 relative">
                     <p className="text-xs text-muted-foreground">Tarefa · id: <code>{t.id}</code></p>
                     <Button size="icon" variant="ghost" className="absolute top-2 right-2"
                       onClick={() => update("tarefas", exp.tarefas.filter(x => x.id !== t.id))}>
                       <Trash2 className="w-4 h-4 text-destructive" /></Button>
                     <Textarea rows={2} placeholder="Descrição da tarefa" value={t.descricao}
-                      onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, descricao: e.target.value } : x); update("tarefas", arr); }} />
-                    <div className="grid grid-cols-2 gap-2">
-                      <Input placeholder="Critério de sucesso" value={t.criterio_sucesso}
-                        onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, criterio_sucesso: e.target.value } : x); update("tarefas", arr); }} />
+                      onChange={e => updateTarefa({ descricao: e.target.value })} />
+
+                    <div>
+                      <p className="text-xs font-medium mb-2">Personas que realizarão esta tarefa</p>
+                      {exp.personas.length === 0 ? (
+                        <p className="text-xs text-muted-foreground">Cadastre personas na fase I para selecioná-las aqui.</p>
+                      ) : (
+                        <div className="grid md:grid-cols-2 gap-2">
+                          {exp.personas.map((p, pi) => {
+                            const checked = personasIdx.includes(pi);
+                            return (
+                              <label key={pi} className={`flex items-center gap-2 p-2 rounded-md border cursor-pointer text-sm ${checked ? "border-primary bg-primary/5" : "border-border"}`}>
+                                <Checkbox checked={checked} onCheckedChange={(v) => {
+                                  const next = v ? [...personasIdx, pi] : personasIdx.filter(x => x !== pi);
+                                  updateTarefa({ personas_idx: next.sort((a, b) => a - b) });
+                                }} />
+                                <span className="truncate">{p.nome || `Persona ${pi + 1}`}</span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-medium mb-2">Critérios de sucesso</p>
+                      <div className="space-y-2">
+                        {criterios.map((c, ci) => (
+                          <div key={ci} className="flex gap-2">
+                            <Input placeholder={`Critério ${ci + 1}`} value={c}
+                              onChange={e => {
+                                const next = [...criterios];
+                                next[ci] = e.target.value;
+                                updateTarefa({ criterios_sucesso: next, criterio_sucesso: next[0] ?? "" });
+                              }} />
+                            <Button size="icon" variant="ghost" onClick={() => {
+                              const next = criterios.filter((_, idx) => idx !== ci);
+                              updateTarefa({ criterios_sucesso: next.length ? next : [], criterio_sucesso: next[0] ?? "" });
+                            }}>
+                              <Trash2 className="w-4 h-4 text-destructive" />
+                            </Button>
+                          </div>
+                        ))}
+                        <Button variant="outline" size="sm" onClick={() => {
+                          const next = [...criterios, ""];
+                          updateTarefa({ criterios_sucesso: next, criterio_sucesso: next[0] ?? "" });
+                        }}>
+                          <Plus className="w-4 h-4 mr-2" />Adicionar critério
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-medium mb-1">Tempo esperado (segundos)</p>
                       <Input type="number" placeholder="Tempo esperado (s)" value={t.tempo_esperado_seg || ""}
-                        onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, tempo_esperado_seg: Number(e.target.value) } : x); update("tarefas", arr); }} />
+                        onChange={e => updateTarefa({ tempo_esperado_seg: Number(e.target.value) })} />
                     </div>
                   </div>
-                ))}
+                  );
+                })}
                 <Button variant="outline" size="sm"
-                  onClick={() => update("tarefas", [...exp.tarefas, { id: uid(), descricao: "", criterio_sucesso: "", tempo_esperado_seg: 0, fator: "eficacia" }])}>
+                  onClick={() => update("tarefas", [...exp.tarefas, { id: uid(), descricao: "", criterio_sucesso: "", criterios_sucesso: [], personas_idx: [], tempo_esperado_seg: 0, fator: "eficacia" }])}>
                   <Plus className="w-4 h-4 mr-2" />Adicionar tarefa
                 </Button>
+
               </CardContent>
             </Card>
 
