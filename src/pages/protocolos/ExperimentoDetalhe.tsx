@@ -704,6 +704,7 @@ export default function ExperimentoDetalhe() {
                       <thead>
                         <tr className="border-b border-border text-left">
                           <th className="p-2">Participante</th>
+                          <th className="p-2">Persona</th>
                           <th className="p-2">Tarefa</th>
                           <th className="p-2">Sucesso</th>
                           <th className="p-2">Tempo (s)</th>
@@ -714,11 +715,39 @@ export default function ExperimentoDetalhe() {
                         </tr>
                       </thead>
                       <tbody>
-                        {exp.resultados.map((r, i) => (
+                        {exp.resultados.map((r, i) => {
+                          const tarefaSel = exp.tarefas.find(t => t.id === r.tarefa_id);
+                          const personasSugeridas = tarefaSel?.personas_idx ?? [];
+                          return (
                           <tr key={i} className="border-b border-border/50">
                             <td className="p-1"><Input value={r.participante} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, participante: e.target.value }; update("resultados", arr); }} /></td>
                             <td className="p-1">
-                              <Select value={r.tarefa_id} onValueChange={v => { const arr = [...exp.resultados]; arr[i] = { ...r, tarefa_id: v }; update("resultados", arr); }}>
+                              <Select
+                                value={r.persona_idx == null ? "none" : String(r.persona_idx)}
+                                onValueChange={v => { const arr = [...exp.resultados]; arr[i] = { ...r, persona_idx: v === "none" ? null : Number(v) }; update("resultados", arr); }}
+                              >
+                                <SelectTrigger className="w-40"><SelectValue placeholder="Persona" /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="none">— Não definida —</SelectItem>
+                                  {exp.personas.map((p, pi) => (
+                                    <SelectItem key={pi} value={String(pi)}>
+                                      {personasSugeridas.includes(pi) ? "★ " : ""}{p.nome || `Persona ${pi + 1}`}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-1">
+                              <Select value={r.tarefa_id} onValueChange={v => {
+                                const arr = [...exp.resultados];
+                                const t = exp.tarefas.find(x => x.id === v);
+                                const sugeridas = t?.personas_idx ?? [];
+                                const novaPersona = r.persona_idx != null && sugeridas.includes(r.persona_idx)
+                                  ? r.persona_idx
+                                  : (sugeridas[0] ?? r.persona_idx ?? null);
+                                arr[i] = { ...r, tarefa_id: v, persona_idx: novaPersona };
+                                update("resultados", arr);
+                              }}>
                                 <SelectTrigger className="w-48"><SelectValue placeholder="Tarefa" /></SelectTrigger>
                                 <SelectContent>{exp.tarefas.map(t => <SelectItem key={t.id} value={t.id}>[{FATOR_META[t.fator ?? "eficacia"].label}] {t.descricao.slice(0, 40) || t.id}</SelectItem>)}</SelectContent>
                               </Select>
