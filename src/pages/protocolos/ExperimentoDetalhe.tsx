@@ -235,6 +235,38 @@ export default function ExperimentoDetalhe() {
   const totalSucesso = exp.resultados.filter(r => r.sucesso).length;
   const totalFalha = exp.resultados.length - totalSucesso;
 
+  // Análise por Participante — reflete exatamente o que foi preenchido na Coleta
+  const totalTarefasExp = exp.tarefas.length;
+  const participanteStats = participantes.map(code => {
+    const rs = exp.resultados.filter(r => r.participante === code);
+    const preenchidas = rs.filter(r => r.sucesso || r.tempo_seg > 0 || r.erros > 0 || (r.observacoes && r.observacoes.trim())).length;
+    const sucessos = rs.filter(r => r.sucesso).length;
+    const nTarefas = rs.length || totalTarefasExp || 1;
+    const taxaSucesso = +((sucessos / nTarefas) * 100).toFixed(1);
+    const tempoTotal = rs.reduce((s, r) => s + (r.tempo_seg || 0), 0);
+    const tempoMedio = rs.length ? +(tempoTotal / rs.length).toFixed(1) : 0;
+    const erros = rs.reduce((s, r) => s + (r.erros || 0), 0);
+    const susRs = rs.filter(r => r.sus_score);
+    const sus = susRs.length ? +(susRs.reduce((s, r) => s + r.sus_score, 0) / susRs.length).toFixed(1) : 0;
+    const personaIdx = rs.find(r => r.persona_idx != null)?.persona_idx ?? null;
+    const persona = personaIdx != null ? exp.personas[personaIdx] : null;
+    const completo = preenchidas >= (totalTarefasExp || rs.length) && (totalTarefasExp > 0 || rs.length > 0);
+    return {
+      participante: code,
+      persona: persona?.nome || (personaIdx != null ? `Persona ${personaIdx + 1}` : "—"),
+      preenchidas,
+      totalTarefas: totalTarefasExp || rs.length,
+      sucessos,
+      taxaSucesso,
+      tempoTotal,
+      tempoMedio,
+      erros,
+      sus,
+      completo,
+    };
+  });
+  const participantesCompletos = participanteStats.filter(p => p.completo).length;
+
   return (
     <main className="min-h-screen bg-background">
       <MainNavigation />
