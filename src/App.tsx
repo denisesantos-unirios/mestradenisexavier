@@ -76,6 +76,8 @@ import ProtocolosExperimentoDetalhe from "./pages/protocolos/ExperimentoDetalhe"
 import ProtocolosLogin from "./pages/protocolos/Login";
 import ProtocolosGestao from "./pages/protocolos/Gestao";
 import SistemaExperimentos from "./pages/protocolos/SistemaExperimentos";
+import ProjetosInterdisciplinares from "./pages/protocolos/ProjetosInterdisciplinares";
+import ProjetoInterdisciplinarDetalhe from "./pages/protocolos/ProjetoInterdisciplinarDetalhe";
 import ProtocolosGuard from "./components/protocolos/ProtocolosGuard";
 // Modelagem
 import ModelagemIndex from "./pages/modelagem/Index";
