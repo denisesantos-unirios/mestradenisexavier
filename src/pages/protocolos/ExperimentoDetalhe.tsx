@@ -1028,47 +1028,105 @@ export default function ExperimentoDetalhe() {
 
           {/* ANALISE */}
           <TabsContent value="analise" className="space-y-6 mt-6">
-            {(() => {
-              const fmtMMSS = (sec: number) => `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
-              const totalObs = exp.resultados.length;
-              const pctConclusao = totalObs ? Math.round((totalSucesso / totalObs) * 100) : 0;
-              // Satisfação em escala 1–5 (média das respostas Likert)
-              const todasLikert = (exp.satisfacao_respostas ?? []).flatMap(r => r.respostas.filter(v => v > 0));
-              const mediaLikert = todasLikert.length ? +(todasLikert.reduce((s, v) => s + v, 0) / todasLikert.length).toFixed(2) : 0;
-              // Melhor tarefa (maior taxa de sucesso, desempate por menor tempo)
-              const ranked = [...tarefaStats].sort((a, b) => b.taxaSucesso - a.taxaSucesso || a.tempoMedio - b.tempoMedio);
-              const best = ranked[0];
-              const bestLabel = best ? `T${tarefaStats.indexOf(best) + 1}` : "—";
-              const primeiro = tarefaStats.length ? "T1" : "—";
-              const ultimo = tarefaStats.length ? `T${tarefaStats.length}` : "—";
-              const primeiroP = participantes[0] || "—";
-              const ultimoP = participantes[participantes.length - 1] || "—";
-              const cards = [
-                { top: participantes.length, label: "Participantes", hint: `${primeiroP} – ${ultimoP}`, color: "text-blue-600", bar: "bg-blue-500" },
-                { top: tarefaStats.length, label: "Tarefas", hint: `${primeiro} – ${ultimo}`, color: "text-blue-600", bar: "bg-blue-500" },
-                { top: `${totalSucesso}/${totalObs}`, label: "Acertos Totais", hint: `${pctConclusao}% de conclusão`, color: "text-emerald-600", bar: "bg-emerald-500" },
-                { top: mediaLikert ? `${((mediaLikert / 5) * 100).toFixed(1)}%` : "—", label: "Satisfação", hint: mediaLikert ? `Média ${mediaLikert.toFixed(2)}/5.00` : "sem dados", color: "text-cyan-600", bar: "bg-cyan-500" },
-                { top: bestLabel, label: "Melhor Tarefa", hint: best ? `${best.taxaSucesso}% · ${fmtMMSS(best.tempoMedio)}` : "sem dados", color: "text-emerald-600", bar: "bg-emerald-500" },
-              ];
-              return (
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                  {cards.map((c, i) => (
-                    <div key={i} className="rounded-xl border border-border bg-card p-4 flex flex-col items-center text-center">
-                      <div className={`text-3xl font-bold ${c.color}`}>{c.top}</div>
-                      <div className={`h-1 w-16 my-2 rounded-full ${c.bar}`} />
-                      <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{c.label}</div>
-                      <div className="text-[11px] text-muted-foreground mt-1">{c.hint}</div>
-                    </div>
-                  ))}
-                </div>
-              );
-            })()}
-
             <div className="grid md:grid-cols-3 gap-4">
               <StatCard label="Participantes na Coleta" value={participantes.length} />
               <StatCard label="Tarefas avaliadas" value={exp.tarefas.length} />
               <StatCard label="SUS médio" value={susMedio.toFixed(1)} hint="0–100, ≥68 = aceitável" />
             </div>
+
+            {/* Parte III — Satisfação */}
+            {(() => {
+              const satQ = exp.questoes.filter(q => q.fator === "satisfacao");
+              const respondentes = (exp.satisfacao_respostas ?? []).filter(r => r.respostas.some(v => v > 0));
+              if (!satQ.length || !respondentes.length) return null;
+              const criterios = satQ.map((q, qi) => {
+                const vals = respondentes.map(r => r.respostas[qi]).filter(v => v > 0);
+                const media = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : 0;
+                const n4 = vals.filter(v => v === 4).length;
+                const n5 = vals.filter(v => v === 5).length;
+                const pct = vals.length ? Math.round(((n4 + n5) / vals.length) * 100) : 0;
+                return { texto: q.texto || `Critério ${qi + 1}`, media, pct, n4, n5, n: vals.length };
+              });
+              const todas = criterios.flatMap(c => Array(c.n).fill(c.media));
+              const mediaGlobal = criterios.length ? criterios.reduce((s, c) => s + c.media, 0) / criterios.length : 0;
+              const satGeral = Math.round((mediaGlobal / 5) * 100);
+              const indicariam = criterios.length ? criterios[criterios.length - 1].pct : 0;
+              const menor = criterios.reduce((a, b) => (b.media < a.media ? b : a), criterios[0]);
+              const totalConvidados = participantes.length || respondentes.length;
+              const comentarios = respondentes.map(r => r.comentario).filter(c => c && c.trim().length > 0) as string[];
+              const cor = (m: number) => m >= 4.8 ? "text-emerald-600" : m >= 4.5 ? "text-emerald-500" : m >= 4 ? "text-cyan-600" : m >= 3 ? "text-amber-500" : "text-orange-500";
+              return (
+                <Card>
+                  <CardHeader className="border-b">
+                    <CardTitle className="text-2xl flex items-center gap-2">
+                      <Smile className="w-6 h-6 text-cyan-600" /> Parte III — Satisfação
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-6 space-y-6">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                      {[
+                        { top: respondentes.length, label: "Respondentes", hint: `de ${totalConvidados} convidados`, color: "text-blue-600" },
+                        { top: mediaGlobal.toFixed(2), label: "Média Global", hint: "de 5,00", color: "text-emerald-600" },
+                        { top: `${indicariam}%`, label: "Indicariam", hint: "o sistema", color: "text-emerald-500" },
+                        { top: `${satGeral}%`, label: "Satisfação Geral", hint: satGeral >= 90 ? "excelente" : satGeral >= 75 ? "bom" : satGeral >= 60 ? "regular" : "atenção", color: "text-cyan-600" },
+                        { top: menor?.media.toFixed(2) ?? "—", label: "Menor Critério", hint: menor?.texto?.slice(0, 30) ?? "—", color: "text-amber-500" },
+                      ].map((c, i) => (
+                        <div key={i} className="rounded-lg border border-border bg-muted/30 p-4 text-center">
+                          <div className={`text-3xl font-bold ${c.color}`}>{c.top}</div>
+                          <div className="h-px bg-border my-2" />
+                          <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{c.label}</div>
+                          <div className="text-[10px] text-muted-foreground mt-0.5">{c.hint}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Resultados por Critério (Escala 1–5 · {respondentes.length} Respondentes)</h4>
+                      <div className="overflow-x-auto rounded-lg border border-border">
+                        <table className="w-full text-sm">
+                          <thead className="bg-slate-800 text-white">
+                            <tr>
+                              <th className="p-3 text-left">Critério</th>
+                              <th className="p-3 text-center w-28">Satisfação</th>
+                              <th className="p-3 text-center w-24">Média</th>
+                              <th className="p-3 text-center w-24">N4 | N5</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {criterios.map((c, i) => (
+                              <tr key={i} className={i % 2 === 0 ? "bg-background" : "bg-muted/40"}>
+                                <td className="p-3">{c.texto}</td>
+                                <td className={`p-3 text-center font-semibold ${cor(c.media)}`}>{c.pct}%</td>
+                                <td className={`p-3 text-center font-semibold ${cor(c.media)}`}>{c.media.toFixed(2)}</td>
+                                <td className="p-3 text-center text-muted-foreground">{c.n4} | {c.n5}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {comentarios.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-3">Comentários e Feedback dos Usuários</h4>
+                        <div className="space-y-3">
+                          {comentarios.map((c, i) => (
+                            <div key={i} className="rounded-lg border-2 border-cyan-500/40 bg-cyan-500/5 p-4">
+                              <p className="italic text-center text-foreground">" {c} "</p>
+                              <div className="mt-3 pt-2 border-t border-cyan-500/20 text-center text-xs text-muted-foreground">
+                                — participante, sessão de avaliação
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })()}
+
+
 
 
             <Card>
