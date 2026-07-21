@@ -120,6 +120,40 @@ const AvaliacaoSection = () => {
                 ))}
               </div>
             </motion.div>
+
+            <motion.div
+              className="p-6 rounded-xl bg-secondary/50 border border-border/50 mt-6"
+              whileHover={{ borderColor: "hsl(var(--accent) / 0.3)" }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <BookOpen className="w-5 h-5 text-accent" />
+                  <span className="font-semibold text-foreground">{etapa1Avaliacoes.nota2.title}</span>
+                </div>
+                <span className="text-accent font-bold">{etapa1Avaliacoes.nota2.pontos} pts</span>
+              </div>
+              <p className="text-muted-foreground mb-4">{etapa1Avaliacoes.nota2.descricao}</p>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                <Calendar className="w-4 h-4 text-accent" />
+                <span>Aberto: 20/07/2026 às 00:00 • Vencimento: 14/09/2026 às 23:59</span>
+              </div>
+              <div className="grid md:grid-cols-2 gap-3">
+                {etapa1Avaliacoes.nota2.topicos.map((topico, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg bg-background/50"
+                    whileHover={{ x: 3 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <span className="w-6 h-6 rounded-full bg-accent/20 text-accent flex items-center justify-center text-xs font-bold">
+                      {i + 1}
+                    </span>
+                    <span className="text-sm text-foreground">{topico}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </ScrollReveal>
 
