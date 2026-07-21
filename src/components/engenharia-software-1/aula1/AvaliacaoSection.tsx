@@ -1,4 +1,4 @@
-import { ClipboardCheck, FileText, Calculator, AlertCircle, Mail, BookOpen } from "lucide-react";
+import { ClipboardCheck, FileText, Calculator, AlertCircle, Mail, BookOpen, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerContainer, { StaggerItem } from "@/components/animations/StaggerContainer";
@@ -10,6 +10,18 @@ const etapa1Avaliacoes = {
     pontos: 10.0,
     descricao: "3 atividades práticas pelo AVA",
     detalhes: ["Atividade 1: 3,0 pontos", "Atividade 2: 3,0 pontos", "Atividade 3: 4,0 pontos"]
+  },
+  nota2: {
+    title: "Seminários sobre Modelos de Processo de Software",
+    pontos: 10.0,
+    descricao: "Etapa 1 — Tarefa 1: abertura 20/07/2026 e vencimento 14/09/2026",
+    topicos: [
+      "Seminário Modelo Cascata",
+      "Seminário Modelo Incremental",
+      "Seminário Modelo Iterativo",
+      "Seminário Modelo em V (V-Model)",
+      "Seminário Modelo Espiral"
+    ]
   }
 };
 
