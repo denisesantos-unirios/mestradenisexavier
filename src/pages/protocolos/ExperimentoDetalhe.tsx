@@ -196,6 +196,35 @@ export default function ExperimentoDetalhe() {
     return { participante: p, sus: +media.toFixed(1) };
   });
   const susMedio = susPorParticipante.length ? susPorParticipante.reduce((s, x) => s + x.sus, 0) / susPorParticipante.length : 0;
+
+  // Análise por persona: agrega resultados das tarefas atribuídas a cada persona
+  const personaStats = exp.personas.map((p, pi) => {
+    const tarefasDaPersona = exp.tarefas.filter(t => (t.personas_idx ?? []).includes(pi));
+    const ids = tarefasDaPersona.map(t => t.id);
+    const rs = exp.resultados.filter(r => ids.includes(r.tarefa_id));
+    const n = rs.length;
+    const participantesUnicos = new Set(rs.map(r => r.participante).filter(Boolean)).size;
+    const sucessos = rs.filter(r => r.sucesso).length;
+    const taxaSucesso = n ? +(sucessos / n * 100).toFixed(1) : 0;
+    const tempoMedio = n ? +(rs.reduce((s, r) => s + (r.tempo_seg || 0), 0) / n).toFixed(1) : 0;
+    const errosMedio = n ? +(rs.reduce((s, r) => s + (r.erros || 0), 0) / n).toFixed(2) : 0;
+    const susRs = rs.filter(r => r.sus_score);
+    const susMed = susRs.length ? +(susRs.reduce((s, r) => s + r.sus_score, 0) / susRs.length).toFixed(1) : 0;
+    const metaSoma = tarefasDaPersona.reduce((s, t) => s + (t.tempo_esperado_seg || 0), 0);
+    const metaMedia = tarefasDaPersona.length ? +(metaSoma / tarefasDaPersona.length).toFixed(1) : 0;
+    return {
+      persona: p.nome || `Persona ${pi + 1}`,
+      perfil: p.perfil || "",
+      qtdTarefas: tarefasDaPersona.length,
+      participantes: participantesUnicos,
+      n,
+      taxaSucesso,
+      tempoMedio,
+      metaMedia,
+      errosMedio,
+      susMedio: susMed,
+    };
+  });
   const totalSucesso = exp.resultados.filter(r => r.sucesso).length;
   const totalFalha = exp.resultados.length - totalSucesso;
 
@@ -783,6 +812,94 @@ export default function ExperimentoDetalhe() {
                 <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
                   <span>Critérios: Sucesso ≥ 80% · Tempo ≤ meta · SUS ≥ 68</span>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Análise por Persona */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Análise Consolidada por Persona</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Agrega os resultados das tarefas atribuídas a cada persona (definidas na fase <strong>Evaluate</strong>).
+                </p>
+              </CardHeader>
+              <CardContent className="overflow-x-auto">
+                {exp.personas.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Cadastre personas na fase <strong>Identify</strong> e associe-as às tarefas em <strong>Evaluate</strong>.</p>
+                ) : (
+                  <>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b-2 border-border text-left">
+                          <th className="p-2" rowSpan={2}>Persona</th>
+                          <th className="p-2 text-center" rowSpan={2}>Tarefas</th>
+                          <th className="p-2 text-center" rowSpan={2}>Participantes</th>
+                          <th className="p-2 text-center" rowSpan={2}>N (obs.)</th>
+                          <th className="p-2 text-center bg-blue-500/10" colSpan={1}>Eficácia</th>
+                          <th className="p-2 text-center bg-amber-500/10" colSpan={3}>Eficiência</th>
+                          <th className="p-2 text-center bg-emerald-500/10" colSpan={1}>Satisfação</th>
+                          <th className="p-2 text-center" rowSpan={2}>Status</th>
+                        </tr>
+                        <tr className="border-b border-border text-left text-xs text-muted-foreground">
+                          <th className="p-2 bg-blue-500/5">Taxa Sucesso</th>
+                          <th className="p-2 bg-amber-500/5">Tempo Médio (s)</th>
+                          <th className="p-2 bg-amber-500/5">Meta Média (s)</th>
+                          <th className="p-2 bg-amber-500/5">Erros</th>
+                          <th className="p-2 bg-emerald-500/5">SUS Médio</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {personaStats.map((s, i) => {
+                          const okSucesso = s.taxaSucesso >= 80;
+                          const okTempo = !s.metaMedia || s.tempoMedio <= s.metaMedia;
+                          const okSus = s.susMedio === 0 || s.susMedio >= 68;
+                          const passou = okSucesso && okTempo && okSus;
+                          return (
+                            <tr key={i} className="border-b border-border/50 hover:bg-muted/30">
+                              <td className="p-2">
+                                <div className="font-medium">{s.persona}</div>
+                                {s.perfil && <div className="text-xs text-muted-foreground truncate max-w-[220px]">{s.perfil}</div>}
+                              </td>
+                              <td className="p-2 text-center">{s.qtdTarefas}</td>
+                              <td className="p-2 text-center">{s.participantes}</td>
+                              <td className="p-2 text-center">{s.n}</td>
+                              <td className="p-2 bg-blue-500/5">
+                                <span className={okSucesso ? "text-blue-600 font-semibold" : "text-destructive font-semibold"}>{s.taxaSucesso}%</span>
+                              </td>
+                              <td className="p-2 bg-amber-500/5">{s.tempoMedio}s</td>
+                              <td className="p-2 bg-amber-500/5">{s.metaMedia ? `${s.metaMedia}s` : "—"}</td>
+                              <td className="p-2 bg-amber-500/5">{s.errosMedio}</td>
+                              <td className="p-2 bg-emerald-500/5">
+                                {s.susMedio > 0 ? <span className={okSus ? "text-emerald-600 font-semibold" : "text-destructive font-semibold"}>{s.susMedio}</span> : <span className="text-muted-foreground">—</span>}
+                              </td>
+                              <td className="p-2 text-center">
+                                {s.n === 0 ? <span className="text-xs text-muted-foreground">sem dados</span> :
+                                  passou ? <span className="inline-block px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 text-xs font-medium">✓ Atende</span>
+                                         : <span className="inline-block px-2 py-0.5 rounded-full bg-destructive/15 text-destructive text-xs font-medium">⚠ Revisar</span>}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                    {personaStats.some(p => p.n > 0) && (
+                      <div style={{ height: 300 }} className="mt-6">
+                        <ResponsiveContainer>
+                          <BarChart data={personaStats}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="persona" tick={{ fontSize: 11 }} />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="taxaSucesso" name="Eficácia (%)" fill="hsl(217 91% 60%)" />
+                            <Bar dataKey="susMedio" name="SUS Médio" fill="hsl(160 84% 39%)" />
+                            <Bar dataKey="errosMedio" name="Erros (média)" fill="hsl(0 84% 60%)" />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    )}
+                  </>
+                )}
               </CardContent>
             </Card>
 
