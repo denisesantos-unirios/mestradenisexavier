@@ -761,7 +761,7 @@ export default function ExperimentoDetalhe() {
                                 update("resultados", arr);
                               }}>
                                 <SelectTrigger className="w-48"><SelectValue placeholder="Tarefa" /></SelectTrigger>
-                                <SelectContent>{exp.tarefas.map(t => <SelectItem key={t.id} value={t.id}>[{FATOR_META[t.fator ?? "eficacia"].label}] {t.descricao.slice(0, 40) || t.id}</SelectItem>)}</SelectContent>
+                                <SelectContent>{exp.tarefas.map(t => <SelectItem key={t.id} value={t.id}>{t.descricao.slice(0, 55) || t.id}</SelectItem>)}</SelectContent>
                               </Select>
                             </td>
                             <td className="p-1">
