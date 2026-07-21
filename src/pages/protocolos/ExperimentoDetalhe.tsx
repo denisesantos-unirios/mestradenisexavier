@@ -1028,11 +1028,48 @@ export default function ExperimentoDetalhe() {
 
           {/* ANALISE */}
           <TabsContent value="analise" className="space-y-6 mt-6">
+            {(() => {
+              const fmtMMSS = (sec: number) => `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
+              const totalObs = exp.resultados.length;
+              const pctConclusao = totalObs ? Math.round((totalSucesso / totalObs) * 100) : 0;
+              // Satisfação em escala 1–5 (média das respostas Likert)
+              const todasLikert = respostas.flatMap(r => r.respostas.filter(v => v > 0));
+              const mediaLikert = todasLikert.length ? +(todasLikert.reduce((s, v) => s + v, 0) / todasLikert.length).toFixed(2) : 0;
+              // Melhor tarefa (maior taxa de sucesso, desempate por menor tempo)
+              const ranked = [...tarefaStats].sort((a, b) => b.taxaSucesso - a.taxaSucesso || a.tempoMedio - b.tempoMedio);
+              const best = ranked[0];
+              const bestLabel = best ? `T${tarefaStats.indexOf(best) + 1}` : "—";
+              const primeiro = tarefaStats.length ? "T1" : "—";
+              const ultimo = tarefaStats.length ? `T${tarefaStats.length}` : "—";
+              const primeiroP = participantes[0] || "—";
+              const ultimoP = participantes[participantes.length - 1] || "—";
+              const cards = [
+                { top: participantes.length, label: "Participantes", hint: `${primeiroP} – ${ultimoP}`, color: "text-blue-600", bar: "bg-blue-500" },
+                { top: tarefaStats.length, label: "Tarefas", hint: `${primeiro} – ${ultimo}`, color: "text-blue-600", bar: "bg-blue-500" },
+                { top: `${totalSucesso}/${totalObs}`, label: "Acertos Totais", hint: `${pctConclusao}% de conclusão`, color: "text-emerald-600", bar: "bg-emerald-500" },
+                { top: mediaLikert ? `${((mediaLikert / 5) * 100).toFixed(1)}%` : "—", label: "Satisfação", hint: mediaLikert ? `Média ${mediaLikert.toFixed(2)}/5.00` : "sem dados", color: "text-cyan-600", bar: "bg-cyan-500" },
+                { top: bestLabel, label: "Melhor Tarefa", hint: best ? `${best.taxaSucesso}% · ${fmtMMSS(best.tempoMedio)}` : "sem dados", color: "text-emerald-600", bar: "bg-emerald-500" },
+              ];
+              return (
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  {cards.map((c, i) => (
+                    <div key={i} className="rounded-xl border border-border bg-card p-4 flex flex-col items-center text-center">
+                      <div className={`text-3xl font-bold ${c.color}`}>{c.top}</div>
+                      <div className={`h-1 w-16 my-2 rounded-full ${c.bar}`} />
+                      <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{c.label}</div>
+                      <div className="text-[11px] text-muted-foreground mt-1">{c.hint}</div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+
             <div className="grid md:grid-cols-3 gap-4">
-              <StatCard label="Participantes" value={participantes.length} />
+              <StatCard label="Participantes na Coleta" value={participantes.length} />
               <StatCard label="Tarefas avaliadas" value={exp.tarefas.length} />
               <StatCard label="SUS médio" value={susMedio.toFixed(1)} hint="0–100, ≥68 = aceitável" />
             </div>
+
 
             <Card>
               <CardHeader>
