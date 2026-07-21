@@ -1089,11 +1089,12 @@ export default function ExperimentoDetalhe() {
                     <div className="text-[10px] text-slate-500 mt-1">Média {mediaGlobal.toFixed(2)}/5.00</div>
                   </div>
                   <div className="rounded-lg border border-border bg-emerald-50/60 p-4 text-center">
-                    <div className="text-3xl font-bold text-emerald-600">{melhor ? melhor.tarefa : "—"}</div>
+                    <div className="text-3xl font-bold text-emerald-600">{melhor ? shortTask(melhor.descricaoCompleta || melhor.tarefa) : "—"}</div>
                     <div className="h-0.5 bg-emerald-500 my-2 mx-auto w-16" />
                     <div className="text-xs font-semibold uppercase tracking-wider text-slate-600">Melhor Tarefa</div>
                     <div className="text-[10px] text-slate-500 mt-1">{melhor ? `${melhor.taxaSucesso}% + ${fmtTime(melhor.tempoMedio)}` : ""}</div>
                   </div>
+
                 </div>
               );
             })()}
