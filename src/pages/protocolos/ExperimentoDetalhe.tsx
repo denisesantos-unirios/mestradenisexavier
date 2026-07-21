@@ -21,7 +21,7 @@ import {
 type FatorTipo = "eficacia" | "eficiencia" | "satisfacao";
 type Metrica = { nome: string; tipo: FatorTipo; formula?: string; pior?: string; almejado?: string; melhor?: string };
 type Persona = { nome: string; perfil: string; contexto: string; objetivos: string };
-type Tarefa = { id: string; descricao: string; criterio_sucesso: string; tempo_esperado_seg: number; fator?: FatorTipo };
+type Tarefa = { id: string; descricao: string; criterio_sucesso: string; criterios_sucesso?: string[]; personas_idx?: number[]; tempo_esperado_seg: number; fator?: FatorTipo };
 type Hipotese = { fator: FatorTipo; texto: string };
 type Questao = { fator: FatorTipo; texto: string };
 type Resultado = { participante: string; tarefa_id: string; sucesso: boolean; tempo_seg: number; erros: number; sus_score: number; observacoes?: string };
