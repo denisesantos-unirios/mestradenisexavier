@@ -831,12 +831,26 @@ export default function ExperimentoDetalhe() {
                       return (
                         <div key={ri} className="border border-border rounded-lg p-3 space-y-3">
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <Input className="max-w-xs" placeholder="Nome / código do participante" value={sr.participante}
-                              onChange={e => {
+                            <Select
+                              value={sr.participante || "__none"}
+                              onValueChange={v => {
                                 const arr = [...respostas];
-                                arr[ri] = { ...sr, participante: e.target.value };
+                                arr[ri] = { ...sr, participante: v === "__none" ? "" : v };
                                 setRespostas(arr);
-                              }} />
+                              }}
+                            >
+                              <SelectTrigger className="max-w-xs"><SelectValue placeholder="Selecione o código do participante" /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="__none">— Selecione —</SelectItem>
+                                {Array.from(new Set(exp.resultados.map(r => r.participante).filter(Boolean))).map(p => (
+                                  <SelectItem key={p} value={p}>{p}</SelectItem>
+                                ))}
+                                {sr.participante && !exp.resultados.some(r => r.participante === sr.participante) && (
+                                  <SelectItem value={sr.participante}>{sr.participante}</SelectItem>
+                                )}
+                              </SelectContent>
+                            </Select>
+
                             <div className="flex items-center gap-3 text-sm">
                               {isSUS && <span className="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-700 font-medium">SUS: {susCalc || "—"}</span>}
                               <span className="px-2 py-1 rounded-md bg-muted text-muted-foreground">Índice: {pct}%</span>
