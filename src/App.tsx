@@ -178,6 +178,8 @@ const App = () => (
           <Route path="/protocolos/experimentos" element={<ProtocolosGuard permission="experimentos"><ProtocolosExperimentos /></ProtocolosGuard>} />
           <Route path="/protocolos/experimentos/:id" element={<ProtocolosGuard permission="experimentos"><ProtocolosExperimentoDetalhe /></ProtocolosGuard>} />
           <Route path="/protocolos/gestao" element={<ProtocolosGuard requireGestor><ProtocolosGestao /></ProtocolosGuard>} />
+          <Route path="/protocolos/interdisciplinar" element={<ProtocolosGuard><ProjetosInterdisciplinares /></ProtocolosGuard>} />
+          <Route path="/protocolos/interdisciplinar/:id" element={<ProtocolosGuard><ProjetoInterdisciplinarDetalhe /></ProtocolosGuard>} />
           {/* Provas */}
           <Route path="/provas/login" element={<ProvasLogin />} />
           <Route path="/provas/banco-questoes" element={<BancoQuestoes />} />
