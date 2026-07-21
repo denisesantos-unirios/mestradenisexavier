@@ -196,6 +196,35 @@ export default function ExperimentoDetalhe() {
     return { participante: p, sus: +media.toFixed(1) };
   });
   const susMedio = susPorParticipante.length ? susPorParticipante.reduce((s, x) => s + x.sus, 0) / susPorParticipante.length : 0;
+
+  // Análise por persona: agrega resultados das tarefas atribuídas a cada persona
+  const personaStats = exp.personas.map((p, pi) => {
+    const tarefasDaPersona = exp.tarefas.filter(t => (t.personas_idx ?? []).includes(pi));
+    const ids = tarefasDaPersona.map(t => t.id);
+    const rs = exp.resultados.filter(r => ids.includes(r.tarefa_id));
+    const n = rs.length;
+    const participantesUnicos = new Set(rs.map(r => r.participante).filter(Boolean)).size;
+    const sucessos = rs.filter(r => r.sucesso).length;
+    const taxaSucesso = n ? +(sucessos / n * 100).toFixed(1) : 0;
+    const tempoMedio = n ? +(rs.reduce((s, r) => s + (r.tempo_seg || 0), 0) / n).toFixed(1) : 0;
+    const errosMedio = n ? +(rs.reduce((s, r) => s + (r.erros || 0), 0) / n).toFixed(2) : 0;
+    const susRs = rs.filter(r => r.sus_score);
+    const susMed = susRs.length ? +(susRs.reduce((s, r) => s + r.sus_score, 0) / susRs.length).toFixed(1) : 0;
+    const metaSoma = tarefasDaPersona.reduce((s, t) => s + (t.tempo_esperado_seg || 0), 0);
+    const metaMedia = tarefasDaPersona.length ? +(metaSoma / tarefasDaPersona.length).toFixed(1) : 0;
+    return {
+      persona: p.nome || `Persona ${pi + 1}`,
+      perfil: p.perfil || "",
+      qtdTarefas: tarefasDaPersona.length,
+      participantes: participantesUnicos,
+      n,
+      taxaSucesso,
+      tempoMedio,
+      metaMedia,
+      errosMedio,
+      susMedio: susMed,
+    };
+  });
   const totalSucesso = exp.resultados.filter(r => r.sucesso).length;
   const totalFalha = exp.resultados.length - totalSucesso;
 
