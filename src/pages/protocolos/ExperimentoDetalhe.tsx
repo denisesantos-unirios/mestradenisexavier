@@ -1034,11 +1034,65 @@ export default function ExperimentoDetalhe() {
 
           {/* ANALISE */}
           <TabsContent value="analise" className="space-y-6 mt-6">
-            <div className="grid md:grid-cols-3 gap-4">
-              <StatCard label="Participantes na Coleta" value={participantes.length} />
-              <StatCard label="Tarefas avaliadas" value={exp.tarefas.length} />
-              <StatCard label="SUS médio" value={susMedio.toFixed(1)} hint="0–100, ≥68 = aceitável" />
-            </div>
+            {(() => {
+              const totalResultados = exp.resultados.length;
+              const totalAcertos = exp.resultados.filter(r => r.sucesso).length;
+              const pctConclusao = totalResultados ? Math.round((totalAcertos / totalResultados) * 100) : 0;
+              const satQ = exp.questoes.filter(q => q.fator === "satisfacao");
+              const respondentes = (exp.satisfacao_respostas ?? []).filter(r => r.respostas.some(v => v > 0));
+              let mediaGlobal = 0;
+              let satGeral = 0;
+              if (satQ.length && respondentes.length) {
+                const medias = satQ.map((q, qi) => {
+                  const vals = respondentes.map(r => r.respostas[qi]).filter(v => v > 0);
+                  return vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : 0;
+                });
+                mediaGlobal = medias.reduce((s, v) => s + v, 0) / medias.length;
+                satGeral = Math.round((mediaGlobal / 5) * 100);
+              }
+              const melhor = tarefaStats.reduce((a, b) => {
+                if (a.taxaSucesso !== b.taxaSucesso) return a.taxaSucesso > b.taxaSucesso ? a : b;
+                if (a.tempoMedio && b.tempoMedio) return a.tempoMedio < b.tempoMedio ? a : b;
+                return a;
+              }, tarefaStats[0]);
+              const participantesRange = participantes.length ? `${participantes[0]} – ${participantes[participantes.length - 1]}` : "—";
+              const tarefasRange = exp.tarefas.length ? `T1 – T${exp.tarefas.length}` : "—";
+              return (
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  <div className="rounded-lg border border-border bg-blue-50/60 p-4 text-center">
+                    <div className="text-3xl font-bold text-blue-700">{participantes.length}</div>
+                    <div className="h-0.5 bg-blue-600 my-2 mx-auto w-16" />
+                    <div className="text-xs font-semibold uppercase tracking-wider text-slate-600">Participantes</div>
+                    <div className="text-[10px] text-slate-500 mt-1">{participantesRange}</div>
+                  </div>
+                  <div className="rounded-lg border border-border bg-blue-50/60 p-4 text-center">
+                    <div className="text-3xl font-bold text-blue-500">{exp.tarefas.length}</div>
+                    <div className="h-0.5 bg-blue-400 my-2 mx-auto w-16" />
+                    <div className="text-xs font-semibold uppercase tracking-wider text-slate-600">Tarefas</div>
+                    <div className="text-[10px] text-slate-500 mt-1">{tarefasRange}</div>
+                  </div>
+                  <div className="rounded-lg border border-border bg-emerald-50/60 p-4 text-center">
+                    <div className="text-3xl font-bold text-emerald-600">{totalAcertos}/{totalResultados}</div>
+                    <div className="h-0.5 bg-emerald-500 my-2 mx-auto w-16" />
+                    <div className="text-xs font-semibold uppercase tracking-wider text-slate-600">Acertos Totais</div>
+                    <div className="text-[10px] text-slate-500 mt-1">{pctConclusao}% de conclusão</div>
+                  </div>
+                  <div className="rounded-lg border border-border bg-cyan-50/60 p-4 text-center">
+                    <div className="text-3xl font-bold text-cyan-500">{satGeral}%</div>
+                    <div className="h-0.5 bg-cyan-400 my-2 mx-auto w-16" />
+                    <div className="text-xs font-semibold uppercase tracking-wider text-slate-600">Satisfação</div>
+                    <div className="text-[10px] text-slate-500 mt-1">Média {mediaGlobal.toFixed(2)}/5.00</div>
+                  </div>
+                  <div className="rounded-lg border border-border bg-emerald-50/60 p-4 text-center">
+                    <div className="text-3xl font-bold text-emerald-600">{melhor ? melhor.tarefa : "—"}</div>
+                    <div className="h-0.5 bg-emerald-500 my-2 mx-auto w-16" />
+                    <div className="text-xs font-semibold uppercase tracking-wider text-slate-600">Melhor Tarefa</div>
+                    <div className="text-[10px] text-slate-500 mt-1">{melhor ? `${melhor.taxaSucesso}% + ${fmtTime(melhor.tempoMedio)}` : ""}</div>
+                  </div>
+                </div>
+              );
+            })()}
+
 
             {/* Parte III — Satisfação */}
             {(() => {
