@@ -12,7 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Plus, Trash2, ArrowLeft, Target, Gauge, Smile, FileText, Printer, BookOpen, Users, ClipboardList, Shield, BarChart3 } from "lucide-react";
+import { Save, Plus, Trash2, ArrowLeft, Target, Gauge, Smile, FileText, Printer, BookOpen, Users, ClipboardList, Shield, BarChart3, UserPlus, CheckCircle2, Circle, Clock } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend,
   PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
@@ -692,108 +694,170 @@ export default function ExperimentoDetalhe() {
           <TabsContent value="coleta" className="space-y-4 mt-6">
             <Card>
               <CardHeader>
-                <CardTitle>Coleta de Resultados</CardTitle>
-                <p className="text-sm text-muted-foreground">Uma linha por participante × tarefa.</p>
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                  <div>
+                    <CardTitle>Coleta de Resultados</CardTitle>
+                    <p className="text-sm text-muted-foreground">Agrupado por participante — cada participante realiza todas as tarefas do teste.</p>
+                  </div>
+                  <Button size="sm" disabled={exp.tarefas.length === 0}
+                    onClick={() => {
+                      const existentes = Array.from(new Set(exp.resultados.map(r => r.participante).filter(Boolean)));
+                      // Próximo código sequencial (001, 002, ...) evitando duplicados
+                      let n = existentes.length + 1;
+                      let code = String(n).padStart(3, "0");
+                      while (existentes.includes(code)) { n++; code = String(n).padStart(3, "0"); }
+                      const novos = exp.tarefas.map(t => ({
+                        participante: code,
+                        tarefa_id: t.id,
+                        persona_idx: (t.personas_idx && t.personas_idx[0] != null) ? t.personas_idx[0] : null,
+                        sucesso: false, tempo_seg: 0, erros: 0, sus_score: 0,
+                      }));
+                      update("resultados", [...exp.resultados, ...novos]);
+                    }}>
+                    <UserPlus className="w-4 h-4 mr-2" />Adicionar participante
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 {exp.tarefas.length === 0 ? (
                   <p className="text-muted-foreground text-sm">Cadastre tarefas no Protocolo antes de coletar resultados.</p>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-border text-left">
-                          <th className="p-2">Participante</th>
-                          <th className="p-2">Persona</th>
-                          <th className="p-2">Tarefa</th>
-                          <th className="p-2">Sucesso</th>
-                          <th className="p-2">Tempo (mm:ss)</th>
-                          <th className="p-2">Erros</th>
-                          <th className="p-2">Observações</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {exp.resultados.map((r, i) => {
-                          const tarefaSel = exp.tarefas.find(t => t.id === r.tarefa_id);
-                          const personasSugeridas = tarefaSel?.personas_idx ?? [];
-                          const secToMMSS = (s: number) => {
-                            const n = Math.max(0, Math.floor(s || 0));
-                            const m = Math.floor(n / 60), ss = n % 60;
-                            return `${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
-                          };
-                          const mmssToSec = (v: string) => {
-                            const clean = v.replace(/[^\d:]/g, "");
-                            if (clean.includes(":")) {
-                              const [m, s] = clean.split(":");
-                              return (Number(m) || 0) * 60 + (Number(s) || 0);
-                            }
-                            return Number(clean) || 0;
-                          };
-                          return (
-                          <tr key={i} className="border-b border-border/50">
-                            <td className="p-1"><Input value={r.participante} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, participante: e.target.value }; update("resultados", arr); }} /></td>
-                            <td className="p-1">
-                              <Select
-                                value={r.persona_idx == null ? "none" : String(r.persona_idx)}
-                                onValueChange={v => { const arr = [...exp.resultados]; arr[i] = { ...r, persona_idx: v === "none" ? null : Number(v) }; update("resultados", arr); }}
-                              >
-                                <SelectTrigger className="w-40"><SelectValue placeholder="Persona" /></SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="none">— Não definida —</SelectItem>
-                                  {exp.personas.map((p, pi) => (
-                                    <SelectItem key={pi} value={String(pi)}>
-                                      {personasSugeridas.includes(pi) ? "★ " : ""}{p.nome || `Persona ${pi + 1}`}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </td>
-                            <td className="p-1">
-                              <Select value={r.tarefa_id} onValueChange={v => {
-                                const arr = [...exp.resultados];
-                                const t = exp.tarefas.find(x => x.id === v);
-                                const sugeridas = t?.personas_idx ?? [];
-                                const novaPersona = r.persona_idx != null && sugeridas.includes(r.persona_idx)
-                                  ? r.persona_idx
-                                  : (sugeridas[0] ?? r.persona_idx ?? null);
-                                arr[i] = { ...r, tarefa_id: v, persona_idx: novaPersona };
-                                update("resultados", arr);
-                              }}>
-                                <SelectTrigger className="w-48"><SelectValue placeholder="Tarefa" /></SelectTrigger>
-                                <SelectContent>{exp.tarefas.map(t => <SelectItem key={t.id} value={t.id}>{t.descricao.slice(0, 55) || t.id}</SelectItem>)}</SelectContent>
-                              </Select>
-                            </td>
-                            <td className="p-1">
-                              <Select value={r.sucesso ? "1" : "0"} onValueChange={v => { const arr = [...exp.resultados]; arr[i] = { ...r, sucesso: v === "1" }; update("resultados", arr); }}>
-                                <SelectTrigger className="w-20"><SelectValue /></SelectTrigger>
-                                <SelectContent><SelectItem value="1">Sim</SelectItem><SelectItem value="0">Não</SelectItem></SelectContent>
-                              </Select>
-                            </td>
-                            <td className="p-1">
-                              <Input
-                                className="w-24"
-                                placeholder="mm:ss"
-                                value={r.tempo_seg ? secToMMSS(r.tempo_seg) : ""}
-                                onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, tempo_seg: mmssToSec(e.target.value) }; update("resultados", arr); }}
-                              />
-                            </td>
-                            <td className="p-1"><Input type="number" className="w-16" value={r.erros || ""} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, erros: Number(e.target.value) }; update("resultados", arr); }} /></td>
-                            <td className="p-1"><Input value={r.observacoes ?? ""} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, observacoes: e.target.value }; update("resultados", arr); }} /></td>
-                            <td className="p-1"><Button size="icon" variant="ghost" onClick={() => update("resultados", exp.resultados.filter((_, idx) => idx !== i))}><Trash2 className="w-4 h-4 text-destructive" /></Button></td>
-                          </tr>
-                        );})}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-                <Button variant="outline" size="sm" className="mt-3" disabled={exp.tarefas.length === 0}
-                  onClick={() => update("resultados", [...exp.resultados, { participante: "", tarefa_id: exp.tarefas[0]?.id ?? "", sucesso: false, tempo_seg: 0, erros: 0, sus_score: 0 }])}>
-                  <Plus className="w-4 h-4 mr-2" />Adicionar linha
-                </Button>
-
+                ) : (() => {
+                  const secToMMSS = (s: number) => {
+                    const n = Math.max(0, Math.floor(s || 0));
+                    const m = Math.floor(n / 60), ss = n % 60;
+                    return `${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+                  };
+                  const mmssToSec = (v: string) => {
+                    const clean = v.replace(/[^\d:]/g, "");
+                    if (clean.includes(":")) { const [m, s] = clean.split(":"); return (Number(m) || 0) * 60 + (Number(s) || 0); }
+                    return Number(clean) || 0;
+                  };
+                  const codigos = Array.from(new Set(exp.resultados.map(r => r.participante).filter(Boolean)));
+                  if (codigos.length === 0) {
+                    return <p className="text-muted-foreground text-sm">Nenhum participante ainda. Clique em <strong>Adicionar participante</strong> para começar.</p>;
+                  }
+                  // Upsert helper: garante linha para (participante, tarefa)
+                  const upsert = (participante: string, tarefa_id: string, patch: Partial<Resultado>) => {
+                    const arr = [...exp.resultados];
+                    const idx = arr.findIndex(r => r.participante === participante && r.tarefa_id === tarefa_id);
+                    if (idx >= 0) arr[idx] = { ...arr[idx], ...patch };
+                    else arr.push({ participante, tarefa_id, sucesso: false, tempo_seg: 0, erros: 0, sus_score: 0, persona_idx: null, ...patch });
+                    update("resultados", arr);
+                  };
+                  return (
+                    <Accordion type="multiple" defaultValue={codigos.slice(0, 1)} className="space-y-2">
+                      {codigos.map(code => {
+                        const rows = exp.resultados.filter(r => r.participante === code);
+                        const personaIdx = rows.find(r => r.persona_idx != null)?.persona_idx ?? null;
+                        const persona = personaIdx != null ? exp.personas[personaIdx] : null;
+                        const feitas = exp.tarefas.filter(t => rows.some(r => r.tarefa_id === t.id && (r.sucesso || r.tempo_seg > 0))).length;
+                        const tempoTotal = rows.reduce((a, r) => a + (r.tempo_seg || 0), 0);
+                        const sucessos = rows.filter(r => r.sucesso).length;
+                        return (
+                          <AccordionItem key={code} value={code} className="border rounded-lg px-3 bg-card">
+                            <AccordionTrigger className="hover:no-underline py-3">
+                              <div className="flex items-center gap-3 flex-wrap text-left w-full pr-3">
+                                <Badge variant="outline" className="font-mono text-sm">P{code}</Badge>
+                                {persona && <Badge variant="secondary" className="gap-1"><Users className="w-3 h-3" />{persona.nome || `Persona ${personaIdx! + 1}`}</Badge>}
+                                <span className="text-xs text-muted-foreground flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />{sucessos}/{exp.tarefas.length} sucesso</span>
+                                <span className="text-xs text-muted-foreground flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{secToMMSS(tempoTotal)}</span>
+                                <span className="text-xs text-muted-foreground ml-auto">{feitas}/{exp.tarefas.length} tarefas preenchidas</span>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="pb-4">
+                              <div className="flex items-end gap-3 flex-wrap mb-3 pt-1">
+                                <div>
+                                  <label className="text-xs text-muted-foreground block mb-1">Código do participante</label>
+                                  <Input className="w-32 font-mono" value={code} onChange={e => {
+                                    const novo = e.target.value.trim();
+                                    if (!novo || novo === code) return;
+                                    const arr = exp.resultados.map(r => r.participante === code ? { ...r, participante: novo } : r);
+                                    update("resultados", arr);
+                                  }} />
+                                </div>
+                                <div>
+                                  <label className="text-xs text-muted-foreground block mb-1">Persona</label>
+                                  <Select value={personaIdx == null ? "none" : String(personaIdx)} onValueChange={v => {
+                                    const pi = v === "none" ? null : Number(v);
+                                    const arr = exp.resultados.map(r => r.participante === code ? { ...r, persona_idx: pi } : r);
+                                    update("resultados", arr);
+                                  }}>
+                                    <SelectTrigger className="w-56"><SelectValue placeholder="Persona" /></SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="none">— Não definida —</SelectItem>
+                                      {exp.personas.map((p, pi) => (
+                                        <SelectItem key={pi} value={String(pi)}>{p.nome || `Persona ${pi + 1}`}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div className="ml-auto">
+                                  <Button size="sm" variant="ghost" className="text-destructive"
+                                    onClick={() => update("resultados", exp.resultados.filter(r => r.participante !== code))}>
+                                    <Trash2 className="w-4 h-4 mr-2" />Remover participante
+                                  </Button>
+                                </div>
+                              </div>
+                              <div className="overflow-x-auto rounded border">
+                                <table className="w-full text-sm">
+                                  <thead className="bg-muted/50">
+                                    <tr className="text-left">
+                                      <th className="p-2 w-10">#</th>
+                                      <th className="p-2">Tarefa</th>
+                                      <th className="p-2 w-28">Sucesso</th>
+                                      <th className="p-2 w-28">Tempo (mm:ss)</th>
+                                      <th className="p-2 w-20">Erros</th>
+                                      <th className="p-2">Observações</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {exp.tarefas.map((t, ti) => {
+                                      const r = rows.find(x => x.tarefa_id === t.id) ?? { participante: code, tarefa_id: t.id, sucesso: false, tempo_seg: 0, erros: 0, sus_score: 0, observacoes: "" } as Resultado;
+                                      return (
+                                        <tr key={t.id} className="border-t">
+                                          <td className="p-2 text-center text-muted-foreground font-mono text-xs">T{ti + 1}</td>
+                                          <td className="p-2">
+                                            <div className="text-sm">{t.descricao || <span className="italic text-muted-foreground">(sem descrição)</span>}</div>
+                                            {t.criterios_sucesso && t.criterios_sucesso.length > 0 && (
+                                              <div className="text-[11px] text-muted-foreground mt-0.5">✔ {t.criterios_sucesso.join(" · ")}</div>
+                                            )}
+                                          </td>
+                                          <td className="p-1">
+                                            <button type="button" onClick={() => upsert(code, t.id, { sucesso: !r.sucesso })}
+                                              className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium border transition ${r.sucesso ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-muted text-muted-foreground border-transparent hover:border-border"}`}>
+                                              {r.sucesso ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Circle className="w-3.5 h-3.5" />}
+                                              {r.sucesso ? "Sim" : "Não"}
+                                            </button>
+                                          </td>
+                                          <td className="p-1">
+                                            <Input className="w-24" placeholder="mm:ss"
+                                              value={r.tempo_seg ? secToMMSS(r.tempo_seg) : ""}
+                                              onChange={e => upsert(code, t.id, { tempo_seg: mmssToSec(e.target.value) })} />
+                                          </td>
+                                          <td className="p-1">
+                                            <Input type="number" className="w-16" value={r.erros || ""}
+                                              onChange={e => upsert(code, t.id, { erros: Number(e.target.value) })} />
+                                          </td>
+                                          <td className="p-1">
+                                            <Input value={r.observacoes ?? ""} placeholder="Notas do avaliador"
+                                              onChange={e => upsert(code, t.id, { observacoes: e.target.value })} />
+                                          </td>
+                                        </tr>
+                                      );
+                                    })}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      })}
+                    </Accordion>
+                  );
+                })()}
               </CardContent>
             </Card>
+
 
             {/* Coleta de Satisfação (Likert) */}
             {(() => {
