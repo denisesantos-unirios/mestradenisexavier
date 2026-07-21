@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Lightbulb, ChevronRight } from "lucide-react";
+import { X, Lightbulb, ChevronRight, MessageCircle } from "lucide-react";
 import denyImg from "@/assets/deny-mascot.png";
+import DenyChat from "@/components/DenyChat";
 
 type TipSet = { titulo: string; dicas: string[] };
 
