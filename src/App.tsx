@@ -76,6 +76,8 @@ import ProtocolosExperimentoDetalhe from "./pages/protocolos/ExperimentoDetalhe"
 import ProtocolosLogin from "./pages/protocolos/Login";
 import ProtocolosGestao from "./pages/protocolos/Gestao";
 import SistemaExperimentos from "./pages/protocolos/SistemaExperimentos";
+import ProjetosInterdisciplinares from "./pages/protocolos/ProjetosInterdisciplinares";
+import ProjetoInterdisciplinarDetalhe from "./pages/protocolos/ProjetoInterdisciplinarDetalhe";
 import ProtocolosGuard from "./components/protocolos/ProtocolosGuard";
 // Modelagem
 import ModelagemIndex from "./pages/modelagem/Index";
@@ -176,6 +178,8 @@ const App = () => (
           <Route path="/protocolos/experimentos" element={<ProtocolosGuard permission="experimentos"><ProtocolosExperimentos /></ProtocolosGuard>} />
           <Route path="/protocolos/experimentos/:id" element={<ProtocolosGuard permission="experimentos"><ProtocolosExperimentoDetalhe /></ProtocolosGuard>} />
           <Route path="/protocolos/gestao" element={<ProtocolosGuard requireGestor><ProtocolosGestao /></ProtocolosGuard>} />
+          <Route path="/protocolos/interdisciplinar" element={<ProtocolosGuard><ProjetosInterdisciplinares /></ProtocolosGuard>} />
+          <Route path="/protocolos/interdisciplinar/:id" element={<ProtocolosGuard><ProjetoInterdisciplinarDetalhe /></ProtocolosGuard>} />
           {/* Provas */}
           <Route path="/provas/login" element={<ProvasLogin />} />
           <Route path="/provas/banco-questoes" element={<BancoQuestoes />} />

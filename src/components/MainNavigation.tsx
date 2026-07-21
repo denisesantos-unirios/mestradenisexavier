@@ -110,6 +110,7 @@ const menuItems = [
     submenu: [
       { title: "Framework DECIDE - Experimentos de Usabilidade", path: "/protocolos/framework-decide" },
       { title: "Sistema de Experimentos", path: "/protocolos/sistema" },
+      { title: "Projeto Interdisciplinar", path: "/protocolos/interdisciplinar" },
     ]
   },
   {

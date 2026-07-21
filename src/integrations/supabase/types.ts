@@ -175,6 +175,226 @@ export type Database = {
         }
         Relationships: []
       }
+      projeto_avaliacoes_pares: {
+        Row: {
+          avaliado_membro_id: string
+          avaliador_membro_id: string
+          created_at: string
+          fase_id: string | null
+          id: string
+          pontos: number
+          projeto_id: string
+        }
+        Insert: {
+          avaliado_membro_id: string
+          avaliador_membro_id: string
+          created_at?: string
+          fase_id?: string | null
+          id?: string
+          pontos?: number
+          projeto_id: string
+        }
+        Update: {
+          avaliado_membro_id?: string
+          avaliador_membro_id?: string
+          created_at?: string
+          fase_id?: string | null
+          id?: string
+          pontos?: number
+          projeto_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projeto_avaliacoes_pares_avaliado_membro_id_fkey"
+            columns: ["avaliado_membro_id"]
+            isOneToOne: false
+            referencedRelation: "projeto_membros"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projeto_avaliacoes_pares_avaliador_membro_id_fkey"
+            columns: ["avaliador_membro_id"]
+            isOneToOne: false
+            referencedRelation: "projeto_membros"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projeto_avaliacoes_pares_fase_id_fkey"
+            columns: ["fase_id"]
+            isOneToOne: false
+            referencedRelation: "projeto_fases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projeto_avaliacoes_pares_projeto_id_fkey"
+            columns: ["projeto_id"]
+            isOneToOne: false
+            referencedRelation: "projetos_interdisciplinares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projeto_documentos: {
+        Row: {
+          created_at: string
+          id: string
+          projeto_id: string
+          tipo: string | null
+          titulo: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          projeto_id: string
+          tipo?: string | null
+          titulo: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          projeto_id?: string
+          tipo?: string | null
+          titulo?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projeto_documentos_projeto_id_fkey"
+            columns: ["projeto_id"]
+            isOneToOne: false
+            referencedRelation: "projetos_interdisciplinares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projeto_fases: {
+        Row: {
+          avaliado_por: string | null
+          created_at: string
+          data_limite: string | null
+          descricao: string
+          disciplina: string
+          entregavel_url: string | null
+          fase_num: number
+          feedback: string | null
+          id: string
+          nota: number | null
+          pontos_max: number | null
+          projeto_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          avaliado_por?: string | null
+          created_at?: string
+          data_limite?: string | null
+          descricao: string
+          disciplina: string
+          entregavel_url?: string | null
+          fase_num: number
+          feedback?: string | null
+          id?: string
+          nota?: number | null
+          pontos_max?: number | null
+          projeto_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          avaliado_por?: string | null
+          created_at?: string
+          data_limite?: string | null
+          descricao?: string
+          disciplina?: string
+          entregavel_url?: string | null
+          fase_num?: number
+          feedback?: string | null
+          id?: string
+          nota?: number | null
+          pontos_max?: number | null
+          projeto_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projeto_fases_projeto_id_fkey"
+            columns: ["projeto_id"]
+            isOneToOne: false
+            referencedRelation: "projetos_interdisciplinares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projeto_membros: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          matricula: string | null
+          nome: string
+          projeto_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          matricula?: string | null
+          nome: string
+          projeto_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          matricula?: string | null
+          nome?: string
+          projeto_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projeto_membros_projeto_id_fkey"
+            columns: ["projeto_id"]
+            isOneToOne: false
+            referencedRelation: "projetos_interdisciplinares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projeto_professores: {
+        Row: {
+          created_at: string
+          disciplina: string
+          id: string
+          projeto_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          disciplina: string
+          id?: string
+          projeto_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          disciplina?: string
+          id?: string
+          projeto_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projeto_professores_projeto_id_fkey"
+            columns: ["projeto_id"]
+            isOneToOne: false
+            referencedRelation: "projetos_interdisciplinares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projetos: {
         Row: {
           created_at: string
@@ -218,6 +438,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      projetos_interdisciplinares: {
+        Row: {
+          created_at: string
+          criado_por: string
+          disciplinas: string[]
+          edital_ref: string | null
+          id: string
+          mini_mundo: string | null
+          nome: string
+          status: string
+          tema: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          criado_por: string
+          disciplinas?: string[]
+          edital_ref?: string | null
+          id?: string
+          mini_mundo?: string | null
+          nome: string
+          status?: string
+          tema?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          criado_por?: string
+          disciplinas?: string[]
+          edital_ref?: string | null
+          id?: string
+          mini_mundo?: string | null
+          nome?: string
+          status?: string
+          tema?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       questions: {
         Row: {
