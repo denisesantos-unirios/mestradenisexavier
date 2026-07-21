@@ -207,15 +207,21 @@ export default function ExperimentoDetalhe() {
   // Análise por persona: agrega resultados das tarefas atribuídas a cada persona
   const personaStats = exp.personas.map((p, pi) => {
     const tarefasDaPersona = exp.tarefas.filter(t => (t.personas_idx ?? []).includes(pi));
-    const ids = tarefasDaPersona.map(t => t.id);
-    const rs = exp.resultados.filter(r => ids.includes(r.tarefa_id));
+    // Participantes que foram atribuídos a esta persona na Coleta
+    const participantesDaPersona = Array.from(
+      new Set(exp.resultados.filter(r => r.persona_idx === pi).map(r => r.participante).filter(Boolean))
+    );
+    // Considera apenas resultados desses participantes nas tarefas atribuídas à persona
+    const idsTarefas = tarefasDaPersona.map(t => t.id);
+    const rs = exp.resultados.filter(r =>
+      r.persona_idx === pi && (idsTarefas.length === 0 || idsTarefas.includes(r.tarefa_id))
+    );
     const n = rs.length;
-    const participantesUnicos = new Set(rs.map(r => r.participante).filter(Boolean)).size;
     const sucessos = rs.filter(r => r.sucesso).length;
     const taxaSucesso = n ? +(sucessos / n * 100).toFixed(1) : 0;
     const tempoMedio = n ? +(rs.reduce((s, r) => s + (r.tempo_seg || 0), 0) / n).toFixed(1) : 0;
     const errosMedio = n ? +(rs.reduce((s, r) => s + (r.erros || 0), 0) / n).toFixed(2) : 0;
-    const susRs = rs.filter(r => r.sus_score);
+    const susRs = exp.resultados.filter(r => r.persona_idx === pi && r.sus_score);
     const susMed = susRs.length ? +(susRs.reduce((s, r) => s + r.sus_score, 0) / susRs.length).toFixed(1) : 0;
     const metaSoma = tarefasDaPersona.reduce((s, t) => s + (t.tempo_esperado_seg || 0), 0);
     const metaMedia = tarefasDaPersona.length ? +(metaSoma / tarefasDaPersona.length).toFixed(1) : 0;
@@ -223,7 +229,7 @@ export default function ExperimentoDetalhe() {
       persona: p.nome || `Persona ${pi + 1}`,
       perfil: p.perfil || "",
       qtdTarefas: tarefasDaPersona.length,
-      participantes: participantesUnicos,
+      participantes: participantesDaPersona.length,
       n,
       taxaSucesso,
       tempoMedio,
