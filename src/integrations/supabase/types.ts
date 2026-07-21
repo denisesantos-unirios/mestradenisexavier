@@ -91,6 +91,7 @@ export type Database = {
           projeto_id: string
           questoes: Json
           resultados: Json
+          satisfacao_respostas: Json
           tarefas: Json
           tcle: Json
           tecnicas: Json
@@ -110,6 +111,7 @@ export type Database = {
           projeto_id: string
           questoes?: Json
           resultados?: Json
+          satisfacao_respostas?: Json
           tarefas?: Json
           tcle?: Json
           tecnicas?: Json
@@ -129,6 +131,7 @@ export type Database = {
           projeto_id?: string
           questoes?: Json
           resultados?: Json
+          satisfacao_respostas?: Json
           tarefas?: Json
           tcle?: Json
           tecnicas?: Json

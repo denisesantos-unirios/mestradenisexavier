@@ -1,0 +1,1 @@
+ALTER TABLE public.experimentos ADD COLUMN IF NOT EXISTS satisfacao_respostas jsonb NOT NULL DEFAULT '[]'::jsonb;
