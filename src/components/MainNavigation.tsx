@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban, Cloud } from "lucide-react";
 
 const menuItems = [
   {
@@ -123,6 +123,14 @@ const menuItems = [
       { title: "Gerar Prova", path: "/provas/gerar-prova" },
       { title: "Estudos de Modelagem", path: "/modelagem" },
       { title: "Aula 7 - Suporte de IA Generativa (ES I)", path: "/engenharia-software-1/aula-7" }
+    ]
+  },
+  {
+    id: "nuvem",
+    title: "Nuvem de Palavras",
+    icon: Cloud,
+    submenu: [
+      { title: "Minhas Nuvens", path: "/nuvem" },
     ]
   }
 ];

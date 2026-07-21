@@ -87,6 +87,10 @@ import ProvasLogin from "./pages/provas/Login";
 import BancoQuestoes from "./pages/provas/BancoQuestoes";
 import GerarProva from "./pages/provas/GerarProva";
 import ListaProvas from "./pages/provas/ListaProvas";
+// Nuvem de Palavras
+import NuvemLista from "./pages/nuvem/NuvemLista";
+import NuvemView from "./pages/nuvem/NuvemView";
+import NuvemParticipar from "./pages/nuvem/NuvemParticipar";
 import NotFound from "./pages/NotFound";
 import DenyMascot from "./components/DenyMascot";
 import PresentationMode from "./components/PresentationMode";
@@ -185,6 +189,10 @@ const App = () => (
           <Route path="/provas/banco-questoes" element={<BancoQuestoes />} />
           <Route path="/provas/gerar-prova" element={<GerarProva />} />
           <Route path="/provas/lista" element={<ListaProvas />} />
+          {/* Nuvem de Palavras */}
+          <Route path="/nuvem" element={<NuvemLista />} />
+          <Route path="/nuvem/:id" element={<NuvemView />} />
+          <Route path="/nuvem/:id/participar" element={<NuvemParticipar />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
