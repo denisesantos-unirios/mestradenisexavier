@@ -235,6 +235,38 @@ export default function ExperimentoDetalhe() {
   const totalSucesso = exp.resultados.filter(r => r.sucesso).length;
   const totalFalha = exp.resultados.length - totalSucesso;
 
+  // Análise por Participante — reflete exatamente o que foi preenchido na Coleta
+  const totalTarefasExp = exp.tarefas.length;
+  const participanteStats = participantes.map(code => {
+    const rs = exp.resultados.filter(r => r.participante === code);
+    const preenchidas = rs.filter(r => r.sucesso || r.tempo_seg > 0 || r.erros > 0 || (r.observacoes && r.observacoes.trim())).length;
+    const sucessos = rs.filter(r => r.sucesso).length;
+    const nTarefas = rs.length || totalTarefasExp || 1;
+    const taxaSucesso = +((sucessos / nTarefas) * 100).toFixed(1);
+    const tempoTotal = rs.reduce((s, r) => s + (r.tempo_seg || 0), 0);
+    const tempoMedio = rs.length ? +(tempoTotal / rs.length).toFixed(1) : 0;
+    const erros = rs.reduce((s, r) => s + (r.erros || 0), 0);
+    const susRs = rs.filter(r => r.sus_score);
+    const sus = susRs.length ? +(susRs.reduce((s, r) => s + r.sus_score, 0) / susRs.length).toFixed(1) : 0;
+    const personaIdx = rs.find(r => r.persona_idx != null)?.persona_idx ?? null;
+    const persona = personaIdx != null ? exp.personas[personaIdx] : null;
+    const completo = preenchidas >= (totalTarefasExp || rs.length) && (totalTarefasExp > 0 || rs.length > 0);
+    return {
+      participante: code,
+      persona: persona?.nome || (personaIdx != null ? `Persona ${personaIdx + 1}` : "—"),
+      preenchidas,
+      totalTarefas: totalTarefasExp || rs.length,
+      sucessos,
+      taxaSucesso,
+      tempoTotal,
+      tempoMedio,
+      erros,
+      sus,
+      completo,
+    };
+  });
+  const participantesCompletos = participanteStats.filter(p => p.completo).length;
+
   return (
     <main className="min-h-screen bg-background">
       <MainNavigation />
@@ -1147,6 +1179,108 @@ export default function ExperimentoDetalhe() {
                 )}
               </CardContent>
             </Card>
+
+            {/* Análise por Participante — espelha a Coleta */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Análise Consolidada por Participante</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Espelha exatamente o que foi preenchido na aba <strong>Coleta</strong>. Progresso mostra tarefas com dados / total de tarefas do experimento.
+                </p>
+                <div className="flex flex-wrap gap-4 mt-3 text-xs">
+                  <span className="px-2 py-1 rounded-md bg-primary/10 text-primary font-medium">
+                    {participanteStats.length} participante{participanteStats.length === 1 ? "" : "s"} na coleta
+                  </span>
+                  <span className="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-700 font-medium">
+                    {participantesCompletos} completo{participantesCompletos === 1 ? "" : "s"}
+                  </span>
+                  <span className="px-2 py-1 rounded-md bg-amber-500/10 text-amber-700 font-medium">
+                    {participanteStats.length - participantesCompletos} em andamento
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent className="overflow-x-auto">
+                {participanteStats.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Nenhum participante cadastrado na <strong>Coleta</strong>.</p>
+                ) : (
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b-2 border-border text-left">
+                        <th className="p-2">Participante</th>
+                        <th className="p-2">Persona</th>
+                        <th className="p-2 text-center">Progresso</th>
+                        <th className="p-2 text-center bg-blue-500/10">Taxa Sucesso</th>
+                        <th className="p-2 text-center bg-amber-500/10">Tempo Total</th>
+                        <th className="p-2 text-center bg-amber-500/10">Tempo Médio</th>
+                        <th className="p-2 text-center bg-amber-500/10">Erros</th>
+                        <th className="p-2 text-center bg-emerald-500/10">SUS</th>
+                        <th className="p-2 text-center">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {participanteStats.map((s, i) => {
+                        const fmt = (sec: number) => {
+                          const m = Math.floor(sec / 60);
+                          const ss = Math.floor(sec % 60);
+                          return `${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+                        };
+                        const pct = s.totalTarefas ? Math.round((s.preenchidas / s.totalTarefas) * 100) : 0;
+                        const okSucesso = s.taxaSucesso >= 80;
+                        const okSus = s.sus === 0 || s.sus >= 68;
+                        return (
+                          <tr key={i} className="border-b border-border/50 hover:bg-muted/30">
+                            <td className="p-2 font-medium">{s.participante}</td>
+                            <td className="p-2 text-xs text-muted-foreground">{s.persona}</td>
+                            <td className="p-2">
+                              <div className="flex items-center gap-2 min-w-[140px]">
+                                <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+                                  <div className={`h-full ${s.completo ? "bg-emerald-500" : "bg-amber-500"}`} style={{ width: `${pct}%` }} />
+                                </div>
+                                <span className="text-xs text-muted-foreground whitespace-nowrap">{s.preenchidas}/{s.totalTarefas}</span>
+                              </div>
+                            </td>
+                            <td className="p-2 text-center bg-blue-500/5">
+                              <span className={okSucesso ? "text-blue-600 font-semibold" : "text-destructive font-semibold"}>{s.taxaSucesso}%</span>
+                              <div className="text-[10px] text-muted-foreground">{s.sucessos}/{s.totalTarefas}</div>
+                            </td>
+                            <td className="p-2 text-center bg-amber-500/5">{fmt(s.tempoTotal)}</td>
+                            <td className="p-2 text-center bg-amber-500/5">{fmt(s.tempoMedio)}</td>
+                            <td className="p-2 text-center bg-amber-500/5">{s.erros}</td>
+                            <td className="p-2 text-center bg-emerald-500/5">
+                              {s.sus > 0 ? <span className={okSus ? "text-emerald-600 font-semibold" : "text-destructive font-semibold"}>{s.sus}</span> : <span className="text-muted-foreground">—</span>}
+                            </td>
+                            <td className="p-2 text-center">
+                              {s.completo
+                                ? <span className="inline-block px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 text-xs font-medium">✓ Completo</span>
+                                : s.preenchidas === 0
+                                  ? <span className="inline-block px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs font-medium">Sem dados</span>
+                                  : <span className="inline-block px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 text-xs font-medium">Em andamento</span>}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
+                {participanteStats.some(p => p.taxaSucesso > 0 || p.erros > 0) && (
+                  <div style={{ height: 300 }} className="mt-6">
+                    <ResponsiveContainer>
+                      <BarChart data={participanteStats}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="participante" tick={{ fontSize: 11 }} />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="taxaSucesso" name="Taxa Sucesso (%)" fill="hsl(217 91% 60%)" />
+                        <Bar dataKey="sus" name="SUS" fill="hsl(160 84% 39%)" />
+                        <Bar dataKey="erros" name="Erros" fill="hsl(0 84% 60%)" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
 
             {tarefaStats.length > 0 && (
               <div className="grid md:grid-cols-2 gap-6">
