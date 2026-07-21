@@ -4,34 +4,32 @@ import { useLocation } from "react-router-dom";
 
 const isLessonRoute = (path: string) => /\/aula-\d+/.test(path);
 
-const collectSlides = (): HTMLElement[] => {
-  const main = document.querySelector("main") || document.body;
-  // Prefer explicit <section> elements
-  let nodes = Array.from(main.querySelectorAll<HTMLElement>("section"));
-  if (nodes.length < 2) {
-    // Fallback: top-level children of the content wrapper
-    const wrapper = main.querySelector(".pt-16") || main;
-    nodes = Array.from(wrapper.children).filter(
-      (el) => el instanceof HTMLElement && el.offsetHeight > 40
-    ) as HTMLElement[];
-  }
-  return nodes;
-};
+// Step ~85% of viewport height per arrow so long sections are not skipped.
+const STEP_RATIO = 0.85;
+
+const getStep = () => Math.max(200, Math.floor(window.innerHeight * STEP_RATIO));
+
+const getMaxScroll = () =>
+  Math.max(
+    0,
+    (document.scrollingElement?.scrollHeight ?? document.body.scrollHeight) -
+      window.innerHeight
+  );
+
+const computeTotal = () => Math.max(1, Math.ceil(getMaxScroll() / getStep()) + 1);
 
 const PresentationMode = () => {
   const location = useLocation();
   const [active, setActive] = useState(false);
   const [index, setIndex] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(1);
 
   const enter = useCallback(async () => {
-    const slides = collectSlides();
-    if (slides.length === 0) return;
-    setTotal(slides.length);
+    setTotal(computeTotal());
     setIndex(0);
     setActive(true);
     document.body.classList.add("presentation-active");
-    slides[0].scrollIntoView({ behavior: "auto", block: "start" });
+    window.scrollTo({ top: 0, behavior: "auto" });
     try {
       await document.documentElement.requestFullscreen?.();
     } catch {
@@ -47,18 +45,16 @@ const PresentationMode = () => {
     }
   }, []);
 
-  const go = useCallback(
-    (delta: number) => {
-      const slides = collectSlides();
-      if (!slides.length) return;
-      setIndex((prev) => {
-        const next = Math.min(Math.max(prev + delta, 0), slides.length - 1);
-        slides[next]?.scrollIntoView({ behavior: "smooth", block: "start" });
-        return next;
-      });
-    },
-    []
-  );
+  const go = useCallback((delta: number) => {
+    const step = getStep();
+    const max = getMaxScroll();
+    const current = window.scrollY;
+    const target = Math.min(Math.max(current + delta * step, 0), max);
+    window.scrollTo({ top: target, behavior: "smooth" });
+    const newTotal = computeTotal();
+    setTotal(newTotal);
+    setIndex(Math.min(newTotal - 1, Math.round(target / step)));
+  }, []);
 
   useEffect(() => {
     if (!active) return;
