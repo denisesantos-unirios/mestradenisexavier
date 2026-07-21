@@ -90,6 +90,7 @@ const DenyMascot = () => {
   const [open, setOpen] = useState(false);
   const [dicaIdx, setDicaIdx] = useState(0);
   const [dismissed, setDismissed] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   const tipSet = useMemo(() => {
     const seg = location.pathname.split("/")[1] || "default";
