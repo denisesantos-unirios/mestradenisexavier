@@ -764,7 +764,7 @@ export default function ExperimentoDetalhe() {
                             <td className="p-1"><Input value={r.observacoes ?? ""} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, observacoes: e.target.value }; update("resultados", arr); }} /></td>
                             <td className="p-1"><Button size="icon" variant="ghost" onClick={() => update("resultados", exp.resultados.filter((_, idx) => idx !== i))}><Trash2 className="w-4 h-4 text-destructive" /></Button></td>
                           </tr>
-                        ))}
+                        );})}
                       </tbody>
                     </table>
                   </div>
