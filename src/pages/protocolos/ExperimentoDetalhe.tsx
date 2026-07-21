@@ -424,82 +424,80 @@ export default function ExperimentoDetalhe() {
               </CardContent>
             </Card>
 
-            {/* E — EVALUATE (Métricas + Tarefas por fator) */}
-            <PhaseHeader letter="E" title="Evaluate, interprete e apresente os dados" icon={BarChart3} desc="Defina métricas (com pior/almejado/melhor) e tarefas por fator. Os dados serão coletados na próxima aba." />
+            {/* E — EVALUATE (Tarefas compartilhadas + Métricas por fator) */}
+            <PhaseHeader letter="E" title="Evaluate, interprete e apresente os dados" icon={BarChart3} desc="Defina primeiro as tarefas (compartilhadas entre Eficácia e Eficiência) e, em seguida, as métricas específicas de cada fator." />
 
+            {/* 1) Tarefas compartilhadas */}
+            <Card className="border-l-4" style={{ borderLeftColor: "hsl(var(--primary))" }}>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <ClipboardList className="w-5 h-5 text-primary" /> Tarefas do experimento
+                </CardTitle>
+                <p className="text-xs text-muted-foreground">
+                  Uma única lista de tarefas será utilizada para medir Eficácia (sucesso) e Eficiência (tempo/esforço) sobre a mesma execução.
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {exp.tarefas.map((t) => (
+                  <div key={t.id} className="border border-border rounded-lg p-3 space-y-2 relative">
+                    <p className="text-xs text-muted-foreground">Tarefa · id: <code>{t.id}</code></p>
+                    <Button size="icon" variant="ghost" className="absolute top-2 right-2"
+                      onClick={() => update("tarefas", exp.tarefas.filter(x => x.id !== t.id))}>
+                      <Trash2 className="w-4 h-4 text-destructive" /></Button>
+                    <Textarea rows={2} placeholder="Descrição da tarefa" value={t.descricao}
+                      onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, descricao: e.target.value } : x); update("tarefas", arr); }} />
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input placeholder="Critério de sucesso" value={t.criterio_sucesso}
+                        onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, criterio_sucesso: e.target.value } : x); update("tarefas", arr); }} />
+                      <Input type="number" placeholder="Tempo esperado (s)" value={t.tempo_esperado_seg || ""}
+                        onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, tempo_esperado_seg: Number(e.target.value) } : x); update("tarefas", arr); }} />
+                    </div>
+                  </div>
+                ))}
+                <Button variant="outline" size="sm"
+                  onClick={() => update("tarefas", [...exp.tarefas, { id: uid(), descricao: "", criterio_sucesso: "", tempo_esperado_seg: 0, fator: "eficacia" }])}>
+                  <Plus className="w-4 h-4 mr-2" />Adicionar tarefa
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* 2) Métricas por fator */}
             {exp.fatores.map(f => {
               const meta = FATOR_META[f];
               const Icon = meta.icon;
+              const sugestoes: Record<FatorTipo, string> = {
+                eficacia: "Ex.: Taxa de sucesso (%) = tarefas concluídas / tarefas totais",
+                eficiencia: "Ex.: Tempo médio por tarefa (s); nº de erros por tarefa",
+                satisfacao: "Ex.: Score SUS (0–100); NPS; escala Likert pós-teste",
+              };
               return (
                 <Card key={`em-${f}`} className="border-l-4" style={{ borderLeftColor: "hsl(var(--primary))" }}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-base">
-                      <Icon className={`w-5 h-5 ${meta.color}`} /> Fator: {meta.label}
+                      <Icon className={`w-5 h-5 ${meta.color}`} /> Métricas do fator: {meta.label}
                     </CardTitle>
+                    <p className="text-xs text-muted-foreground">{sugestoes[f]}</p>
                   </CardHeader>
-                  <CardContent className="space-y-5">
-                    {/* Métricas */}
-                    <div>
-                      <p className="text-sm font-medium mb-2">Métricas</p>
-                      <div className="space-y-2">
-                        {exp.metricas.map((m, i) => m.tipo === f && (
-                          <div key={i} className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr_auto] gap-2">
-                            <Input placeholder="Nome" value={m.nome}
-                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, nome: e.target.value }; update("metricas", arr); }} />
-                            <Input placeholder="Como medir" value={m.formula ?? ""}
-                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, formula: e.target.value }; update("metricas", arr); }} />
-                            <Input placeholder="Pior" value={m.pior ?? ""}
-                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, pior: e.target.value }; update("metricas", arr); }} />
-                            <Input placeholder="Almejado" value={m.almejado ?? ""}
-                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, almejado: e.target.value }; update("metricas", arr); }} />
-                            <Input placeholder="Melhor" value={m.melhor ?? ""}
-                              onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, melhor: e.target.value }; update("metricas", arr); }} />
-                            <Button size="icon" variant="ghost" onClick={() => update("metricas", exp.metricas.filter((_, idx) => idx !== i))}>
-                              <Trash2 className="w-4 h-4 text-destructive" /></Button>
-                          </div>
-                        ))}
-                        <Button variant="outline" size="sm" onClick={() => update("metricas", [...exp.metricas, { nome: "", tipo: f, formula: "", pior: "", almejado: "", melhor: "" }])}>
-                          <Plus className="w-4 h-4 mr-2" />Adicionar métrica
-                        </Button>
+                  <CardContent className="space-y-2">
+                    {exp.metricas.map((m, i) => m.tipo === f && (
+                      <div key={i} className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr_auto] gap-2">
+                        <Input placeholder="Nome" value={m.nome}
+                          onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, nome: e.target.value }; update("metricas", arr); }} />
+                        <Input placeholder="Como medir" value={m.formula ?? ""}
+                          onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, formula: e.target.value }; update("metricas", arr); }} />
+                        <Input placeholder="Pior" value={m.pior ?? ""}
+                          onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, pior: e.target.value }; update("metricas", arr); }} />
+                        <Input placeholder="Almejado" value={m.almejado ?? ""}
+                          onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, almejado: e.target.value }; update("metricas", arr); }} />
+                        <Input placeholder="Melhor" value={m.melhor ?? ""}
+                          onChange={e => { const arr = [...exp.metricas]; arr[i] = { ...m, melhor: e.target.value }; update("metricas", arr); }} />
+                        <Button size="icon" variant="ghost" onClick={() => update("metricas", exp.metricas.filter((_, idx) => idx !== i))}>
+                          <Trash2 className="w-4 h-4 text-destructive" /></Button>
                       </div>
-                    </div>
-                    {/* Tarefas — Eficácia e Eficiência compartilham a mesma lista */}
-                    {f === "eficiencia" && exp.fatores.includes("eficacia") ? (
-                      <div className="rounded-lg border border-dashed border-amber-300 bg-amber-50 dark:bg-amber-950/20 p-3 text-sm text-amber-900 dark:text-amber-200">
-                        ℹ️ As <strong>tarefas de Eficiência</strong> são as mesmas da <strong>Eficácia</strong> (sucesso × tempo sobre a mesma execução). Edite-as no bloco <em>Fator: Eficácia</em> acima — não é necessário cadastrar novamente aqui.
-                      </div>
-                    ) : (
-                      <div>
-                        <p className="text-sm font-medium mb-2">
-                          Tarefas
-                          {f === "eficacia" && exp.fatores.includes("eficiencia") && (
-                            <span className="ml-2 text-xs font-normal text-muted-foreground">(compartilhadas com Eficiência)</span>
-                          )}
-                        </p>
-                        <div className="space-y-3">
-                          {exp.tarefas.map((t) => t.fator === f && (
-                            <div key={t.id} className="border border-border rounded-lg p-3 space-y-2 relative">
-                              <p className="text-xs text-muted-foreground">Tarefa · id: <code>{t.id}</code></p>
-                              <Button size="icon" variant="ghost" className="absolute top-2 right-2"
-                                onClick={() => update("tarefas", exp.tarefas.filter(x => x.id !== t.id))}>
-                                <Trash2 className="w-4 h-4 text-destructive" /></Button>
-                              <Textarea rows={2} placeholder="Descrição da tarefa" value={t.descricao}
-                                onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, descricao: e.target.value } : x); update("tarefas", arr); }} />
-                              <div className="grid grid-cols-2 gap-2">
-                                <Input placeholder="Critério de sucesso" value={t.criterio_sucesso}
-                                  onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, criterio_sucesso: e.target.value } : x); update("tarefas", arr); }} />
-                                <Input type="number" placeholder="Tempo esperado (s)" value={t.tempo_esperado_seg || ""}
-                                  onChange={e => { const arr = exp.tarefas.map(x => x.id === t.id ? { ...x, tempo_esperado_seg: Number(e.target.value) } : x); update("tarefas", arr); }} />
-                              </div>
-                            </div>
-                          ))}
-                          <Button variant="outline" size="sm"
-                            onClick={() => update("tarefas", [...exp.tarefas, { id: uid(), descricao: "", criterio_sucesso: "", tempo_esperado_seg: 0, fator: f }])}>
-                            <Plus className="w-4 h-4 mr-2" />Adicionar tarefa
-                          </Button>
-                        </div>
-                      </div>
-                    )}
+                    ))}
+                    <Button variant="outline" size="sm" onClick={() => update("metricas", [...exp.metricas, { nome: "", tipo: f, formula: "", pior: "", almejado: "", melhor: "" }])}>
+                      <Plus className="w-4 h-4 mr-2" />Adicionar métrica
+                    </Button>
                   </CardContent>
                 </Card>
               );
