@@ -727,10 +727,14 @@ export default function ExperimentoDetalhe() {
                     const m = Math.floor(n / 60), ss = n % 60;
                     return `${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
                   };
+                  // Interpreta a entrada como sequência de dígitos: os 2 últimos = segundos, os anteriores = minutos.
+                  // Ex.: digitar "0535" ou "05:35" => 5min35s. Evita erro ao anexar dígitos após valor já formatado.
                   const mmssToSec = (v: string) => {
-                    const clean = v.replace(/[^\d:]/g, "");
-                    if (clean.includes(":")) { const [m, s] = clean.split(":"); return (Number(m) || 0) * 60 + (Number(s) || 0); }
-                    return Number(clean) || 0;
+                    const digits = (v || "").replace(/\D/g, "").slice(-4);
+                    if (!digits) return 0;
+                    const mm = digits.length > 2 ? Number(digits.slice(0, -2)) : 0;
+                    const ss = Number(digits.slice(-2));
+                    return mm * 60 + Math.min(ss, 59);
                   };
                   const codigos = Array.from(new Set(exp.resultados.map(r => r.participante).filter(Boolean)));
                   if (codigos.length === 0) {
