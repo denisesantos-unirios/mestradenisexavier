@@ -707,9 +707,8 @@ export default function ExperimentoDetalhe() {
                           <th className="p-2">Persona</th>
                           <th className="p-2">Tarefa</th>
                           <th className="p-2">Sucesso</th>
-                          <th className="p-2">Tempo (s)</th>
+                          <th className="p-2">Tempo (mm:ss)</th>
                           <th className="p-2">Erros</th>
-                          <th className="p-2">SUS (0-100)</th>
                           <th className="p-2">Observações</th>
                           <th></th>
                         </tr>
@@ -718,6 +717,19 @@ export default function ExperimentoDetalhe() {
                         {exp.resultados.map((r, i) => {
                           const tarefaSel = exp.tarefas.find(t => t.id === r.tarefa_id);
                           const personasSugeridas = tarefaSel?.personas_idx ?? [];
+                          const secToMMSS = (s: number) => {
+                            const n = Math.max(0, Math.floor(s || 0));
+                            const m = Math.floor(n / 60), ss = n % 60;
+                            return `${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+                          };
+                          const mmssToSec = (v: string) => {
+                            const clean = v.replace(/[^\d:]/g, "");
+                            if (clean.includes(":")) {
+                              const [m, s] = clean.split(":");
+                              return (Number(m) || 0) * 60 + (Number(s) || 0);
+                            }
+                            return Number(clean) || 0;
+                          };
                           return (
                           <tr key={i} className="border-b border-border/50">
                             <td className="p-1"><Input value={r.participante} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, participante: e.target.value }; update("resultados", arr); }} /></td>
@@ -758,9 +770,15 @@ export default function ExperimentoDetalhe() {
                                 <SelectContent><SelectItem value="1">Sim</SelectItem><SelectItem value="0">Não</SelectItem></SelectContent>
                               </Select>
                             </td>
-                            <td className="p-1"><Input type="number" className="w-20" value={r.tempo_seg || ""} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, tempo_seg: Number(e.target.value) }; update("resultados", arr); }} /></td>
+                            <td className="p-1">
+                              <Input
+                                className="w-24"
+                                placeholder="mm:ss"
+                                value={r.tempo_seg ? secToMMSS(r.tempo_seg) : ""}
+                                onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, tempo_seg: mmssToSec(e.target.value) }; update("resultados", arr); }}
+                              />
+                            </td>
                             <td className="p-1"><Input type="number" className="w-16" value={r.erros || ""} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, erros: Number(e.target.value) }; update("resultados", arr); }} /></td>
-                            <td className="p-1"><Input type="number" className="w-20" value={r.sus_score || ""} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, sus_score: Number(e.target.value) }; update("resultados", arr); }} /></td>
                             <td className="p-1"><Input value={r.observacoes ?? ""} onChange={e => { const arr = [...exp.resultados]; arr[i] = { ...r, observacoes: e.target.value }; update("resultados", arr); }} /></td>
                             <td className="p-1"><Button size="icon" variant="ghost" onClick={() => update("resultados", exp.resultados.filter((_, idx) => idx !== i))}><Trash2 className="w-4 h-4 text-destructive" /></Button></td>
                           </tr>
@@ -773,6 +791,7 @@ export default function ExperimentoDetalhe() {
                   onClick={() => update("resultados", [...exp.resultados, { participante: "", tarefa_id: exp.tarefas[0]?.id ?? "", sucesso: false, tempo_seg: 0, erros: 0, sus_score: 0 }])}>
                   <Plus className="w-4 h-4 mr-2" />Adicionar linha
                 </Button>
+
               </CardContent>
             </Card>
 
@@ -812,12 +831,26 @@ export default function ExperimentoDetalhe() {
                       return (
                         <div key={ri} className="border border-border rounded-lg p-3 space-y-3">
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <Input className="max-w-xs" placeholder="Nome / código do participante" value={sr.participante}
-                              onChange={e => {
+                            <Select
+                              value={sr.participante || "__none"}
+                              onValueChange={v => {
                                 const arr = [...respostas];
-                                arr[ri] = { ...sr, participante: e.target.value };
+                                arr[ri] = { ...sr, participante: v === "__none" ? "" : v };
                                 setRespostas(arr);
-                              }} />
+                              }}
+                            >
+                              <SelectTrigger className="max-w-xs"><SelectValue placeholder="Selecione o código do participante" /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="__none">— Selecione —</SelectItem>
+                                {Array.from(new Set(exp.resultados.map(r => r.participante).filter(Boolean))).map(p => (
+                                  <SelectItem key={p} value={p}>{p}</SelectItem>
+                                ))}
+                                {sr.participante && !exp.resultados.some(r => r.participante === sr.participante) && (
+                                  <SelectItem value={sr.participante}>{sr.participante}</SelectItem>
+                                )}
+                              </SelectContent>
+                            </Select>
+
                             <div className="flex items-center gap-3 text-sm">
                               {isSUS && <span className="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-700 font-medium">SUS: {susCalc || "—"}</span>}
                               <span className="px-2 py-1 rounded-md bg-muted text-muted-foreground">Índice: {pct}%</span>
