@@ -122,6 +122,7 @@ export default function ExperimentoDetalhe() {
       resultados: d.resultados ?? [],
       tecnicas: d.tecnicas ?? { complementares: [] },
       tcle: d.tcle ?? {},
+      satisfacao_respostas: Array.isArray(d.satisfacao_respostas) ? d.satisfacao_respostas : [],
     });
   };
   useEffect(() => { if (user && id) load(); }, [user, id]);
