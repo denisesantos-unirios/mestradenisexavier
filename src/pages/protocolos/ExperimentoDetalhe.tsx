@@ -108,7 +108,14 @@ export default function ExperimentoDetalhe() {
       questoes: normalizeStrList(d.questoes ?? []),
       metricas: d.metricas ?? [],
       personas: d.personas ?? [],
-      tarefas: (d.tarefas ?? []).map((t: any) => ({ ...t, fator: t.fator ?? "eficacia" })),
+      tarefas: (d.tarefas ?? []).map((t: any) => ({
+        ...t,
+        fator: t.fator ?? "eficacia",
+        personas_idx: Array.isArray(t.personas_idx) ? t.personas_idx : [],
+        criterios_sucesso: Array.isArray(t.criterios_sucesso) && t.criterios_sucesso.length
+          ? t.criterios_sucesso
+          : (t.criterio_sucesso ? [t.criterio_sucesso] : []),
+      })),
       resultados: d.resultados ?? [],
       tecnicas: d.tecnicas ?? { complementares: [] },
       tcle: d.tcle ?? {},
