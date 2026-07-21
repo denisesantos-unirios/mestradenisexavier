@@ -148,6 +148,68 @@ export type Database = {
           },
         ]
       }
+      nuvem_palavras: {
+        Row: {
+          created_at: string
+          id: string
+          palavra: string
+          participante: string | null
+          sessao_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          palavra: string
+          participante?: string | null
+          sessao_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          palavra?: string
+          participante?: string | null
+          sessao_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nuvem_palavras_sessao_id_fkey"
+            columns: ["sessao_id"]
+            isOneToOne: false
+            referencedRelation: "nuvem_sessoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nuvem_sessoes: {
+        Row: {
+          ativa: boolean
+          created_at: string
+          criado_por: string | null
+          id: string
+          pergunta: string | null
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          ativa?: boolean
+          created_at?: string
+          criado_por?: string | null
+          id?: string
+          pergunta?: string | null
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          ativa?: boolean
+          created_at?: string
+          criado_por?: string | null
+          id?: string
+          pergunta?: string | null
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
