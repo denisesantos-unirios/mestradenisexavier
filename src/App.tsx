@@ -8,6 +8,7 @@ import Aula1 from "./pages/Aula1";
 import Aula2 from "./pages/Aula2";
 import Aula3 from "./pages/Aula3";
 import Aula4 from "./pages/Aula4";
+import ES1Aula4Reused from "./pages/Aula4";
 import Aula5 from "./pages/Aula5";
 import Aula6 from "./pages/Aula6";
 import ES1Aula7 from "./pages/engenharia-software-1/Aula7";
@@ -111,7 +112,8 @@ const App = () => (
           <Route path="/engenharia-software-2/aula-1" element={<ES2Aula1 />} />
           <Route path="/engenharia-software-2/aula-2" element={<ES2Aula2 />} />
           <Route path="/engenharia-software-2/aula-3" element={<ES2Aula3 />} />
-          <Route path="/engenharia-software-2/aula-4" element={<ES2Aula4 />} />
+          <Route path="/engenharia-software-2/aula-4" element={<ES1Aula4Reused />} />
+          <Route path="/engenharia-software-2/aula-4-fundamentos" element={<ES2Aula4 />} />
           <Route path="/engenharia-software-2/aula-5" element={<ES2Aula5 />} />
           <Route path="/engenharia-software-2/aula-6" element={<ES2Aula6 />} />
           <Route path="/engenharia-software-2/aula-7" element={<ES2Aula7 />} />
