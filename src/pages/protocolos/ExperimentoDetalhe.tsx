@@ -146,24 +146,43 @@ export default function ExperimentoDetalhe() {
 
   // === Análise ===
   const participantes = Array.from(new Set(exp.resultados.map(r => r.participante))).filter(Boolean);
-  const tarefaStats = exp.tarefas.map(t => {
-    const rs = exp.resultados.filter(r => r.tarefa_id === t.id);
-    const n = rs.length || 1;
-    const sucessos = rs.filter(r => r.sucesso).length;
-    const tempoMedio = rs.reduce((s, r) => s + (r.tempo_seg || 0), 0) / n;
-    const errosMedio = rs.reduce((s, r) => s + (r.erros || 0), 0) / n;
-    const tempos = rs.map(r => r.tempo_seg || 0);
-    const desvio = tempos.length ? Math.sqrt(tempos.reduce((s, x) => s + (x - tempoMedio) ** 2, 0) / tempos.length) : 0;
-    return {
-      tarefa: t.descricao.slice(0, 30) || t.id,
-      fator: t.fator ?? "eficacia",
-      taxaSucesso: rs.length ? +(sucessos / rs.length * 100).toFixed(1) : 0,
-      tempoMedio: +tempoMedio.toFixed(1),
-      errosMedio: +errosMedio.toFixed(2),
-      desvio: +desvio.toFixed(1),
-      n: rs.length,
-    };
-  });
+  // Agrupa por descrição da tarefa (dedup entre fatores) — 1 linha por tarefa
+  const tarefaStats = (() => {
+    const grupos = new Map<string, { ids: string[]; descricao: string; tempoEsperado: number }>();
+    exp.tarefas.forEach(t => {
+      const key = (t.descricao || t.id).trim().toLowerCase();
+      const g = grupos.get(key) ?? { ids: [], descricao: t.descricao || t.id, tempoEsperado: t.tempo_esperado_seg || 0 };
+      g.ids.push(t.id);
+      g.tempoEsperado = g.tempoEsperado || t.tempo_esperado_seg || 0;
+      grupos.set(key, g);
+    });
+    return Array.from(grupos.values()).map(g => {
+      const rs = exp.resultados.filter(r => g.ids.includes(r.tarefa_id));
+      const n = rs.length || 1;
+      const sucessos = rs.filter(r => r.sucesso).length;
+      const tempoMedio = rs.reduce((s, r) => s + (r.tempo_seg || 0), 0) / n;
+      const errosMedio = rs.reduce((s, r) => s + (r.erros || 0), 0) / n;
+      const tempos = rs.map(r => r.tempo_seg || 0);
+      const desvio = tempos.length ? Math.sqrt(tempos.reduce((s, x) => s + (x - tempoMedio) ** 2, 0) / tempos.length) : 0;
+      const susRs = rs.filter(r => r.sus_score);
+      const susMed = susRs.length ? susRs.reduce((s, r) => s + r.sus_score, 0) / susRs.length : 0;
+      const taxaSucesso = rs.length ? +(sucessos / rs.length * 100).toFixed(1) : 0;
+      // Eficiência: quanto o tempo médio se compara ao esperado (100% = igual ou melhor)
+      const eficiencia = g.tempoEsperado && tempoMedio ? +Math.min(100, (g.tempoEsperado / tempoMedio) * 100).toFixed(1) : 0;
+      return {
+        tarefa: g.descricao.slice(0, 32),
+        descricaoCompleta: g.descricao,
+        taxaSucesso,
+        eficiencia,
+        tempoMedio: +tempoMedio.toFixed(1),
+        tempoEsperado: g.tempoEsperado,
+        errosMedio: +errosMedio.toFixed(2),
+        desvio: +desvio.toFixed(1),
+        susMedio: +susMed.toFixed(1),
+        n: rs.length,
+      };
+    });
+  })();
   const susPorParticipante = participantes.map(p => {
     const rs = exp.resultados.filter(r => r.participante === p && r.sus_score);
     const media = rs.length ? rs.reduce((s, r) => s + r.sus_score, 0) / rs.length : 0;
