@@ -585,6 +585,68 @@ export default function ExperimentoDetalhe() {
                     <Button variant="outline" size="sm" onClick={() => update("metricas", [...exp.metricas, { nome: "", tipo: f, formula: "", pior: "", almejado: "", melhor: "" }])}>
                       <Plus className="w-4 h-4 mr-2" />Adicionar métrica
                     </Button>
+
+                    {f === "satisfacao" && (() => {
+                      const SUS_PADRAO = [
+                        "Eu acho que gostaria de usar este sistema com frequência.",
+                        "Eu achei o sistema desnecessariamente complexo.",
+                        "Eu achei o sistema fácil de usar.",
+                        "Eu acho que precisaria de ajuda de um técnico para conseguir usar este sistema.",
+                        "Eu achei que as várias funções do sistema estavam bem integradas.",
+                        "Eu achei que havia muita inconsistência neste sistema.",
+                        "Eu imagino que a maioria das pessoas aprenderia a usar este sistema rapidamente.",
+                        "Eu achei o sistema muito complicado de usar.",
+                        "Eu me senti muito confiante ao usar o sistema.",
+                        "Eu precisei aprender várias coisas novas antes de conseguir usar o sistema.",
+                      ];
+                      const satisfQ = exp.questoes.filter(q => q.fator === "satisfacao");
+                      const setSatisfQ = (arr: string[]) => {
+                        const outros = exp.questoes.filter(q => q.fator !== "satisfacao");
+                        update("questoes", [...outros, ...arr.map(texto => ({ fator: "satisfacao" as FatorTipo, texto }))]);
+                      };
+                      return (
+                        <div className="mt-6 pt-4 border-t border-border space-y-3">
+                          <div className="flex items-center justify-between flex-wrap gap-2">
+                            <div>
+                              <p className="text-sm font-semibold text-foreground flex items-center gap-2">
+                                <Smile className="w-4 h-4 text-emerald-500" /> Questões de Satisfação (Likert 1–5)
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                Aplique após as tarefas. Escala: 1 (Discordo totalmente) → 5 (Concordo totalmente). Ímpares positivas · pares negativas (SUS).
+                              </p>
+                            </div>
+                            <Button variant="outline" size="sm" onClick={() => setSatisfQ(SUS_PADRAO)}>
+                              <Plus className="w-4 h-4 mr-2" />Carregar SUS (10 itens)
+                            </Button>
+                          </div>
+                          <div className="space-y-2">
+                            {satisfQ.map((q, qi) => (
+                              <div key={qi} className="flex gap-2 items-start">
+                                <span className="mt-2 text-xs font-mono text-muted-foreground w-6 text-right">{qi + 1}.</span>
+                                <Textarea rows={2} value={q.texto}
+                                  onChange={e => {
+                                    const arr = satisfQ.map(x => x.texto);
+                                    arr[qi] = e.target.value;
+                                    setSatisfQ(arr);
+                                  }}
+                                  placeholder="Ex.: O sistema foi fácil de usar." />
+                                <Button size="icon" variant="ghost" onClick={() => setSatisfQ(satisfQ.filter((_, i) => i !== qi).map(x => x.texto))}>
+                                  <Trash2 className="w-4 h-4 text-destructive" />
+                                </Button>
+                              </div>
+                            ))}
+                            <Button variant="outline" size="sm" onClick={() => setSatisfQ([...satisfQ.map(x => x.texto), ""])}>
+                              <Plus className="w-4 h-4 mr-2" />Adicionar questão
+                            </Button>
+                          </div>
+                          {satisfQ.length > 0 && (
+                            <div className="p-3 rounded-md bg-emerald-500/5 border border-emerald-500/20 text-xs text-muted-foreground">
+                              <strong className="text-emerald-600">Aplicação:</strong> cada participante responde após a sessão. Consolidamos as respostas no campo <code>SUS (0–100)</code> da aba Coleta (SUS: some ímpares−5 + 25−pares × 2,5).
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
               );
