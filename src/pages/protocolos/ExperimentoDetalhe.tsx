@@ -138,6 +138,7 @@ export default function ExperimentoDetalhe() {
       metricas: exp.metricas as any, personas: exp.personas as any,
       tarefas: exp.tarefas as any, resultados: exp.resultados as any,
       tecnicas: exp.tecnicas as any, tcle: exp.tcle as any,
+      satisfacao_respostas: exp.satisfacao_respostas as any,
     } as any).eq("id", exp.id);
     setSaving(false);
     if (error) return toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
