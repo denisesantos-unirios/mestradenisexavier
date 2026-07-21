@@ -1033,7 +1033,7 @@ export default function ExperimentoDetalhe() {
               const totalObs = exp.resultados.length;
               const pctConclusao = totalObs ? Math.round((totalSucesso / totalObs) * 100) : 0;
               // Satisfação em escala 1–5 (média das respostas Likert)
-              const todasLikert = respostas.flatMap(r => r.respostas.filter(v => v > 0));
+              const todasLikert = (exp.satisfacao_respostas ?? []).flatMap(r => r.respostas.filter(v => v > 0));
               const mediaLikert = todasLikert.length ? +(todasLikert.reduce((s, v) => s + v, 0) / todasLikert.length).toFixed(2) : 0;
               // Melhor tarefa (maior taxa de sucesso, desempate por menor tempo)
               const ranked = [...tarefaStats].sort((a, b) => b.taxaSucesso - a.taxaSucesso || a.tempoMedio - b.tempoMedio);
