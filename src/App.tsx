@@ -195,6 +195,8 @@ const App = () => (
           <Route path="/nuvem" element={<NuvemLista />} />
           <Route path="/nuvem/:id" element={<NuvemView />} />
           <Route path="/nuvem/:id/participar" element={<NuvemParticipar />} />
+          {/* Ferramentas */}
+          <Route path="/ferramentas/historias-usuario" element={<HistoriasUsuario />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
