@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { FileText, Printer, ArrowLeft, CheckCircle2, Save } from "lucide-react";
+import QuestionImage from "@/components/provas/QuestionImage";
 import type { Database } from "@/integrations/supabase/types";
 
 type Question = Database["public"]["Tables"]["questions"]["Row"];
@@ -220,7 +221,7 @@ const GerarProva = () => {
 
                       {q.image_url && (
                         <div className="mb-4">
-                          <img src={q.image_url} alt="Imagem da questão" className="max-h-48 rounded-lg border border-border print:border-gray-300" />
+                          <QuestionImage value={q.image_url} className="max-h-48 rounded-lg border border-border print:border-gray-300" />
                         </div>
                       )}
 
