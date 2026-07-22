@@ -107,7 +107,8 @@ const QuestionFormDialog = ({ open, onOpenChange, onSuccess }: QuestionFormDialo
 
         if (uploadError) throw uploadError;
 
-        imageUrl = `${SUPABASE_URL}/storage/v1/object/public/question-images/${path}`;
+        // Bucket is private; store the storage path and generate signed URLs on read.
+        imageUrl = path;
       }
 
       const { error } = await supabase.from("questions").insert({

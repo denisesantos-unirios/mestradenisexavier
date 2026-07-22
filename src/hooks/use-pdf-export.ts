@@ -149,7 +149,7 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
       );
 
       const opt = {
-        margin: [10, 10, 10, 10],
+        margin: [10, 10, 10, 10] as [number, number, number, number],
         filename: options?.filename ?? "aula.pdf",
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: {
@@ -172,7 +172,7 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
         },
       };
 
-      await html2pdf().set(opt).from(container).save();
+      await html2pdf().set(opt as any).from(container).save();
 
       // Clean up
       document.body.removeChild(container);

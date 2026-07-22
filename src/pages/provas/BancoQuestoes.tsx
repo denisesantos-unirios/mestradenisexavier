@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { BookOpen, Filter, FileText, LogOut, Plus, Trash2, CheckCircle2, XCircle, Image as ImageIcon, ClipboardList } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
 import QuestionFormDialog from "@/components/provas/QuestionFormDialog";
+import QuestionImage from "@/components/provas/QuestionImage";
 
 type Question = Database["public"]["Tables"]["questions"]["Row"];
 type Discipline = Database["public"]["Enums"]["discipline"];
@@ -72,7 +73,8 @@ const BancoQuestoes = () => {
       .order("created_at", { ascending: false });
 
     if (error) {
-      toast({ title: "Erro ao carregar questões", description: error.message, variant: "destructive" });
+      console.error("Erro ao carregar questões:", error);
+      toast({ title: "Erro ao carregar questões", description: "Não foi possível carregar as questões. Tente novamente.", variant: "destructive" });
     } else {
       setQuestions(data || []);
     }
@@ -297,7 +299,7 @@ const BancoQuestoes = () => {
 
                       {(q as any).image_url && (
                         <div className="mb-3">
-                          <img src={(q as any).image_url} alt="Imagem da questão" className="max-h-48 rounded-lg border border-border" />
+                          <QuestionImage value={(q as any).image_url} className="max-h-48 rounded-lg border border-border" />
                         </div>
                       )}
                       {q.question_type === "multiple_choice" && (
