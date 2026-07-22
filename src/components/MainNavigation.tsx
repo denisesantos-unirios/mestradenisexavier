@@ -142,6 +142,8 @@ const MainNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
+  const { isProfessor } = useAuth();
+  const visibleItems = menuItems.filter((it: any) => !it.professorOnly || isProfessor);
 
   const toggleSubmenu = (id: string) => {
     setOpenSubmenu(openSubmenu === id ? null : id);
