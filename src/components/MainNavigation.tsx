@@ -111,27 +111,29 @@ const menuItems = [
     submenu: [
       { title: "Framework DECIDE - Experimentos de Usabilidade", path: "/protocolos/framework-decide" },
       { title: "Sistema de Experimentos", path: "/protocolos/sistema" },
-      { title: "Projeto Interdisciplinar", path: "/protocolos/interdisciplinar" },
+    ]
+  },
+  {
+    id: "ferramentas",
+    title: "Ferramentas",
+    icon: Wrench,
+    submenu: [
+      { title: "Histórias de Usuário", path: "/ferramentas/historias-usuario" },
+      { title: "Nuvem de Palavras", path: "/nuvem" },
     ]
   },
   {
     id: "provas",
     title: "Provas",
     icon: ClipboardList,
+    professorOnly: true,
     submenu: [
       { title: "Login Professor", path: "/provas/login" },
       { title: "Banco de Questões", path: "/provas/banco-questoes" },
       { title: "Gerar Prova", path: "/provas/gerar-prova" },
       { title: "Estudos de Modelagem", path: "/modelagem" },
+      { title: "Projeto Interdisciplinar", path: "/protocolos/interdisciplinar" },
       { title: "Aula 7 - Suporte de IA Generativa (ES I)", path: "/engenharia-software-1/aula-7" }
-    ]
-  },
-  {
-    id: "nuvem",
-    title: "Nuvem de Palavras",
-    icon: Cloud,
-    submenu: [
-      { title: "Minhas Nuvens", path: "/nuvem" },
     ]
   }
 ];
