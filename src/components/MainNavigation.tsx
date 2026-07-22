@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban, Cloud } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban, Cloud, Wrench, BookOpen } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const menuItems = [
   {
@@ -110,27 +111,29 @@ const menuItems = [
     submenu: [
       { title: "Framework DECIDE - Experimentos de Usabilidade", path: "/protocolos/framework-decide" },
       { title: "Sistema de Experimentos", path: "/protocolos/sistema" },
-      { title: "Projeto Interdisciplinar", path: "/protocolos/interdisciplinar" },
+    ]
+  },
+  {
+    id: "ferramentas",
+    title: "Ferramentas",
+    icon: Wrench,
+    submenu: [
+      { title: "Histórias de Usuário", path: "/ferramentas/historias-usuario" },
+      { title: "Nuvem de Palavras", path: "/nuvem" },
     ]
   },
   {
     id: "provas",
     title: "Provas",
     icon: ClipboardList,
+    professorOnly: true,
     submenu: [
       { title: "Login Professor", path: "/provas/login" },
       { title: "Banco de Questões", path: "/provas/banco-questoes" },
       { title: "Gerar Prova", path: "/provas/gerar-prova" },
       { title: "Estudos de Modelagem", path: "/modelagem" },
+      { title: "Projeto Interdisciplinar", path: "/protocolos/interdisciplinar" },
       { title: "Aula 7 - Suporte de IA Generativa (ES I)", path: "/engenharia-software-1/aula-7" }
-    ]
-  },
-  {
-    id: "nuvem",
-    title: "Nuvem de Palavras",
-    icon: Cloud,
-    submenu: [
-      { title: "Minhas Nuvens", path: "/nuvem" },
     ]
   }
 ];
@@ -139,6 +142,8 @@ const MainNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
+  const { isProfessor } = useAuth();
+  const visibleItems = menuItems.filter((it: any) => !it.professorOnly || isProfessor);
 
   const toggleSubmenu = (id: string) => {
     setOpenSubmenu(openSubmenu === id ? null : id);
@@ -161,7 +166,7 @@ const MainNavigation = () => {
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-1">
-            {menuItems.map((item) => (
+            {visibleItems.map((item) => (
               <div key={item.id} className="relative group">
                 {item.path ? (
                   <Link
@@ -251,7 +256,7 @@ const MainNavigation = () => {
             className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border max-h-[calc(100vh-4rem)] overflow-y-auto"
           >
             <div className="px-6 py-4 space-y-2 pb-8">
-              {menuItems.map((item) => (
+              {visibleItems.map((item) => (
                 <div key={item.id}>
                   {item.path ? (
                     <Link

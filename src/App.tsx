@@ -91,6 +91,8 @@ import ListaProvas from "./pages/provas/ListaProvas";
 import NuvemLista from "./pages/nuvem/NuvemLista";
 import NuvemView from "./pages/nuvem/NuvemView";
 import NuvemParticipar from "./pages/nuvem/NuvemParticipar";
+// Ferramentas
+import HistoriasUsuario from "./pages/ferramentas/HistoriasUsuario";
 import NotFound from "./pages/NotFound";
 import DenyMascot from "./components/DenyMascot";
 import PresentationMode from "./components/PresentationMode";
@@ -193,6 +195,8 @@ const App = () => (
           <Route path="/nuvem" element={<NuvemLista />} />
           <Route path="/nuvem/:id" element={<NuvemView />} />
           <Route path="/nuvem/:id/participar" element={<NuvemParticipar />} />
+          {/* Ferramentas */}
+          <Route path="/ferramentas/historias-usuario" element={<HistoriasUsuario />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
