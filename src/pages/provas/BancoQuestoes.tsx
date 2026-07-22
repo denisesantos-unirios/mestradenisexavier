@@ -72,7 +72,8 @@ const BancoQuestoes = () => {
       .order("created_at", { ascending: false });
 
     if (error) {
-      toast({ title: "Erro ao carregar questões", description: error.message, variant: "destructive" });
+      console.error("Erro ao carregar questões:", error);
+      toast({ title: "Erro ao carregar questões", description: "Não foi possível carregar as questões. Tente novamente.", variant: "destructive" });
     } else {
       setQuestions(data || []);
     }

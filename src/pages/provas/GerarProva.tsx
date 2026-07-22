@@ -55,7 +55,8 @@ const GerarProva = () => {
       .in("id", ids);
 
     if (error) {
-      toast({ title: "Erro", description: error.message, variant: "destructive" });
+      console.error("Erro ao carregar questões:", error);
+      toast({ title: "Erro", description: "Não foi possível carregar as questões.", variant: "destructive" });
     } else {
       setQuestions(data || []);
     }
@@ -76,7 +77,8 @@ const GerarProva = () => {
         .eq("id", examId);
 
       if (error) {
-        toast({ title: "Erro ao atualizar", description: error.message, variant: "destructive" });
+        console.error("Erro ao atualizar prova:", error);
+        toast({ title: "Erro ao atualizar", description: "Não foi possível atualizar a prova.", variant: "destructive" });
       } else {
         toast({ title: "Prova atualizada com sucesso!" });
       }
@@ -88,7 +90,8 @@ const GerarProva = () => {
         .single();
 
       if (error) {
-        toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
+        console.error("Erro ao salvar prova:", error);
+        toast({ title: "Erro ao salvar", description: "Não foi possível salvar a prova.", variant: "destructive" });
       } else {
         setExamId(data.id);
         toast({ title: "Prova salva com sucesso!" });
