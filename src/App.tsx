@@ -91,6 +91,8 @@ import ListaProvas from "./pages/provas/ListaProvas";
 import NuvemLista from "./pages/nuvem/NuvemLista";
 import NuvemView from "./pages/nuvem/NuvemView";
 import NuvemParticipar from "./pages/nuvem/NuvemParticipar";
+// Ferramentas
+import HistoriasUsuario from "./pages/ferramentas/HistoriasUsuario";
 import NotFound from "./pages/NotFound";
 import DenyMascot from "./components/DenyMascot";
 import PresentationMode from "./components/PresentationMode";
