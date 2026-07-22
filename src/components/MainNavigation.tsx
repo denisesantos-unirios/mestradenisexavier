@@ -166,7 +166,7 @@ const MainNavigation = () => {
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-1">
-            {menuItems.map((item) => (
+            {visibleItems.map((item) => (
               <div key={item.id} className="relative group">
                 {item.path ? (
                   <Link
@@ -256,7 +256,7 @@ const MainNavigation = () => {
             className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border max-h-[calc(100vh-4rem)] overflow-y-auto"
           >
             <div className="px-6 py-4 space-y-2 pb-8">
-              {menuItems.map((item) => (
+              {visibleItems.map((item) => (
                 <div key={item.id}>
                   {item.path ? (
                     <Link
