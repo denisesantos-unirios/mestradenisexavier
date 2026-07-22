@@ -172,7 +172,7 @@ export const usePdfExport = (options?: UsePdfExportOptions) => {
         },
       };
 
-      await html2pdf().set(opt).from(container).save();
+      await html2pdf().set(opt as any).from(container).save();
 
       // Clean up
       document.body.removeChild(container);
