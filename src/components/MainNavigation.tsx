@@ -119,6 +119,10 @@ const menuItems = [
     icon: Wrench,
     submenu: [
       { title: "Histórias de Usuário", path: "/ferramentas/historias-usuario" },
+      { title: "Backlog", path: "/ferramentas/backlog" },
+      { title: "Kanban", path: "/ferramentas/kanban" },
+      { title: "Planejamento de Sprint", path: "/ferramentas/sprint-planning" },
+      { title: "Casos de Uso", path: "/ferramentas/casos-de-uso" },
       { title: "Nuvem de Palavras", path: "/nuvem" },
     ]
   },
