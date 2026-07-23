@@ -93,6 +93,10 @@ import NuvemView from "./pages/nuvem/NuvemView";
 import NuvemParticipar from "./pages/nuvem/NuvemParticipar";
 // Ferramentas
 import HistoriasUsuario from "./pages/ferramentas/HistoriasUsuario";
+import Backlog from "./pages/ferramentas/Backlog";
+import KanbanTool from "./pages/ferramentas/Kanban";
+import SprintPlanning from "./pages/ferramentas/SprintPlanning";
+import CasosDeUso from "./pages/ferramentas/CasosDeUso";
 import NotFound from "./pages/NotFound";
 import DenyMascot from "./components/DenyMascot";
 import PresentationMode from "./components/PresentationMode";
@@ -197,6 +201,10 @@ const App = () => (
           <Route path="/nuvem/:id/participar" element={<NuvemParticipar />} />
           {/* Ferramentas */}
           <Route path="/ferramentas/historias-usuario" element={<HistoriasUsuario />} />
+          <Route path="/ferramentas/backlog" element={<Backlog />} />
+          <Route path="/ferramentas/kanban" element={<KanbanTool />} />
+          <Route path="/ferramentas/sprint-planning" element={<SprintPlanning />} />
+          <Route path="/ferramentas/casos-de-uso" element={<CasosDeUso />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
