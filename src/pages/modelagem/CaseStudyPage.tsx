@@ -1,6 +1,6 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, BookOpen, Database, Network, Workflow, ListChecks, Code, Users, FileText, Loader2 } from "lucide-react";
+import { ArrowLeft, BookOpen, Database, Network, Workflow, ListChecks, Code, Users, FileText, Loader2, UserCheck } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import MainNavigation from "@/components/MainNavigation";
 import LessonQRCode from "@/components/LessonQRCode";
@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { getCaseBySlug } from "@/data/modelagem/cases";
+import { buildCasosUso } from "@/data/modelagem/casosUso";
+import IntegracaoFerramentas from "@/components/modelagem/IntegracaoFerramentas";
 
 const SectionTitle = ({ icon: Icon, title, subtitle }: { icon: any; title: string; subtitle?: string }) => (
   <div className="flex items-start gap-3 mb-6">
