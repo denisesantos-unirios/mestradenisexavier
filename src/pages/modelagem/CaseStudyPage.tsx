@@ -74,7 +74,22 @@ const CaseStudyPage = () => {
             </Card>
           </ScrollReveal>
 
+          <ScrollReveal animation="fadeUp">
+            <IntegracaoFerramentas cs={cs} />
+          </ScrollReveal>
+
           {/* Tabs com artefatos */}
+          <Tabs defaultValue="der" className="space-y-6">
+            <TabsList className="flex flex-wrap h-auto gap-1 bg-card/60 p-1.5 border border-border/50">
+              <TabsTrigger value="der" className="text-xs md:text-sm gap-1.5"><Database className="w-3.5 h-3.5" />DER</TabsTrigger>
+              <TabsTrigger value="conceitual" className="text-xs md:text-sm gap-1.5"><Network className="w-3.5 h-3.5" />Conceitual</TabsTrigger>
+              <TabsTrigger value="classes" className="text-xs md:text-sm gap-1.5"><Code className="w-3.5 h-3.5" />Classes</TabsTrigger>
+              <TabsTrigger value="atividades" className="text-xs md:text-sm gap-1.5"><Workflow className="w-3.5 h-3.5" />Atividades</TabsTrigger>
+              <TabsTrigger value="rfs" className="text-xs md:text-sm gap-1.5"><ListChecks className="w-3.5 h-3.5" />Requisitos</TabsTrigger>
+              <TabsTrigger value="casos" className="text-xs md:text-sm gap-1.5"><UserCheck className="w-3.5 h-3.5" />Casos de Uso</TabsTrigger>
+              <TabsTrigger value="sql" className="text-xs md:text-sm gap-1.5"><FileText className="w-3.5 h-3.5" />SQL</TabsTrigger>
+              <TabsTrigger value="hus" className="text-xs md:text-sm gap-1.5"><Users className="w-3.5 h-3.5" />Histórias</TabsTrigger>
+            </TabsList>
           <Tabs defaultValue="der" className="space-y-6">
             <TabsList className="flex flex-wrap h-auto gap-1 bg-card/60 p-1.5 border border-border/50">
               <TabsTrigger value="der" className="text-xs md:text-sm gap-1.5"><Database className="w-3.5 h-3.5" />DER</TabsTrigger>
