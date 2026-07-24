@@ -154,6 +154,48 @@ const CaseStudyPage = () => {
               </Card>
             </TabsContent>
 
+            <TabsContent value="casos" forceMount className="data-[state=inactive]:hidden print-show">
+              <Card className="bg-card/50 border-border/50">
+                <CardContent className="p-6">
+                  <SectionTitle icon={UserCheck} title="Casos de Uso" subtitle="Especificações UML derivadas dos requisitos funcionais" />
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {casosUso.map((uc) => (
+                      <div key={uc.id} className="p-4 rounded-lg bg-background/40 border border-border/30">
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <div>
+                            <p className="text-xs font-mono text-blue-400">{uc.codigo}</p>
+                            <h4 className="font-semibold text-foreground">{uc.nome}</h4>
+                          </div>
+                          <Badge className="bg-orange-500/20 text-orange-300 border-orange-400/40 shrink-0">{uc.prioridade}</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mb-2"><b>Ator:</b> {uc.ator}{uc.atoresSecundarios && ` • ${uc.atoresSecundarios}`}</p>
+                        <p className="text-xs text-foreground/80 mb-2"><b>Objetivo:</b> {uc.objetivo}</p>
+                        <p className="text-xs text-muted-foreground mb-1"><b>Pré:</b> {uc.preCondicoes}</p>
+                        <p className="text-xs font-semibold text-muted-foreground mt-2 mb-1">Fluxo Principal:</p>
+                        <ol className="text-xs text-foreground/80 list-decimal ml-4 space-y-0.5">
+                          {uc.fluxoPrincipal.map((p) => <li key={p.id}>{p.texto}</li>)}
+                        </ol>
+                        {uc.fluxosAlternativos.length > 0 && (
+                          <>
+                            <p className="text-xs font-semibold text-muted-foreground mt-2 mb-1">Alternativos:</p>
+                            {uc.fluxosAlternativos.map((f) => (
+                              <div key={f.id} className="mb-1">
+                                <p className="text-xs text-orange-400">{f.nome}</p>
+                                <ol className="text-xs text-foreground/70 list-decimal ml-4">
+                                  {f.passos.map((p) => <li key={p.id}>{p.texto}</li>)}
+                                </ol>
+                              </div>
+                            ))}
+                          </>
+                        )}
+                        <p className="text-xs text-muted-foreground mt-2"><b>Pós:</b> {uc.posCondicoes}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
             <TabsContent value="sql" forceMount className="data-[state=inactive]:hidden print-show">
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
