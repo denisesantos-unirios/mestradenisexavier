@@ -33,6 +33,7 @@ const CaseStudyPage = () => {
   if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
   if (!isProfessor) return <Navigate to="/provas/login" replace />;
   if (!cs) return <Navigate to="/modelagem" replace />;
+  const casosUso = buildCasosUso(cs);
 
   return (
     <main className="min-h-screen relative" style={{ background: "var(--gradient-hero)" }}>
