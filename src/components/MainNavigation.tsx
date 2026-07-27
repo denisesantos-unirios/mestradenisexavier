@@ -171,11 +171,13 @@ const MainNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
-  const { isProfessor, hasPermission } = useAuth();
+  const { user, isProfessor, hasPermission } = useAuth();
   const visibleItems = menuItems.filter(
     (it: any) =>
       (!it.professorOnly || isProfessor) &&
-      (!it.permission || (isProfessor && hasPermission(it.permission))),
+      // menus com permissão ficam visíveis para visitantes (redirecionam ao login);
+      // só somem para quem está logado e não tem o acesso liberado
+      (!it.permission || !user || hasPermission(it.permission)),
   );
 
   const toggleSubmenu = (id: string) => {
