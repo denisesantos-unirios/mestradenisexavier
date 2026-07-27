@@ -17,6 +17,7 @@ import PraticaSection from "@/components/projetos-interface/aula2/PraticaSection
 const sections = [
   { id: "hero", title: "Início" },
   { id: "introducao-ihc", title: "O que é IHC?" },
+  { id: "evolucao-interfaces", title: "Evolução das Interfaces" },
   { id: "processo-interacao", title: "Processo de Interação" },
   { id: "interface-definicao", title: "Definição de Interface" },
   { id: "metaforas-affordance", title: "Metáforas e Affordance" },
