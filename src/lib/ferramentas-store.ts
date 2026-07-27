@@ -37,12 +37,56 @@ export function readLS<T>(key: string, fallback: T): T {
   }
 }
 
+const TOOL_KEYS: string[] = Object.values(FKEYS);
+const timers: Record<string, ReturnType<typeof setTimeout>> = {};
+
+/** Envia (upsert) o conteúdo de uma chave para o banco, com debounce. */
+export function syncToCloud(key: string, val: unknown) {
+  if (!TOOL_KEYS.includes(key)) return;
+  clearTimeout(timers[key]);
+  timers[key] = setTimeout(async () => {
+    try {
+      const { data } = await supabase.auth.getUser();
+      const userId = data.user?.id;
+      if (!userId) return;
+      await supabase
+        .from("ferramentas_dados")
+        .upsert(
+          { user_id: userId, chave: key, dados: val as never },
+          { onConflict: "user_id,chave" },
+        );
+    } catch {
+      /* offline / sem permissão: mantém apenas local */
+    }
+  }, 600);
+}
+
+/** Carrega do banco para o localStorage (chamado ao entrar nas ferramentas). */
+export async function hydrateFromCloud() {
+  try {
+    const { data: auth } = await supabase.auth.getUser();
+    if (!auth.user) return;
+    const { data, error } = await supabase
+      .from("ferramentas_dados")
+      .select("chave, dados");
+    if (error || !data) return;
+    for (const row of data) {
+      if (row.dados !== null && row.dados !== undefined) {
+        localStorage.setItem(row.chave, JSON.stringify(row.dados));
+      }
+    }
+  } catch {
+    /* ignora */
+  }
+}
+
 export function writeLS(key: string, val: unknown) {
   try {
     localStorage.setItem(key, JSON.stringify(val));
   } catch {
     /* ignore */
   }
+  syncToCloud(key, val);
 }
 
 export function prependLS<T>(key: string, itens: T[]) {
