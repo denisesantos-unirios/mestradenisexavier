@@ -1,4 +1,6 @@
 // Armazenamento local compartilhado entre as ferramentas ágeis/UX do portal.
+// Espelhado no banco (tabela ferramentas_dados) para o(a) professor(a) autenticado(a).
+import { supabase } from "@/integrations/supabase/client";
 
 export const FKEYS = {
   historias: "ferramentas_historias_usuario",
