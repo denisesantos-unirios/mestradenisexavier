@@ -117,6 +117,7 @@ import CompetenciasDashboard from "./pages/avancado/CompetenciasDashboard";
 import NotFound from "./pages/NotFound";
 import DenyMascot from "./components/DenyMascot";
 import PresentationMode from "./components/PresentationMode";
+import FerramentasSugeridas from "./components/FerramentasSugeridas";
 
 const queryClient = new QueryClient();
 
