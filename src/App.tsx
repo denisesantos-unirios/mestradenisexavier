@@ -104,6 +104,16 @@ import CasosDeTeste from "./pages/ferramentas/CasosDeTeste";
 import RegistroBugs from "./pages/ferramentas/RegistroBugs";
 import AvaliacaoHeuristica from "./pages/ferramentas/AvaliacaoHeuristica";
 import ChecklistAcessibilidade from "./pages/ferramentas/ChecklistAcessibilidade";
+import Wireframes from "./pages/ferramentas/Wireframes";
+// Recursos Avançados
+import EditorUML from "./pages/avancado/EditorUML";
+import PlanningPoker from "./pages/avancado/PlanningPoker";
+import Burndown from "./pages/avancado/Burndown";
+import GaleriaPrototipos from "./pages/avancado/GaleriaPrototipos";
+import Versionamento from "./pages/avancado/Versionamento";
+import Simuladores from "./pages/avancado/Simuladores";
+import Recomendacoes from "./pages/avancado/Recomendacoes";
+import CompetenciasDashboard from "./pages/avancado/CompetenciasDashboard";
 import NotFound from "./pages/NotFound";
 import DenyMascot from "./components/DenyMascot";
 import PresentationMode from "./components/PresentationMode";
@@ -219,6 +229,16 @@ const App = () => (
           <Route path="/ferramentas/bugs" element={<RegistroBugs />} />
           <Route path="/ferramentas/avaliacao-heuristica" element={<AvaliacaoHeuristica />} />
           <Route path="/ferramentas/acessibilidade" element={<ChecklistAcessibilidade />} />
+          <Route path="/ferramentas/wireframes" element={<Wireframes />} />
+          {/* Recursos Avançados */}
+          <Route path="/avancado/editor-uml" element={<EditorUML />} />
+          <Route path="/avancado/planning-poker" element={<PlanningPoker />} />
+          <Route path="/avancado/burndown" element={<Burndown />} />
+          <Route path="/avancado/prototipos" element={<GaleriaPrototipos />} />
+          <Route path="/avancado/versionamento" element={<Versionamento />} />
+          <Route path="/avancado/simuladores" element={<Simuladores />} />
+          <Route path="/avancado/recomendacoes" element={<Recomendacoes />} />
+          <Route path="/avancado/competencias" element={<CompetenciasDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
