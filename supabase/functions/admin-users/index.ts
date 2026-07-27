@@ -9,6 +9,16 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const ADMIN_EMAIL = "denise.santos@unirioes.edu.br";
 const ADMIN_DEFAULT_PASSWORD = "admin2026";
+const ADMIN_EMAILS = [ADMIN_EMAIL, "denise.santos@uniriosead.com"];
+const ALL_PERMISSIONS = [
+  "framework-decide",
+  "equipes",
+  "projetos",
+  "experimentos",
+  "ferramentas",
+  "avancado",
+  "interdisciplinar",
+];
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -32,11 +42,18 @@ Deno.serve(async (req) => {
 
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
-  // Ensure admin user exists (idempotent bootstrap). Runs on every invocation; cheap because list is filtered.
+  // Ensure admin users have the required roles and current permissions (idempotent).
   async function ensureAdmin() {
     const { data: list } = await admin.auth.admin.listUsers({ page: 1, perPage: 200 });
     const existing = list?.users.find((u) => u.email === ADMIN_EMAIL);
-    if (existing) return existing.id;
+    if (existing) {
+      await Promise.all([
+        admin.from("user_roles").upsert({ user_id: existing.id, role: "professor" }, { onConflict: "user_id,role" }),
+        admin.from("user_roles").upsert({ user_id: existing.id, role: "gestor" }, { onConflict: "user_id,role" }),
+        admin.from("profiles").update({ permissions: ALL_PERMISSIONS }).eq("user_id", existing.id),
+      ]);
+      return existing.id;
+    }
     const { data: created, error } = await admin.auth.admin.createUser({
       email: ADMIN_EMAIL,
       password: ADMIN_DEFAULT_PASSWORD,
@@ -44,7 +61,11 @@ Deno.serve(async (req) => {
       user_metadata: { full_name: "Profª Denise Santos" },
     });
     if (error) throw error;
-    // The handle_new_user trigger grants 'professor' + 'gestor' for this email.
+    await Promise.all([
+      admin.from("user_roles").upsert({ user_id: created.user!.id, role: "professor" }, { onConflict: "user_id,role" }),
+      admin.from("user_roles").upsert({ user_id: created.user!.id, role: "gestor" }, { onConflict: "user_id,role" }),
+      admin.from("profiles").upsert({ user_id: created.user!.id, email: ADMIN_EMAIL, display_name: "Profª Denise Santos", permissions: ALL_PERMISSIONS }, { onConflict: "user_id" }),
+    ]);
     return created.user!.id;
   }
 
@@ -102,8 +123,8 @@ Deno.serve(async (req) => {
           created_at: u.created_at,
           last_sign_in_at: u.last_sign_in_at,
           display_name: u.user_metadata?.full_name ?? u.email,
-          is_admin: u.email === ADMIN_EMAIL,
-          permissions: permMap.get(u.id) ?? ["framework-decide", "equipes", "projetos", "experimentos"],
+          is_admin: ADMIN_EMAILS.includes(u.email ?? ""),
+          permissions: ADMIN_EMAILS.includes(u.email ?? "") ? ALL_PERMISSIONS : (permMap.get(u.id) ?? ALL_PERMISSIONS),
         }));
       return json({ users });
     }
@@ -121,7 +142,7 @@ Deno.serve(async (req) => {
       });
       if (error) return json({ error: error.message }, 400);
       await admin.from("user_roles").insert({ user_id: created.user!.id, role: "professor" });
-      const perms = Array.isArray(permissions) ? permissions : ["framework-decide", "equipes", "projetos", "experimentos"];
+      const perms = Array.isArray(permissions) ? permissions : ALL_PERMISSIONS;
       await admin.from("profiles").update({ permissions: perms }).eq("user_id", created.user!.id);
       return json({ ok: true, user_id: created.user!.id });
     }
@@ -153,7 +174,7 @@ Deno.serve(async (req) => {
       const blocked = requireGestor(); if (blocked) return blocked;
       const { user_id, permissions } = body;
       if (!user_id || !Array.isArray(permissions)) return json({ error: "Dados incompletos" }, 400);
-      const allowed = ["framework-decide", "equipes", "projetos", "experimentos", "ferramentas", "avancado", "interdisciplinar"];
+      const allowed = ALL_PERMISSIONS;
       const clean = permissions.filter((p: string) => allowed.includes(p));
       const { error } = await admin.from("profiles").update({ permissions: clean }).eq("user_id", user_id);
       if (error) return json({ error: error.message }, 400);
