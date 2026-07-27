@@ -5,6 +5,7 @@ import { useAuth, type PermissionKey } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import MainNavigation from "@/components/MainNavigation";
 import { Button } from "@/components/ui/button";
+import { hydrateFromCloud } from "@/lib/ferramentas-store";
 
 interface Props {
   children: ReactNode;
@@ -24,6 +25,14 @@ const ProtocolosGuard = ({ children, permission, requireGestor }: Props) => {
       .invoke("admin-users", { body: { action: "bootstrap" } })
       .catch(() => sessionStorage.removeItem("protocolos_bootstrap_done"));
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !user) return;
+    if (sessionStorage.getItem("ferramentas_hydrated")) return;
+    sessionStorage.setItem("ferramentas_hydrated", "1");
+    hydrateFromCloud().catch(() => sessionStorage.removeItem("ferramentas_hydrated"));
+  }, [user]);
+
 
   if (loading) {
     return (

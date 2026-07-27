@@ -218,28 +218,28 @@ const App = () => (
           <Route path="/nuvem/:id" element={<NuvemView />} />
           <Route path="/nuvem/:id/participar" element={<NuvemParticipar />} />
           {/* Ferramentas */}
-          <Route path="/ferramentas/historias-usuario" element={<HistoriasUsuario />} />
-          <Route path="/ferramentas/backlog" element={<Backlog />} />
-          <Route path="/ferramentas/kanban" element={<KanbanTool />} />
-          <Route path="/ferramentas/sprint-planning" element={<SprintPlanning />} />
-          <Route path="/ferramentas/casos-de-uso" element={<CasosDeUso />} />
-          <Route path="/ferramentas/stakeholders" element={<MapaStakeholders />} />
-          <Route path="/ferramentas/personas" element={<Personas />} />
-          <Route path="/ferramentas/jornada-usuario" element={<JornadaUsuario />} />
-          <Route path="/ferramentas/casos-de-teste" element={<CasosDeTeste />} />
-          <Route path="/ferramentas/bugs" element={<RegistroBugs />} />
-          <Route path="/ferramentas/avaliacao-heuristica" element={<AvaliacaoHeuristica />} />
-          <Route path="/ferramentas/acessibilidade" element={<ChecklistAcessibilidade />} />
-          <Route path="/ferramentas/wireframes" element={<Wireframes />} />
+          <Route path="/ferramentas/historias-usuario" element={<ProtocolosGuard><HistoriasUsuario /></ProtocolosGuard>} />
+          <Route path="/ferramentas/backlog" element={<ProtocolosGuard><Backlog /></ProtocolosGuard>} />
+          <Route path="/ferramentas/kanban" element={<ProtocolosGuard><KanbanTool /></ProtocolosGuard>} />
+          <Route path="/ferramentas/sprint-planning" element={<ProtocolosGuard><SprintPlanning /></ProtocolosGuard>} />
+          <Route path="/ferramentas/casos-de-uso" element={<ProtocolosGuard><CasosDeUso /></ProtocolosGuard>} />
+          <Route path="/ferramentas/stakeholders" element={<ProtocolosGuard><MapaStakeholders /></ProtocolosGuard>} />
+          <Route path="/ferramentas/personas" element={<ProtocolosGuard><Personas /></ProtocolosGuard>} />
+          <Route path="/ferramentas/jornada-usuario" element={<ProtocolosGuard><JornadaUsuario /></ProtocolosGuard>} />
+          <Route path="/ferramentas/casos-de-teste" element={<ProtocolosGuard><CasosDeTeste /></ProtocolosGuard>} />
+          <Route path="/ferramentas/bugs" element={<ProtocolosGuard><RegistroBugs /></ProtocolosGuard>} />
+          <Route path="/ferramentas/avaliacao-heuristica" element={<ProtocolosGuard><AvaliacaoHeuristica /></ProtocolosGuard>} />
+          <Route path="/ferramentas/acessibilidade" element={<ProtocolosGuard><ChecklistAcessibilidade /></ProtocolosGuard>} />
+          <Route path="/ferramentas/wireframes" element={<ProtocolosGuard><Wireframes /></ProtocolosGuard>} />
           {/* Recursos Avançados */}
-          <Route path="/avancado/editor-uml" element={<EditorUML />} />
-          <Route path="/avancado/planning-poker" element={<PlanningPoker />} />
-          <Route path="/avancado/burndown" element={<Burndown />} />
-          <Route path="/avancado/prototipos" element={<GaleriaPrototipos />} />
-          <Route path="/avancado/versionamento" element={<Versionamento />} />
-          <Route path="/avancado/simuladores" element={<Simuladores />} />
-          <Route path="/avancado/recomendacoes" element={<Recomendacoes />} />
-          <Route path="/avancado/competencias" element={<CompetenciasDashboard />} />
+          <Route path="/avancado/editor-uml" element={<ProtocolosGuard><EditorUML /></ProtocolosGuard>} />
+          <Route path="/avancado/planning-poker" element={<ProtocolosGuard><PlanningPoker /></ProtocolosGuard>} />
+          <Route path="/avancado/burndown" element={<ProtocolosGuard><Burndown /></ProtocolosGuard>} />
+          <Route path="/avancado/prototipos" element={<ProtocolosGuard><GaleriaPrototipos /></ProtocolosGuard>} />
+          <Route path="/avancado/versionamento" element={<ProtocolosGuard><Versionamento /></ProtocolosGuard>} />
+          <Route path="/avancado/simuladores" element={<ProtocolosGuard><Simuladores /></ProtocolosGuard>} />
+          <Route path="/avancado/recomendacoes" element={<ProtocolosGuard><Recomendacoes /></ProtocolosGuard>} />
+          <Route path="/avancado/competencias" element={<ProtocolosGuard><CompetenciasDashboard /></ProtocolosGuard>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

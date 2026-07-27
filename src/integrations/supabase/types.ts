@@ -148,6 +148,33 @@ export type Database = {
           },
         ]
       }
+      ferramentas_dados: {
+        Row: {
+          chave: string
+          created_at: string
+          dados: Json
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chave: string
+          created_at?: string
+          dados?: Json
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chave?: string
+          created_at?: string
+          dados?: Json
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       nuvem_palavras: {
         Row: {
           created_at: string
