@@ -17,13 +17,23 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-type PermissionKey = "framework-decide" | "equipes" | "projetos" | "experimentos";
+type PermissionKey =
+  | "framework-decide"
+  | "equipes"
+  | "projetos"
+  | "experimentos"
+  | "ferramentas"
+  | "avancado"
+  | "interdisciplinar";
 
 const PERMISSIONS: { key: PermissionKey; label: string; description: string }[] = [
   { key: "framework-decide", label: "Framework DECIDE", description: "Página teórica do protocolo" },
   { key: "equipes", label: "Gerenciar Equipes", description: "Cadastrar turmas e integrantes" },
   { key: "projetos", label: "Gerenciar Projetos", description: "Vincular projetos às equipes" },
   { key: "experimentos", label: "Gerenciar Experimentos", description: "Montar protocolo, TCLE e análise" },
+  { key: "interdisciplinar", label: "Projeto Interdisciplinar", description: "Grupos, fases e avaliações" },
+  { key: "ferramentas", label: "Ferramentas", description: "Histórias, backlog, kanban, personas, testes..." },
+  { key: "avancado", label: "Recursos Avançados", description: "UML, Planning Poker, burndown, protótipos..." },
 ];
 
 interface ManagedUser {
