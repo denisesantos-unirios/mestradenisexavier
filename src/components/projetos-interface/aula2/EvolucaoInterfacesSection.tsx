@@ -3,19 +3,19 @@ import { History, Monitor, Sparkles, Users, Quote, Car, DoorOpen, Phone, Tv, Fan
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerContainer, { StaggerItem } from "@/components/animations/StaggerContainer";
 
-import lisa from "@/assets/ihc/lisa-1983.jpg.asset.json";
-import win101 from "@/assets/ihc/windows-101-1985.jpg.asset.json";
-import win2 from "@/assets/ihc/windows-2-1987.jpg.asset.json";
-import win95 from "@/assets/ihc/windows-95.jpg.asset.json";
-import kde1 from "@/assets/ihc/kde1-1997.jpg.asset.json";
-import macosx from "@/assets/ihc/macosx-aqua.jpg.asset.json";
-import ubuntu from "@/assets/ihc/ubuntu-2005.jpg.asset.json";
+import lisa from "@/assets/ihc/lisa-1983.jpg";
+import win101 from "@/assets/ihc/windows-101-1985.jpg";
+import win2 from "@/assets/ihc/windows-2-1987.jpg";
+import win95 from "@/assets/ihc/windows-95.jpg";
+import kde1 from "@/assets/ihc/kde1-1997.jpg";
+import macosx from "@/assets/ihc/macosx-aqua.jpg";
+import ubuntu from "@/assets/ihc/ubuntu-2005.jpg";
 
 const linhaTempo = [
   {
     ano: "1983",
     titulo: "Apple Lisa",
-    img: lisa.url,
+    img: lisa,
     alt: "Área de trabalho do Apple Lisa com ícones de arquivos e menus",
     desc: "Primeira GUI comercial de massa: ícones de arquivos, janelas e arrastar-e-soltar. Custava US$ 10.000 (o Macintosh, em 1984, saiu por US$ 2.495).",
     marco: "Nasce a metáfora da mesa de trabalho (desktop).",
@@ -23,7 +23,7 @@ const linhaTempo = [
   {
     ano: "1985",
     titulo: "Microsoft Windows 1.01",
-    img: win101.url,
+    img: win101,
     alt: "Windows 1.01 exibindo as janelas Calendar e Cardfile",
     desc: "Janelas lado a lado (tiling), sem sobreposição. Aplicativos simples como Calendar e Cardfile mostravam o conceito de multitarefa visual.",
     marco: "Evolução do MS-DOS: da linha de comando para o gráfico.",
@@ -31,7 +31,7 @@ const linhaTempo = [
   {
     ano: "1987",
     titulo: "Microsoft Windows 2",
-    img: win2.url,
+    img: win2,
     alt: "Windows 2 com o aplicativo Write, uma caixa de diálogo e o relógio",
     desc: "Janelas sobrepostas, atalhos de teclado e caixas de diálogo modais (\"Salvar alterações?\") — feedback e prevenção de erros ganham forma.",
     marco: "Surgem os diálogos de confirmação.",
@@ -39,7 +39,7 @@ const linhaTempo = [
   {
     ano: "1995",
     titulo: "Windows 95",
-    img: win95.url,
+    img: win95,
     alt: "Área de trabalho do Windows 95 com o menu Iniciar e várias janelas abertas",
     desc: "Menu Iniciar, barra de tarefas e botão Fechar padronizado. A interface passa a ser projetada para o usuário comum, não para o especialista.",
     marco: "Popularização definitiva da GUI + chegada da Web.",
@@ -47,7 +47,7 @@ const linhaTempo = [
   {
     ano: "1997",
     titulo: "KDE 1 (Linux/BSD)",
-    img: kde1.url,
+    img: kde1,
     alt: "Ambiente de trabalho KDE 1 em Linux",
     desc: "O software livre ganha um ambiente gráfico consistente e configurável, provando que interface é também escolha cultural e de comunidade.",
     marco: "Consistência e personalização no mundo open source.",
@@ -55,7 +55,7 @@ const linhaTempo = [
   {
     ano: "2001",
     titulo: "Mac OS X — GUI Aqua",
-    img: macosx.url,
+    img: macosx,
     alt: "Área de trabalho do Mac OS X com a janela do Finder e a interface Aqua",
     desc: "Transparências, sombras, animações e o Dock. A estética entra no jogo: o design deixa de ser só funcional e passa a ser experiência.",
     marco: "Interface como identidade de marca.",
@@ -63,7 +63,7 @@ const linhaTempo = [
   {
     ano: "2005",
     titulo: "Ubuntu 5.04",
-    img: ubuntu.url,
+    img: ubuntu,
     alt: "Área de trabalho do Ubuntu 5.04 com menus Applications, Places e System",
     desc: "GNOME com foco em simplicidade: menus previsíveis (Applications / Places / System) e instalação acessível para não-especialistas.",
     marco: "Usabilidade como argumento de adoção.",
