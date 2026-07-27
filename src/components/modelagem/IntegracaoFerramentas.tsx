@@ -6,12 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import type { CaseStudy } from "@/data/modelagem/cases";
 import { buildCasosUso, getAtorPrincipal, type CasoUsoGerado } from "@/data/modelagem/casosUso";
-
-const uid = () => Math.random().toString(36).slice(2, 10);
-const readLS = <T,>(key: string, fallback: T): T => {
-  try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) as T : fallback; } catch { return fallback; }
-};
-const writeLS = (key: string, val: unknown) => localStorage.setItem(key, JSON.stringify(val));
+import { readLS, writeLS, uid } from "@/lib/ferramentas-store";
 
 type Tool = "historias" | "backlog" | "kanban" | "sprint" | "casos";
 
