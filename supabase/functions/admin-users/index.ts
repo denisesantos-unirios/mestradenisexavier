@@ -153,7 +153,7 @@ Deno.serve(async (req) => {
       const blocked = requireGestor(); if (blocked) return blocked;
       const { user_id, permissions } = body;
       if (!user_id || !Array.isArray(permissions)) return json({ error: "Dados incompletos" }, 400);
-      const allowed = ["framework-decide", "equipes", "projetos", "experimentos"];
+      const allowed = ["framework-decide", "equipes", "projetos", "experimentos", "ferramentas", "avancado", "interdisciplinar"];
       const clean = permissions.filter((p: string) => allowed.includes(p));
       const { error } = await admin.from("profiles").update({ permissions: clean }).eq("user_id", user_id);
       if (error) return json({ error: error.message }, 400);

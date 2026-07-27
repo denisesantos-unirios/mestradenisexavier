@@ -116,6 +116,7 @@ const menuItems = [
   {
     id: "ferramentas",
     title: "Ferramentas",
+    permission: "ferramentas",
     icon: Wrench,
     submenu: [
       { title: "Histórias de Usuário", path: "/ferramentas/historias-usuario" },
@@ -137,6 +138,7 @@ const menuItems = [
   {
     id: "avancado",
     title: "Recursos Avançados",
+    permission: "avancado",
     icon: Rocket,
     submenu: [
       { title: "Editor UML", path: "/avancado/editor-uml" },
@@ -169,8 +171,12 @@ const MainNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
-  const { isProfessor } = useAuth();
-  const visibleItems = menuItems.filter((it: any) => !it.professorOnly || isProfessor);
+  const { isProfessor, hasPermission } = useAuth();
+  const visibleItems = menuItems.filter(
+    (it: any) =>
+      (!it.professorOnly || isProfessor) &&
+      (!it.permission || (isProfessor && hasPermission(it.permission))),
+  );
 
   const toggleSubmenu = (id: string) => {
     setOpenSubmenu(openSubmenu === id ? null : id);
