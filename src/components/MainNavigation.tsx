@@ -130,7 +130,23 @@ const menuItems = [
       { title: "Registro de Bugs", path: "/ferramentas/bugs" },
       { title: "Avaliação Heurística", path: "/ferramentas/avaliacao-heuristica" },
       { title: "Checklist de Acessibilidade", path: "/ferramentas/acessibilidade" },
+      { title: "Wireframes", path: "/ferramentas/wireframes" },
       { title: "Nuvem de Palavras", path: "/nuvem" },
+    ]
+  },
+  {
+    id: "avancado",
+    title: "Recursos Avançados",
+    icon: Rocket,
+    submenu: [
+      { title: "Editor UML", path: "/avancado/editor-uml" },
+      { title: "Planning Poker", path: "/avancado/planning-poker" },
+      { title: "Gráficos de Burndown", path: "/avancado/burndown" },
+      { title: "Galeria de Protótipos", path: "/avancado/prototipos" },
+      { title: "Integração com Versionamento", path: "/avancado/versionamento" },
+      { title: "Simuladores de Decisões", path: "/avancado/simuladores" },
+      { title: "Recomendações Personalizadas", path: "/avancado/recomendacoes" },
+      { title: "Badges e Trilhas de Competências", path: "/avancado/competencias" },
     ]
   },
   {
