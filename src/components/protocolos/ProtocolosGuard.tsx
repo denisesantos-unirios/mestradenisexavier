@@ -25,6 +25,14 @@ const ProtocolosGuard = ({ children, permission, requireGestor }: Props) => {
       .catch(() => sessionStorage.removeItem("protocolos_bootstrap_done"));
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined" || !user) return;
+    if (sessionStorage.getItem("ferramentas_hydrated")) return;
+    sessionStorage.setItem("ferramentas_hydrated", "1");
+    hydrateFromCloud().catch(() => sessionStorage.removeItem("ferramentas_hydrated"));
+  }, [user]);
+
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
