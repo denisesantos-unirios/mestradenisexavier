@@ -4,11 +4,21 @@ import { motion } from "framer-motion";
 import { QrCode } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
-const PUBLISHED_BASE_URL = "https://madenisexaiver.lovable.app";
+const PUBLISHED_BASE_URL = "https://mestradenisexavier.lovable.app";
+
+const getBaseUrl = () => {
+  if (typeof window === "undefined") return PUBLISHED_BASE_URL;
+  const { origin, hostname } = window.location;
+  // Em preview/localhost o link público é o correto para os alunos
+  if (hostname === "localhost" || hostname.includes("-preview--")) {
+    return PUBLISHED_BASE_URL;
+  }
+  return origin;
+};
 
 const LessonQRCode = () => {
   const location = useLocation();
-  const fullUrl = `${PUBLISHED_BASE_URL}${location.pathname}`;
+  const fullUrl = `${getBaseUrl()}${location.pathname}`;
 
   return (
     <ScrollReveal animation="fadeUp" delay={0.3}>
