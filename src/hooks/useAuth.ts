@@ -2,8 +2,23 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
-export type PermissionKey = "framework-decide" | "equipes" | "projetos" | "experimentos";
-const ALL_PERMISSIONS: PermissionKey[] = ["framework-decide", "equipes", "projetos", "experimentos"];
+export type PermissionKey =
+  | "framework-decide"
+  | "equipes"
+  | "projetos"
+  | "experimentos"
+  | "ferramentas"
+  | "avancado"
+  | "interdisciplinar";
+const ALL_PERMISSIONS: PermissionKey[] = [
+  "framework-decide",
+  "equipes",
+  "projetos",
+  "experimentos",
+  "ferramentas",
+  "avancado",
+  "interdisciplinar",
+];
 
 type AuthState = {
   user: User | null;
