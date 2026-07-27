@@ -104,6 +104,16 @@ import CasosDeTeste from "./pages/ferramentas/CasosDeTeste";
 import RegistroBugs from "./pages/ferramentas/RegistroBugs";
 import AvaliacaoHeuristica from "./pages/ferramentas/AvaliacaoHeuristica";
 import ChecklistAcessibilidade from "./pages/ferramentas/ChecklistAcessibilidade";
+import Wireframes from "./pages/ferramentas/Wireframes";
+// Recursos Avançados
+import EditorUML from "./pages/avancado/EditorUML";
+import PlanningPoker from "./pages/avancado/PlanningPoker";
+import Burndown from "./pages/avancado/Burndown";
+import GaleriaPrototipos from "./pages/avancado/GaleriaPrototipos";
+import Versionamento from "./pages/avancado/Versionamento";
+import Simuladores from "./pages/avancado/Simuladores";
+import Recomendacoes from "./pages/avancado/Recomendacoes";
+import CompetenciasDashboard from "./pages/avancado/CompetenciasDashboard";
 import NotFound from "./pages/NotFound";
 import DenyMascot from "./components/DenyMascot";
 import PresentationMode from "./components/PresentationMode";
