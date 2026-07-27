@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { FKEYS, readLS, writeLS } from "@/lib/ferramentas-store";
+import { useAuth } from "@/hooks/useAuth";
 
 /** Mapa rota → chave de armazenamento da ferramenta / recurso avançado. */
 const ROTA_CHAVE: Record<string, { chave: string; titulo: string }> = {
@@ -62,7 +63,10 @@ const resumoCampos = (r: Registro) =>
 const GerenciadorRegistros = () => {
   const location = useLocation();
   const { toast } = useToast();
+  const { isProfessor, hasPermission } = useAuth();
   const cfg = ROTA_CHAVE[location.pathname];
+  const permitido =
+    isProfessor && hasPermission(location.pathname.startsWith("/avancado") ? "avancado" : "ferramentas");
 
   const [dados, setDados] = useState<unknown>(null);
   const [verIdx, setVerIdx] = useState<number | null>(null);
@@ -80,7 +84,7 @@ const GerenciadorRegistros = () => {
   const lista = useMemo<Registro[]>(() => (Array.isArray(dados) ? (dados as Registro[]) : []), [dados]);
   const ehObjeto = !!dados && !Array.isArray(dados) && typeof dados === "object";
 
-  if (!cfg) return null;
+  if (!cfg || !permitido) return null;
 
   const persistir = (novo: unknown, msg: string) => {
     writeLS(cfg.chave, novo);
