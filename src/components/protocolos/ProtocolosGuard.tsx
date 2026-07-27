@@ -5,6 +5,7 @@ import { useAuth, type PermissionKey } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import MainNavigation from "@/components/MainNavigation";
 import { Button } from "@/components/ui/button";
+import { hydrateFromCloud } from "@/lib/ferramentas-store";
 
 interface Props {
   children: ReactNode;
