@@ -18,7 +18,9 @@ const getBaseUrl = () => {
 
 const LessonQRCode = () => {
   const location = useLocation();
-  const fullUrl = `${getBaseUrl()}${location.pathname}`;
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const fullUrl = `${getBaseUrl()}${base}${location.pathname}`;
+
 
   return (
     <ScrollReveal animation="fadeUp" delay={0.3}>
