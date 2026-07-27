@@ -3,6 +3,7 @@ import PdfExportButton from "@/components/PdfExportButton";
 import LessonQRCode from "@/components/LessonQRCode";
 import HeroSection from "@/components/projetos-interface/aula2/HeroSection";
 import IntroducaoIHCSection from "@/components/projetos-interface/aula2/IntroducaoIHCSection";
+import EvolucaoInterfacesSection from "@/components/projetos-interface/aula2/EvolucaoInterfacesSection";
 import ProcessoInteracaoSection from "@/components/projetos-interface/aula2/ProcessoInteracaoSection";
 import InterfaceDefinicaoSection from "@/components/projetos-interface/aula2/InterfaceDefinicaoSection";
 import MetaforasAffordanceSection from "@/components/projetos-interface/aula2/MetaforasAffordanceSection";
