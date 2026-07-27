@@ -229,6 +229,16 @@ const App = () => (
           <Route path="/ferramentas/bugs" element={<RegistroBugs />} />
           <Route path="/ferramentas/avaliacao-heuristica" element={<AvaliacaoHeuristica />} />
           <Route path="/ferramentas/acessibilidade" element={<ChecklistAcessibilidade />} />
+          <Route path="/ferramentas/wireframes" element={<Wireframes />} />
+          {/* Recursos Avançados */}
+          <Route path="/avancado/editor-uml" element={<EditorUML />} />
+          <Route path="/avancado/planning-poker" element={<PlanningPoker />} />
+          <Route path="/avancado/burndown" element={<Burndown />} />
+          <Route path="/avancado/prototipos" element={<GaleriaPrototipos />} />
+          <Route path="/avancado/versionamento" element={<Versionamento />} />
+          <Route path="/avancado/simuladores" element={<Simuladores />} />
+          <Route path="/avancado/recomendacoes" element={<Recomendacoes />} />
+          <Route path="/avancado/competencias" element={<CompetenciasDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
