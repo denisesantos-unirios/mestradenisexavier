@@ -123,6 +123,13 @@ const menuItems = [
       { title: "Kanban", path: "/ferramentas/kanban" },
       { title: "Planejamento de Sprint", path: "/ferramentas/sprint-planning" },
       { title: "Casos de Uso", path: "/ferramentas/casos-de-uso" },
+      { title: "Mapa de Stakeholders", path: "/ferramentas/stakeholders" },
+      { title: "Personas", path: "/ferramentas/personas" },
+      { title: "Jornada do Usuário", path: "/ferramentas/jornada-usuario" },
+      { title: "Casos de Teste", path: "/ferramentas/casos-de-teste" },
+      { title: "Registro de Bugs", path: "/ferramentas/bugs" },
+      { title: "Avaliação Heurística", path: "/ferramentas/avaliacao-heuristica" },
+      { title: "Checklist de Acessibilidade", path: "/ferramentas/acessibilidade" },
       { title: "Nuvem de Palavras", path: "/nuvem" },
     ]
   },

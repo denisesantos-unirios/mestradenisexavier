@@ -97,6 +97,13 @@ import Backlog from "./pages/ferramentas/Backlog";
 import KanbanTool from "./pages/ferramentas/Kanban";
 import SprintPlanning from "./pages/ferramentas/SprintPlanning";
 import CasosDeUso from "./pages/ferramentas/CasosDeUso";
+import MapaStakeholders from "./pages/ferramentas/MapaStakeholders";
+import Personas from "./pages/ferramentas/Personas";
+import JornadaUsuario from "./pages/ferramentas/JornadaUsuario";
+import CasosDeTeste from "./pages/ferramentas/CasosDeTeste";
+import RegistroBugs from "./pages/ferramentas/RegistroBugs";
+import AvaliacaoHeuristica from "./pages/ferramentas/AvaliacaoHeuristica";
+import ChecklistAcessibilidade from "./pages/ferramentas/ChecklistAcessibilidade";
 import NotFound from "./pages/NotFound";
 import DenyMascot from "./components/DenyMascot";
 import PresentationMode from "./components/PresentationMode";
@@ -205,6 +212,13 @@ const App = () => (
           <Route path="/ferramentas/kanban" element={<KanbanTool />} />
           <Route path="/ferramentas/sprint-planning" element={<SprintPlanning />} />
           <Route path="/ferramentas/casos-de-uso" element={<CasosDeUso />} />
+          <Route path="/ferramentas/stakeholders" element={<MapaStakeholders />} />
+          <Route path="/ferramentas/personas" element={<Personas />} />
+          <Route path="/ferramentas/jornada-usuario" element={<JornadaUsuario />} />
+          <Route path="/ferramentas/casos-de-teste" element={<CasosDeTeste />} />
+          <Route path="/ferramentas/bugs" element={<RegistroBugs />} />
+          <Route path="/ferramentas/avaliacao-heuristica" element={<AvaliacaoHeuristica />} />
+          <Route path="/ferramentas/acessibilidade" element={<ChecklistAcessibilidade />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
