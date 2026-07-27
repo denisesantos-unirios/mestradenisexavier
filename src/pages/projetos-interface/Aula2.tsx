@@ -41,6 +41,7 @@ const ProjetosInterfaceAula2 = () => {
       <HeroSection />
       <LessonQRCode />
       <IntroducaoIHCSection />
+      <EvolucaoInterfacesSection />
       <ProcessoInteracaoSection />
       <InterfaceDefinicaoSection />
       <MetaforasAffordanceSection />
