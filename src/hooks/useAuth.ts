@@ -19,6 +19,7 @@ const ALL_PERMISSIONS: PermissionKey[] = [
   "avancado",
   "interdisciplinar",
 ];
+const ADMIN_EMAILS = ["denise.santos@unirioes.edu.br", "denise.santos@uniriosead.com"];
 
 type AuthState = {
   user: User | null;
@@ -57,7 +58,8 @@ const fetchAccess = (userId: string) => {
       const isProfessor = !!roles?.some((r: any) => r.role === "professor");
       const isGestor = !!roles?.some((r: any) => r.role === "gestor");
       const raw = (profile as any)?.permissions as string[] | null | undefined;
-      const permissions = isGestor
+      const isAdminEmail = ADMIN_EMAILS.includes((state.user?.email ?? "").toLowerCase());
+      const permissions = isGestor || isAdminEmail
         ? ALL_PERMISSIONS
         : ((raw ?? ALL_PERMISSIONS) as string[]).filter((p): p is PermissionKey =>
             ALL_PERMISSIONS.includes(p as PermissionKey)
@@ -132,7 +134,8 @@ export const useAuth = () => {
     setState({ user: null, isProfessor: false, isGestor: false, permissions: [], loading: false });
   };
 
-  const hasPermission = (key: PermissionKey) => s.isGestor || s.permissions.includes(key);
+  const isAdminEmail = ADMIN_EMAILS.includes((s.user?.email ?? "").toLowerCase());
+  const hasPermission = (key: PermissionKey) => isAdminEmail || s.isGestor || s.permissions.includes(key);
 
   return { ...s, signOut, hasPermission };
 };
