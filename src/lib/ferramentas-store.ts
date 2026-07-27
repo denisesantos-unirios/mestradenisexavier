@@ -175,7 +175,15 @@ export const COMPETENCIAS: Competencia[] = [
 ];
 
 export function contarArtefatos(chaves: string[]) {
-  return chaves.reduce((acc, k) => acc + readLS<unknown[]>(k, []).length, 0);
+  return chaves.reduce((acc, k) => {
+    const v = readLS<unknown>(k, []);
+    if (Array.isArray(v)) return acc + v.length;
+    if (v && typeof v === "object") {
+      const itens = (v as { itens?: unknown[]; dias?: unknown[] });
+      return acc + (itens.itens?.length ?? itens.dias?.length ?? 1);
+    }
+    return acc;
+  }, 0);
 }
 
 export type ProgressoCompetencia = Competencia & { total: number; percentual: number; nivel: string };
