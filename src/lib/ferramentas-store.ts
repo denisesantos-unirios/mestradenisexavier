@@ -13,7 +13,16 @@ export const FKEYS = {
   bugs: "ferramentas_bugs",
   heuristicas: "ferramentas_heuristicas",
   acessibilidade: "ferramentas_acessibilidade",
+  wireframes: "ferramentas_wireframes",
+  uml: "ferramentas_uml",
+  poker: "ferramentas_planning_poker",
+  burndown: "ferramentas_burndown",
+  prototipos: "ferramentas_prototipos",
+  versionamento: "ferramentas_versionamento",
+  simuladores: "ferramentas_simuladores",
+  badges: "ferramentas_badges",
 } as const;
+
 
 export const uid = () => Math.random().toString(36).slice(2, 10);
 
