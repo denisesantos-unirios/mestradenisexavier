@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { writeLS } from "@/lib/ferramentas-store";
 
 type Prioridade = "Must" | "Should" | "Could" | "Won't";
 type Status = "Novo" | "Refinado" | "Pronto" | "Em Sprint" | "Concluído";
@@ -65,7 +66,7 @@ const Backlog = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(itens));
+    writeLS(STORAGE_KEY, itens);
   }, [itens]);
 
   const filtrados = useMemo(() => {

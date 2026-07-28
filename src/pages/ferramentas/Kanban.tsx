@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { writeLS } from "@/lib/ferramentas-store";
 
 type Prioridade = "Alta" | "Média" | "Baixa";
 type Card = {
@@ -55,7 +56,7 @@ const KanbanTool = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ colunas, cards }));
+    writeLS(STORAGE_KEY, { colunas, cards });
   }, [colunas, cards]);
 
   const contagem = useMemo(

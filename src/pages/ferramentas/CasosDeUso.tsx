@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { writeLS } from "@/lib/ferramentas-store";
 
 type Passo = { id: string; texto: string };
 type FluxoAlt = { id: string; nome: string; passos: Passo[] };
@@ -61,7 +62,7 @@ const CasosDeUso = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+    writeLS(STORAGE_KEY, lista);
   }, [lista]);
 
   const proxCodigo = useMemo(() => `UC${String(lista.length + 1).padStart(3, "0")}`, [lista.length]);
