@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
+import { writeLS } from "@/lib/ferramentas-store";
 
 type Item = {
   id: string;
@@ -64,7 +65,7 @@ const SprintPlanning = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ sprint, itens }));
+    writeLS(STORAGE_KEY, { sprint, itens });
   }, [sprint, itens]);
 
   const backlog = useMemo(() => itens.filter((i) => i.origem === "backlog"), [itens]);

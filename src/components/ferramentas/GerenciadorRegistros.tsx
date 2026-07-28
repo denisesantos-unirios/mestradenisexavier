@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { FKEYS, readLS, writeLS } from "@/lib/ferramentas-store";
-import { useAuth } from "@/hooks/useAuth";
 
 /** Mapa rota → chave de armazenamento da ferramenta / recurso avançado. */
 const ROTA_CHAVE: Record<string, { chave: string; titulo: string }> = {
@@ -44,6 +43,15 @@ const ROTA_CHAVE: Record<string, { chave: string; titulo: string }> = {
 };
 
 type Registro = Record<string, unknown> & { id?: string };
+type Grupo = { campo: string | null; titulo: string; itens: Registro[] };
+
+const LABEL_CAMPO: Record<string, string> = {
+  cards: "Cards do quadro",
+  itens: "Itens",
+  dias: "Dias",
+  colunas: "Colunas",
+  etapas: "Etapas",
+};
 
 const rotulo = (r: Registro, i: number) => {
   const campos = ["titulo", "nome", "descricao", "acao", "cenario", "persona", "sprint", "texto", "resumo", "objetivo"];
@@ -60,53 +68,72 @@ const resumoCampos = (r: Registro) =>
     .slice(0, 4)
     .map(([k, v]) => `${k}: ${typeof v === "object" ? (Array.isArray(v) ? `${v.length} itens` : "objeto") : String(v ?? "—")}`);
 
+/** Extrai grupos gerenciáveis: raiz em array, ou listas dentro de um objeto (kanban, sprint…). */
+const extrairGrupos = (dados: unknown): Grupo[] => {
+  if (Array.isArray(dados)) {
+    return [{ campo: null, titulo: "Registros", itens: dados as Registro[] }];
+  }
+  if (dados && typeof dados === "object") {
+    return Object.entries(dados as Record<string, unknown>)
+      .filter(([, v]) => Array.isArray(v) && (v as unknown[]).every((x) => x && typeof x === "object"))
+      .map(([k, v]) => ({ campo: k, titulo: LABEL_CAMPO[k] ?? k, itens: v as Registro[] }));
+  }
+  return [];
+};
+
 const GerenciadorRegistros = () => {
   const location = useLocation();
   const { toast } = useToast();
-  const { isProfessor, hasPermission } = useAuth();
   const cfg = ROTA_CHAVE[location.pathname];
-  const permitido =
-    isProfessor && hasPermission(location.pathname.startsWith("/avancado") ? "avancado" : "ferramentas");
 
   const [dados, setDados] = useState<unknown>(null);
-  const [verIdx, setVerIdx] = useState<number | null>(null);
-  const [editIdx, setEditIdx] = useState<number | null>(null);
+  const [ver, setVer] = useState<{ g: number; i: number } | null>(null);
+  const [edit, setEdit] = useState<{ g: number; i: number } | null>(null);
   const [rascunho, setRascunho] = useState<Record<string, string>>({});
   const [jsonBruto, setJsonBruto] = useState("");
-  const [confirmar, setConfirmar] = useState<number | "tudo" | null>(null);
+  const [mostrarJson, setMostrarJson] = useState(false);
+  const [confirmar, setConfirmar] = useState<{ g: number; i: number | "tudo" } | null>(null);
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
     if (!cfg) return;
     setDados(readLS<unknown>(cfg.chave, []));
+    setJsonBruto("");
+    setMostrarJson(false);
   }, [cfg, tick]);
 
-  const lista = useMemo<Registro[]>(() => (Array.isArray(dados) ? (dados as Registro[]) : []), [dados]);
-  const ehObjeto = !!dados && !Array.isArray(dados) && typeof dados === "object";
+  const grupos = useMemo(() => extrairGrupos(dados), [dados]);
+  const totalRegistros = grupos.reduce((a, g) => a + g.itens.length, 0);
 
-  if (!cfg || !permitido) return null;
+  if (!cfg) return null;
 
   const persistir = (novo: unknown, msg: string) => {
     writeLS(cfg.chave, novo);
     setDados(novo);
     toast({ title: msg });
-    // recarrega a página para que a ferramenta reflita o dado atualizado
-    setTimeout(() => window.location.reload(), 400);
+    setTimeout(() => window.location.reload(), 500);
   };
 
-  const abrirEdicao = (i: number) => {
-    const r = lista[i];
+  /** Substitui os itens de um grupo mantendo a estrutura original (array ou objeto). */
+  const aplicarGrupo = (gi: number, itens: Registro[], msg: string) => {
+    const g = grupos[gi];
+    if (g.campo === null) return persistir(itens, msg);
+    persistir({ ...(dados as Record<string, unknown>), [g.campo]: itens }, msg);
+  };
+
+  const abrirEdicao = (gi: number, i: number) => {
+    const r = grupos[gi].itens[i];
     const draft: Record<string, string> = {};
     Object.entries(r).forEach(([k, v]) => {
       draft[k] = typeof v === "object" && v !== null ? JSON.stringify(v, null, 2) : String(v ?? "");
     });
     setRascunho(draft);
-    setEditIdx(i);
+    setEdit({ g: gi, i });
   };
 
   const salvarEdicao = () => {
-    if (editIdx === null) return;
-    const original = lista[editIdx];
+    if (!edit) return;
+    const original = grupos[edit.g].itens[edit.i];
     const atualizado: Registro = { ...original };
     for (const [k, v] of Object.entries(rascunho)) {
       const orig = original[k];
@@ -126,22 +153,29 @@ const GerenciadorRegistros = () => {
         atualizado[k] = v;
       }
     }
-    const novo = lista.map((r, i) => (i === editIdx ? atualizado : r));
-    setEditIdx(null);
-    persistir(novo, "Registro atualizado.");
+    const itens = grupos[edit.g].itens.map((r, i) => (i === edit.i ? atualizado : r));
+    const gi = edit.g;
+    setEdit(null);
+    aplicarGrupo(gi, itens, "Registro atualizado.");
   };
 
-  const excluir = (i: number) => persistir(lista.filter((_, idx) => idx !== i), "Registro excluído.");
-  const excluirTudo = () => persistir([], "Todos os registros foram excluídos.");
+  const confirmarExclusao = () => {
+    if (!confirmar) return;
+    const { g, i } = confirmar;
+    setConfirmar(null);
+    if (i === "tudo") return aplicarGrupo(g, [], "Todos os registros foram excluídos.");
+    aplicarGrupo(g, grupos[g].itens.filter((_, idx) => idx !== i), "Registro excluído.");
+  };
 
   const salvarJson = () => {
     try {
-      const parsed = JSON.parse(jsonBruto);
-      persistir(parsed, "Dados atualizados.");
+      persistir(JSON.parse(jsonBruto), "Dados atualizados.");
     } catch {
       toast({ title: "JSON inválido.", variant: "destructive" });
     }
   };
+
+  const registroVisto = ver ? grupos[ver.g]?.itens[ver.i] : null;
 
   return (
     <section className="px-4 sm:px-6 pb-16 max-w-6xl mx-auto">
@@ -159,50 +193,65 @@ const GerenciadorRegistros = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline">{ehObjeto ? "1 conjunto" : `${lista.length} registro(s)`}</Badge>
+            <Badge variant="outline">{totalRegistros} registro(s)</Badge>
             <Button variant="outline" size="sm" onClick={() => setTick((t) => t + 1)}>Atualizar</Button>
-            {!ehObjeto && lista.length > 0 && (
-              <Button variant="outline" size="sm" onClick={() => setConfirmar("tudo")}>
-                <Trash2 className="w-3.5 h-3.5 mr-1 text-destructive" /> Excluir tudo
-              </Button>
-            )}
+            <Button variant="outline" size="sm" onClick={() => { setJsonBruto(JSON.stringify(dados, null, 2)); setMostrarJson((v) => !v); }}>
+              {mostrarJson ? "Ocultar JSON" : "Editar JSON"}
+            </Button>
           </div>
         </div>
 
-        {ehObjeto ? (
-          <div className="space-y-2">
-            <Label>Conteúdo (JSON)</Label>
-            <Textarea
-              rows={10}
-              className="font-mono text-xs"
-              value={jsonBruto || JSON.stringify(dados, null, 2)}
-              onChange={(e) => setJsonBruto(e.target.value)}
-            />
-            <div className="flex gap-2">
-              <Button size="sm" onClick={salvarJson}>Salvar alterações</Button>
-              <Button size="sm" variant="outline" onClick={() => persistir({}, "Conteúdo limpo.")}>Excluir conteúdo</Button>
-            </div>
+        {mostrarJson && (
+          <div className="space-y-2 mb-5">
+            <Label>Conteúdo bruto (JSON)</Label>
+            <Textarea rows={10} className="font-mono text-xs" value={jsonBruto} onChange={(e) => setJsonBruto(e.target.value)} />
+            <Button size="sm" onClick={salvarJson}>Salvar JSON</Button>
           </div>
-        ) : lista.length === 0 ? (
+        )}
+
+        {totalRegistros === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-8">Nenhum registro salvo ainda.</p>
         ) : (
-          <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
-            {lista.map((r, i) => (
-              <div key={(r.id as string) ?? i} className="flex items-start justify-between gap-3 p-3 rounded-lg border border-border bg-card">
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">{rotulo(r, i)}</p>
-                  <p className="text-xs text-muted-foreground truncate">{resumoCampos(r).join(" · ")}</p>
-                </div>
-                <div className="flex gap-1 shrink-0">
-                  <Button size="icon" variant="ghost" className="h-8 w-8" title="Visualizar" onClick={() => setVerIdx(i)}>
-                    <Eye className="w-4 h-4" />
-                  </Button>
-                  <Button size="icon" variant="ghost" className="h-8 w-8" title="Editar" onClick={() => abrirEdicao(i)}>
-                    <Pencil className="w-4 h-4" />
-                  </Button>
-                  <Button size="icon" variant="ghost" className="h-8 w-8" title="Excluir" onClick={() => setConfirmar(i)}>
-                    <Trash2 className="w-4 h-4 text-destructive" />
-                  </Button>
+          <div className="space-y-6">
+            {grupos.map((g, gi) => (
+              <div key={g.campo ?? "raiz"}>
+                {grupos.length > 1 && (
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-semibold text-foreground">{g.titulo} ({g.itens.length})</p>
+                    {g.itens.length > 0 && (
+                      <Button variant="ghost" size="sm" onClick={() => setConfirmar({ g: gi, i: "tudo" })}>
+                        <Trash2 className="w-3.5 h-3.5 mr-1 text-destructive" /> Limpar
+                      </Button>
+                    )}
+                  </div>
+                )}
+                {grupos.length === 1 && g.itens.length > 0 && (
+                  <div className="flex justify-end mb-2">
+                    <Button variant="outline" size="sm" onClick={() => setConfirmar({ g: gi, i: "tudo" })}>
+                      <Trash2 className="w-3.5 h-3.5 mr-1 text-destructive" /> Excluir tudo
+                    </Button>
+                  </div>
+                )}
+                <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
+                  {g.itens.map((r, i) => (
+                    <div key={(r.id as string) ?? i} className="flex items-start justify-between gap-3 p-3 rounded-lg border border-border bg-card">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">{rotulo(r, i)}</p>
+                        <p className="text-xs text-muted-foreground truncate">{resumoCampos(r).join(" · ")}</p>
+                      </div>
+                      <div className="flex gap-1 shrink-0">
+                        <Button size="icon" variant="ghost" className="h-8 w-8" title="Visualizar" onClick={() => setVer({ g: gi, i })}>
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button size="icon" variant="ghost" className="h-8 w-8" title="Editar" onClick={() => abrirEdicao(gi, i)}>
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button size="icon" variant="ghost" className="h-8 w-8" title="Excluir" onClick={() => setConfirmar({ g: gi, i })}>
+                          <Trash2 className="w-4 h-4 text-destructive" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
@@ -211,14 +260,14 @@ const GerenciadorRegistros = () => {
       </Card>
 
       {/* Visualizar */}
-      <Dialog open={verIdx !== null} onOpenChange={(o) => !o && setVerIdx(null)}>
+      <Dialog open={!!ver} onOpenChange={(o) => !o && setVer(null)}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>{verIdx !== null ? rotulo(lista[verIdx], verIdx) : ""}</DialogTitle>
+            <DialogTitle>{registroVisto && ver ? rotulo(registroVisto, ver.i) : ""}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3 max-h-[60vh] overflow-y-auto text-sm">
-            {verIdx !== null &&
-              Object.entries(lista[verIdx]).map(([k, v]) => (
+            {registroVisto &&
+              Object.entries(registroVisto).map(([k, v]) => (
                 <div key={k}>
                   <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{k}</p>
                   {typeof v === "object" && v !== null ? (
@@ -230,9 +279,9 @@ const GerenciadorRegistros = () => {
               ))}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setVerIdx(null)}>Fechar</Button>
-            {verIdx !== null && (
-              <Button onClick={() => { const i = verIdx; setVerIdx(null); abrirEdicao(i); }}>
+            <Button variant="outline" onClick={() => setVer(null)}>Fechar</Button>
+            {ver && (
+              <Button onClick={() => { const alvo = ver; setVer(null); abrirEdicao(alvo.g, alvo.i); }}>
                 <Pencil className="w-4 h-4 mr-1" /> Editar
               </Button>
             )}
@@ -241,7 +290,7 @@ const GerenciadorRegistros = () => {
       </Dialog>
 
       {/* Editar */}
-      <Dialog open={editIdx !== null} onOpenChange={(o) => !o && setEditIdx(null)}>
+      <Dialog open={!!edit} onOpenChange={(o) => !o && setEdit(null)}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Editar registro</DialogTitle>
@@ -273,37 +322,28 @@ const GerenciadorRegistros = () => {
             })}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditIdx(null)}>Cancelar</Button>
-            <Button onClick={salvarEdicao}>Salvar</Button>
+            <Button variant="outline" onClick={() => setEdit(null)}>Cancelar</Button>
+            <Button onClick={salvarEdicao}>Salvar alterações</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Confirmar exclusão */}
-      <Dialog open={confirmar !== null} onOpenChange={(o) => !o && setConfirmar(null)}>
+      <Dialog open={!!confirmar} onOpenChange={(o) => !o && setConfirmar(null)}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-destructive" /> Confirmar exclusão
             </DialogTitle>
             <DialogDescription>
-              {confirmar === "tudo"
-                ? "Todos os registros desta ferramenta serão excluídos. Esta ação não pode ser desfeita."
-                : "Este registro será excluído permanentemente."}
+              {confirmar?.i === "tudo"
+                ? "Todos os registros desta lista serão removidos. Esta ação não pode ser desfeita."
+                : "Este registro será removido permanentemente."}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setConfirmar(null)}>Cancelar</Button>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                if (confirmar === "tudo") excluirTudo();
-                else if (typeof confirmar === "number") excluir(confirmar);
-                setConfirmar(null);
-              }}
-            >
-              Excluir
-            </Button>
+            <Button variant="destructive" onClick={confirmarExclusao}>Excluir</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

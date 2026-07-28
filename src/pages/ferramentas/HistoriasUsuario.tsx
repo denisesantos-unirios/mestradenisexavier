@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { writeLS } from "@/lib/ferramentas-store";
 
 type Criterio = { id: string; texto: string };
 type Historia = {
@@ -60,7 +61,7 @@ const HistoriasUsuario = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(historias));
+    writeLS(STORAGE_KEY, historias);
   }, [historias]);
 
   const formatada = useMemo(() => {
