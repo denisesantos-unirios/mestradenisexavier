@@ -28,7 +28,7 @@ const NuvemLista = () => {
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (!data.session) {
-        navigate("/provas/login");
+        setAuthed(false);
         return;
       }
       setAuthed(true);
