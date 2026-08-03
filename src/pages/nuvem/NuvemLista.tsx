@@ -28,7 +28,7 @@ const NuvemLista = () => {
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (!data.session) {
-        navigate("/provas/login");
+        setAuthed(false);
         return;
       }
       setAuthed(true);
@@ -77,6 +77,24 @@ const NuvemLista = () => {
     if (error) toast.error(error.message);
     else carregar();
   };
+
+  if (authed === false) {
+    return (
+      <div className="min-h-screen bg-background">
+        <MainNavigation />
+        <main className="pt-24 pb-16 max-w-md mx-auto px-6">
+          <Card className="p-8 text-center space-y-4">
+            <Cloud className="w-10 h-10 text-primary mx-auto" />
+            <h1 className="text-xl font-bold">Nuvem de Palavras</h1>
+            <p className="text-sm text-muted-foreground">
+              Faça login como professor(a) para criar e gerenciar suas nuvens.
+            </p>
+            <Button onClick={() => navigate("/provas/login")}>Entrar</Button>
+          </Card>
+        </main>
+      </div>
+    );
+  }
 
   if (!authed) return null;
 
