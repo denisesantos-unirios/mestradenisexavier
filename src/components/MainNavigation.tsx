@@ -136,6 +136,14 @@ const menuItems = [
     ]
   },
   {
+    id: "nuvem",
+    title: "Nuvem de Palavras",
+    icon: Wrench,
+    submenu: [
+      { title: "Criar / Gerenciar Nuvens", path: "/nuvem" },
+    ]
+  },
+  {
     id: "avancado",
     title: "Recursos Avançados",
     permission: "avancado",
