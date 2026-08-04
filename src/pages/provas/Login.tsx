@@ -20,6 +20,13 @@ const Login = () => {
   }, [user, isProfessor, loading, navigate]);
 
   const handleGoogleLogin = async () => {
+    // O login OAuth só funciona no domínio hospedado pela Lovable.
+    // No GitHub Pages (denisesantos-unirios.github.io) o fluxo /~oauth não existe (404),
+    // então redirecionamos para o portal publicado.
+    if (window.location.hostname.endsWith("github.io")) {
+      window.location.href = "https://mestradenisexavier.lovable.app/provas/login";
+      return;
+    }
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin + "/provas/login",
       extraParams: {
@@ -35,6 +42,7 @@ const Login = () => {
       });
     }
   };
+
 
   if (loading) {
     return (
