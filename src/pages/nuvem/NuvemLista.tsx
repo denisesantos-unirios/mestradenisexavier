@@ -23,10 +23,8 @@ const NuvemLista = () => {
   const [titulo, setTitulo] = useState("");
   const [pergunta, setPergunta] = useState("");
   const [loading, setLoading] = useState(false);
-  const [authed, setAuthed] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setAuthed(true);
     carregar();
   }, []);
 
