@@ -155,7 +155,7 @@ export type Database = {
           dados: Json
           id: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           chave: string
@@ -163,7 +163,7 @@ export type Database = {
           dados?: Json
           id?: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           chave?: string
@@ -171,7 +171,7 @@ export type Database = {
           dados?: Json
           id?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
