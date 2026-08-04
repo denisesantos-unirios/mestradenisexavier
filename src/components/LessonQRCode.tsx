@@ -3,23 +3,11 @@ import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { QrCode } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
-
-const PUBLISHED_BASE_URL = "https://mestradenisexavier.lovable.app";
-
-const getBaseUrl = () => {
-  if (typeof window === "undefined") return PUBLISHED_BASE_URL;
-  const { origin, hostname } = window.location;
-  // Em preview/localhost o link público é o correto para os alunos
-  if (hostname === "localhost" || hostname.includes("-preview--")) {
-    return PUBLISHED_BASE_URL;
-  }
-  return origin;
-};
+import { buildPublicUrl } from "@/lib/public-url";
 
 const LessonQRCode = () => {
   const location = useLocation();
-  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-  const fullUrl = `${getBaseUrl()}${base}${location.pathname}`;
+  const fullUrl = buildPublicUrl(location.pathname);
 
 
   return (

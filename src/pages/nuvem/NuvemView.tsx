@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
+import { buildPublicUrl } from "@/lib/public-url";
 import { supabase } from "@/integrations/supabase/client";
 import MainNavigation from "@/components/MainNavigation";
 import { Card } from "@/components/ui/card";
@@ -21,7 +22,7 @@ const NuvemView = () => {
   const [palavras, setPalavras] = useState<Palavra[]>([]);
   const [ultima, setUltima] = useState<string | null>(null);
 
-  const shareUrl = `${window.location.origin}/nuvem/${id}/participar`;
+  const shareUrl = buildPublicUrl(`/nuvem/${id}/participar`);
 
   useEffect(() => {
     if (!id) return;
