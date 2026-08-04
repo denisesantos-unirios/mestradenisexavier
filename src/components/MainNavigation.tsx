@@ -145,7 +145,6 @@ const menuItems = [
   {
     id: "avancado",
     title: "Recursos Avançados",
-    permission: "avancado",
     icon: Rocket,
     submenu: [
       { title: "Editor UML", path: "/avancado/editor-uml" },
