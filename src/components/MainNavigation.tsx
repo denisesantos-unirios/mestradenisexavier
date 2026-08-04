@@ -116,7 +116,6 @@ const menuItems = [
   {
     id: "ferramentas",
     title: "Ferramentas",
-    permission: "ferramentas",
     icon: Wrench,
     submenu: [
       { title: "Histórias de Usuário", path: "/ferramentas/historias-usuario" },
