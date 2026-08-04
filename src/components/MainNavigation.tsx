@@ -116,7 +116,6 @@ const menuItems = [
   {
     id: "ferramentas",
     title: "Ferramentas",
-    permission: "ferramentas",
     icon: Wrench,
     submenu: [
       { title: "Histórias de Usuário", path: "/ferramentas/historias-usuario" },
@@ -146,7 +145,6 @@ const menuItems = [
   {
     id: "avancado",
     title: "Recursos Avançados",
-    permission: "avancado",
     icon: Rocket,
     submenu: [
       { title: "Editor UML", path: "/avancado/editor-uml" },
