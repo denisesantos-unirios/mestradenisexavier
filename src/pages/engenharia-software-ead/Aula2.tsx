@@ -6,6 +6,7 @@ import ConteudoSection from "@/components/engenharia-software-ead/aula2/Conteudo
 import FracassosSection from "@/components/engenharia-software-ead/aula2/FracassosSection";
 import SeisSigmaCmmiSection from "@/components/engenharia-software-ead/aula2/SeisSigmaCmmiSection";
 import MpsBrSection from "@/components/engenharia-software-ead/aula2/MpsBrSection";
+import EstudoCasoHospitalSection from "@/components/engenharia-software-ead/aula2/EstudoCasoHospitalSection";
 import AtividadeSection from "@/components/engenharia-software-ead/aula2/AtividadeSection";
 import ReferenciasSection from "@/components/engenharia-software-ead/aula2/ReferenciasSection";
 
@@ -14,6 +15,7 @@ const sections = [
   { id: "fracassos", title: "Por que fracassam?" },
   { id: "modelos", title: "Seis Sigma & CMMI" },
   { id: "mpsbr", title: "MPS.BR" },
+  { id: "estudo-caso", title: "Caso: Hospital" },
   { id: "atividade", title: "Atividade" },
   { id: "referencias", title: "Referências" },
 ];
@@ -28,6 +30,7 @@ const Aula2 = () => (
       <FracassosSection />
       <SeisSigmaCmmiSection />
       <MpsBrSection />
+      <EstudoCasoHospitalSection />
       <AtividadeSection />
       <ReferenciasSection />
     </div>
