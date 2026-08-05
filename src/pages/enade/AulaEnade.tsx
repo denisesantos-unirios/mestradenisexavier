@@ -1,6 +1,6 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import {
-  Target, BookOpen, HelppCircle, CheckCircle2, XCircle, Clock, Lightbulb,
+  Target, BookOpen, HelpCircle, CheckCircle2, XCircle, Clock, Lightbulb,
   AlertTriangle, PenLine, ArrowLeft, ArrowRight, Award,
 } from "lucide-react";
 import LessonNavigation from "@/components/LessonNavigation";
