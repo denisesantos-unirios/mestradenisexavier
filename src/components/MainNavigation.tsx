@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban, Cloud, Wrench, BookOpen, Rocket } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, Home, Code2, Layers, Monitor, FlaskConical, ClipboardList, Wifi, FolderKanban, Cloud, Wrench, BookOpen, Rocket, Award } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const menuItems = [
@@ -102,6 +102,21 @@ const menuItems = [
     submenu: [
       { title: "Aula 1 - Ágeis, Scrum & Kanban (ENADE)", path: "/gestao-projetos/aula-1" },
       { title: "Aula 2 - Metodologias Ágeis e ENADE", path: "/gestao-projetos/aula-2" },
+    ]
+  },
+  {
+    id: "enade",
+    title: "ENADE",
+    icon: Award,
+    submenu: [
+      { title: "Visão Geral e Eixos ENADE 2026", path: "/enade" },
+      { title: "Aula 1 - UML e Casos de Uso", path: "/enade/uml-casos-de-uso" },
+      { title: "Aula 2 - Diagrama de Classes e Multiplicidade", path: "/enade/diagrama-de-classes" },
+      { title: "Aula 3 - Qualidade de Processo e Produto", path: "/enade/qualidade-processo-produto" },
+      { title: "Aula 4 - CMMI-Dev e MPS-SW", path: "/enade/cmmi-dev-mps-sw" },
+      { title: "Aula 5 - Níveis de Maturidade do CMMI", path: "/enade/niveis-maturidade-cmmi" },
+      { title: "Aula 6 - Projeto versus Operação", path: "/enade/projeto-versus-operacao" },
+      { title: "Aula 7 - Gerência de Projetos", path: "/enade/gerencia-de-projetos" },
     ]
   },
   {
