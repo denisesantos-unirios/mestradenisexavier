@@ -201,6 +201,10 @@ const App = () => (
           {/* Modelagem */}
           <Route path="/modelagem" element={<ModelagemIndex />} />
           <Route path="/modelagem/:slug" element={<ModelagemCaseStudy />} />
+          {/* ENADE */}
+          <Route path="/enade" element={<EnadeIndex />} />
+          <Route path="/enade/:slug" element={<EnadeAula />} />
+
           {/* Protocolos */}
           <Route path="/protocolos/login" element={<ProtocolosLogin />} />
           <Route path="/protocolos/framework-decide" element={<ProtocolosGuard><FrameworkDECIDE /></ProtocolosGuard>} />
