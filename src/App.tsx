@@ -82,6 +82,9 @@ import ProtocolosGuard from "./components/protocolos/ProtocolosGuard";
 // Modelagem
 import ModelagemIndex from "./pages/modelagem/Index";
 import ModelagemCaseStudy from "./pages/modelagem/CaseStudyPage";
+// ENADE
+import EnadeIndex from "./pages/enade/Index";
+import EnadeAula from "./pages/enade/AulaEnade";
 // Provas
 import ProvasLogin from "./pages/provas/Login";
 import BancoQuestoes from "./pages/provas/BancoQuestoes";
@@ -198,6 +201,10 @@ const App = () => (
           {/* Modelagem */}
           <Route path="/modelagem" element={<ModelagemIndex />} />
           <Route path="/modelagem/:slug" element={<ModelagemCaseStudy />} />
+          {/* ENADE */}
+          <Route path="/enade" element={<EnadeIndex />} />
+          <Route path="/enade/:slug" element={<EnadeAula />} />
+
           {/* Protocolos */}
           <Route path="/protocolos/login" element={<ProtocolosLogin />} />
           <Route path="/protocolos/framework-decide" element={<ProtocolosGuard><FrameworkDECIDE /></ProtocolosGuard>} />
