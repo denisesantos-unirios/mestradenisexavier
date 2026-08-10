@@ -12,6 +12,7 @@ import TecnicasLevantamentoSection from "@/components/engenharia-software-2/aula
 import BomRequisitoSection from "@/components/engenharia-software-2/aula4/BomRequisitoSection";
 import UserStoriesSection from "@/components/engenharia-software-2/aula4/UserStoriesSection";
 import EstudoCasoSection from "@/components/engenharia-software-2/aula4/EstudoCasoSection";
+import EnviarFerramentasSection from "@/components/engenharia-software-2/aula4/EnviarFerramentasSection";
 import AtividadeEstudoCasoSection from "@/components/engenharia-software-2/aula4/AtividadeEstudoCasoSection";
 
 const sections = [
