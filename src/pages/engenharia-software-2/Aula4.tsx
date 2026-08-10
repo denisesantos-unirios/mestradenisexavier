@@ -27,7 +27,8 @@ const sections = [
   { id: "bom-requisito", title: "7. Bom Requisito" },
   { id: "user-stories", title: "8. User Stories e Personas" },
   { id: "estudo", title: "9. Estudo de Caso" },
-  { id: "atividade", title: "10. Atividade" }
+  { id: "ferramentas", title: "10. Enviar para Ferramentas" },
+  { id: "atividade", title: "11. Atividade" }
 ];
 
 const Aula4 = () => {
