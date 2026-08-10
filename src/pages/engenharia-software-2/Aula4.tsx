@@ -84,6 +84,10 @@ const Aula4 = () => {
           <EstudoCasoSection />
         </div>
 
+        <div id="ferramentas">
+          <EnviarFerramentasSection />
+        </div>
+
         <div id="atividade">
           <AtividadeEstudoCasoSection />
         </div>
