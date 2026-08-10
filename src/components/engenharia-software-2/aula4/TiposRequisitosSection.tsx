@@ -5,52 +5,53 @@ import {
 } from "lucide-react";
 
 const requisitosFuncionais = [
-  { exemplo: "O sistema deve permitir o cadastro de usuários", categoria: "Cadastro" },
-  { exemplo: "O sistema deve emitir relatórios de vendas mensais", categoria: "Relatórios" },
-  { exemplo: "O sistema deve calcular o total do pedido com desconto", categoria: "Cálculo" },
-  { exemplo: "O sistema deve enviar e-mail de confirmação após compra", categoria: "Notificação" },
-  { exemplo: "O sistema deve permitir busca de produtos por nome", categoria: "Busca" },
-  { exemplo: "O sistema deve validar CPF no cadastro", categoria: "Validação" }
+  { exemplo: "RF01: O sistema deve cadastrar clientes com nome, CPF, CNH e validade da CNH", categoria: "Cadastro" },
+  { exemplo: "RF02: O sistema deve listar veículos disponíveis por categoria e período", categoria: "Consulta" },
+  { exemplo: "RF03: O sistema deve registrar uma locação vinculando cliente, veículo e datas", categoria: "Operação" },
+  { exemplo: "RF04: O sistema deve calcular multa de 20% da diária por hora de atraso na devolução", categoria: "Cálculo" },
+  { exemplo: "RF05: O sistema deve enviar e-mail de confirmação da reserva ao cliente", categoria: "Notificação" },
+  { exemplo: "RF06: O sistema deve emitir relatório mensal de faturamento por categoria de veículo", categoria: "Relatório" }
 ];
 
 const requisitosNaoFuncionais = [
   { 
     categoria: "Desempenho", 
     icon: Zap,
-    exemplo: "O sistema deve responder em até 2 segundos",
+    exemplo: "RNF01: A consulta de veículos deve responder em até 3s com 100 usuários simultâneos",
     cor: "text-yellow-400 bg-yellow-500/20"
   },
   { 
     categoria: "Segurança", 
     icon: Shield,
-    exemplo: "O sistema deve criptografar senhas com bcrypt",
+    exemplo: "RNF02: As senhas devem ser armazenadas com hash bcrypt (custo ≥ 12)",
     cor: "text-red-400 bg-red-500/20"
   },
   { 
     categoria: "Disponibilidade", 
     icon: Clock,
-    exemplo: "O sistema deve ter 99.9% de uptime",
+    exemplo: "RNF03: O sistema deve ficar disponível 99,9% do horário comercial (7h–22h)",
     cor: "text-blue-400 bg-blue-500/20"
   },
   { 
     categoria: "Usabilidade", 
     icon: Users,
-    exemplo: "O usuário deve completar cadastro em até 3 minutos",
+    exemplo: "RNF04: Um atendente treinado deve concluir uma locação em até 3 minutos",
     cor: "text-green-400 bg-green-500/20"
   },
   { 
     categoria: "Manutenibilidade", 
     icon: Cog,
-    exemplo: "O código deve seguir padrão PSR-12",
+    exemplo: "RNF05: A regra de cálculo de multa deve ser parametrizável sem alteração de código",
     cor: "text-purple-400 bg-purple-500/20"
   },
   { 
     categoria: "Portabilidade", 
     icon: Settings,
-    exemplo: "O sistema deve funcionar em Chrome, Firefox e Safari",
+    exemplo: "RNF06: O sistema deve funcionar em Chrome, Firefox e Safari (2 últimas versões)",
     cor: "text-cyan-400 bg-cyan-500/20"
   }
 ];
+
 
 const TiposRequisitosSection = () => {
   return (
