@@ -12,6 +12,7 @@ import TecnicasLevantamentoSection from "@/components/engenharia-software-2/aula
 import BomRequisitoSection from "@/components/engenharia-software-2/aula4/BomRequisitoSection";
 import UserStoriesSection from "@/components/engenharia-software-2/aula4/UserStoriesSection";
 import EstudoCasoSection from "@/components/engenharia-software-2/aula4/EstudoCasoSection";
+import EnviarFerramentasSection from "@/components/engenharia-software-2/aula4/EnviarFerramentasSection";
 import AtividadeEstudoCasoSection from "@/components/engenharia-software-2/aula4/AtividadeEstudoCasoSection";
 
 const sections = [
@@ -26,7 +27,8 @@ const sections = [
   { id: "bom-requisito", title: "7. Bom Requisito" },
   { id: "user-stories", title: "8. User Stories e Personas" },
   { id: "estudo", title: "9. Estudo de Caso" },
-  { id: "atividade", title: "10. Atividade" }
+  { id: "ferramentas", title: "10. Enviar para Ferramentas" },
+  { id: "atividade", title: "11. Atividade" }
 ];
 
 const Aula4 = () => {
@@ -82,6 +84,10 @@ const Aula4 = () => {
         
         <div id="estudo">
           <EstudoCasoSection />
+        </div>
+
+        <div id="ferramentas">
+          <EnviarFerramentasSection />
         </div>
 
         <div id="atividade">
