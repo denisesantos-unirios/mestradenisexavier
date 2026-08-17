@@ -307,7 +307,7 @@ const DiagramaCard = ({ diagrama }: { diagrama: DiagramaInfo }) => {
           {expandido ? (
             <>
               <ChevronUp className="w-4 h-4" />
-              Recolder utilidade
+              Recolher utilidade
             </>
           ) : (
             <>
