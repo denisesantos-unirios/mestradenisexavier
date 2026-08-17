@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Image as ImageIcon, Upload, Wand2, Trash2, Download, Copy, Loader2, ExternalLink } from "lucide-react";
+import { Image as ImageIcon, Upload, Wand2, Trash2, Download, Copy, Loader2, ExternalLink, AlertTriangle, AlertCircle, CheckCircle2, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import MainNavigation from "@/components/MainNavigation";
 import MermaidDiagram from "@/components/MermaidDiagram";
@@ -16,6 +16,24 @@ import { FKEYS, uid, readLS, writeLS, baixarMd } from "@/lib/ferramentas-store";
 
 type Diagrama = { id: string; titulo: string; tipo: string; codigo: string; criadoEm: string };
 
+type Problema = {
+  categoria: string;
+  severidade: "erro" | "aviso" | "ok" | string;
+  elemento?: string;
+  descricao: string;
+  correcao?: string;
+};
+
+type Resumo = { erros?: number; avisos?: number; veredito?: string };
+
+const SEVERIDADE = {
+  erro: { label: "Erro", Icon: AlertCircle, classe: "border-destructive/40 bg-destructive/5", cor: "text-destructive" },
+  aviso: { label: "Atenção", Icon: AlertTriangle, classe: "border-accent/50 bg-accent/5", cor: "text-accent-foreground" },
+  ok: { label: "OK", Icon: CheckCircle2, classe: "border-primary/30 bg-primary/5", cor: "text-primary" },
+} as const;
+
+const infoSeveridade = (s: string) => SEVERIDADE[(s as keyof typeof SEVERIDADE)] ?? SEVERIDADE.aviso;
+
 const MAX_MB = 8;
 
 const ImagemParaUML = () => {
@@ -29,6 +47,9 @@ const ImagemParaUML = () => {
   const [codigo, setCodigo] = useState("");
   const [entidades, setEntidades] = useState<string[]>([]);
   const [observacoes, setObservacoes] = useState<string[]>([]);
+  const [problemas, setProblemas] = useState<Problema[]>([]);
+  const [resumo, setResumo] = useState<Resumo | null>(null);
+  const [codigoCorrigido, setCodigoCorrigido] = useState("");
   const [lista, setLista] = useState<Diagrama[]>([]);
 
   useEffect(() => setLista(readLS<Diagrama[]>(FKEYS.uml, [])), []);
@@ -59,6 +80,9 @@ const ImagemParaUML = () => {
     }
     setCarregando(true);
     setCodigo("");
+    setProblemas([]);
+    setResumo(null);
+    setCodigoCorrigido("");
     try {
       const { data, error } = await supabase.functions.invoke("imagem-para-uml", {
         body: { imageDataUrl: imagem, observacao },
@@ -70,6 +94,9 @@ const ImagemParaUML = () => {
       setCodigo(mermaid);
       setEntidades(((data as any)?.entidades ?? []) as string[]);
       setObservacoes(((data as any)?.observacoes ?? []) as string[]);
+      setProblemas(((data as any)?.problemas ?? []) as Problema[]);
+      setResumo(((data as any)?.resumo ?? null) as Resumo | null);
+      setCodigoCorrigido(String((data as any)?.mermaidCorrigido || "").trim());
       if (!titulo) setTitulo(String((data as any)?.titulo || "Diagrama de Classes"));
       toast({ title: "Diagrama de classes gerado!" });
     } catch (e) {
@@ -153,7 +180,7 @@ const ImagemParaUML = () => {
             <div className="flex flex-wrap gap-2">
               <Button onClick={gerar} disabled={carregando || !imagem}>
                 {carregando ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Wand2 className="w-4 h-4 mr-1" />}
-                {carregando ? "Analisando imagem..." : "Gerar diagrama de classes"}
+                {carregando ? "Analisando imagem..." : "Gerar diagrama + analisar erros"}
               </Button>
               {imagem && (
                 <Button variant="outline" onClick={() => { setImagem(null); setNomeArquivo(""); }}>
@@ -206,6 +233,69 @@ const ImagemParaUML = () => {
             )}
           </Card>
         </div>
+
+        {(problemas.length > 0 || resumo) && (
+          <Card className="p-6 mt-6 space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Análise de consistência do modelo</h2>
+                <p className="text-sm text-muted-foreground">
+                  Verificação de cardinalidades, chaves primárias e chaves estrangeiras identificadas na imagem.
+                </p>
+              </div>
+              <div className="flex gap-2 ml-auto">
+                <Badge variant="destructive">{resumo?.erros ?? problemas.filter((p) => p.severidade === "erro").length} erro(s)</Badge>
+                <Badge variant="secondary">{resumo?.avisos ?? problemas.filter((p) => p.severidade === "aviso").length} aviso(s)</Badge>
+              </div>
+            </div>
+
+            {resumo?.veredito && <p className="text-sm text-foreground font-medium">{resumo.veredito}</p>}
+
+            {problemas.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Nenhum problema de cardinalidade, PK ou FK foi apontado pela análise.</p>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-3">
+                {problemas.map((p, i) => {
+                  const info = infoSeveridade(p.severidade);
+                  const Icon = info.Icon;
+                  return (
+                    <div key={i} className={`rounded-xl border p-4 space-y-2 ${info.classe}`}>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Icon className={`w-4 h-4 ${info.cor}`} />
+                        <span className="text-xs font-semibold uppercase tracking-wide">{info.label}</span>
+                        <Badge variant="outline" className="capitalize">{p.categoria}</Badge>
+                        {p.elemento && <span className="text-xs text-muted-foreground">{p.elemento}</span>}
+                      </div>
+                      <p className="text-sm text-foreground">{p.descricao}</p>
+                      {p.correcao && (
+                        <p className="text-sm text-muted-foreground"><strong className="text-foreground">Correção: </strong>{p.correcao}</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {codigoCorrigido && codigoCorrigido !== codigo && (
+              <div className="space-y-3 pt-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="font-semibold text-foreground">Versão corrigida sugerida</h3>
+                  <Button size="sm" variant="outline" onClick={() => { setCodigo(codigoCorrigido); toast({ title: "Diagrama corrigido aplicado." }); }}>
+                    Aplicar correções
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => { navigator.clipboard.writeText(codigoCorrigido); toast({ title: "Código copiado." }); }}>
+                    <Copy className="w-4 h-4 mr-1" /> Copiar
+                  </Button>
+                </div>
+                <MermaidDiagram chart={codigoCorrigido} />
+              </div>
+            )}
+          </Card>
+        )}
+
 
         {lista.length > 0 && (
           <div className="mt-8">
