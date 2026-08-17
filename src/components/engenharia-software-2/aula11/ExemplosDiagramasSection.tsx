@@ -12,6 +12,7 @@ type Exemplo = {
   icone: typeof Boxes;
   pergunta: string;
   leitura: string;
+  explicacao?: string;
   chart: string;
 };
 
@@ -87,6 +88,17 @@ const exemplos: Exemplo[] = [
     pergunta: "Em quais módulos o software é dividido e como se conectam?",
     leitura:
       "Cada bloco é um componente implantável; as setas indicam dependências e interfaces consumidas.",
+    explicacao: `O usuário acessa a Aplicação Web, pela tela chamada Interface de Reservas.
+
+Essa interface envia as informações para a API REST de Locação, usando uma comunicação HTTPS/JSON.
+
+A API encaminha a solicitação para o Módulo de Regras de Negócio. Esse módulo verifica as regras do sistema, como disponibilidade, cadastro e condições da locação.
+
+O módulo de regras pode acessar o Banco de Dados para consultar ou salvar informações.
+
+Quando é necessário realizar um pagamento, o sistema aciona o Módulo de Pagamento, que se comunica com o Gateway de Pagamento externo.
+
+O sistema também consulta o serviço externo CNH / Detran, provavelmente para validar os dados ou a habilitação do cliente.`,
     chart: `flowchart LR
   subgraph Front["Aplicação Web"]
     UI[Interface de Reservas]
@@ -287,6 +299,12 @@ const ExemplosDiagramasSection = () => {
               <p className="text-sm text-muted-foreground mt-4">
                 <strong className="text-foreground">Como ler:</strong> {atual.leitura}
               </p>
+              {atual.explicacao && (
+                <div className="mt-4 p-4 rounded-lg bg-blue-50/80 border border-blue-200/50">
+                  <p className="text-sm font-semibold text-foreground mb-2">Explicação passo a passo</p>
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">{atual.explicacao}</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </ScrollReveal>
