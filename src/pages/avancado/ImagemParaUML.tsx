@@ -296,8 +296,6 @@ const ImagemParaUML = () => {
           </Card>
         )}
 
-        <div className="hidden">
-        </div>
 
         {lista.length > 0 && (
           <div className="mt-8">
