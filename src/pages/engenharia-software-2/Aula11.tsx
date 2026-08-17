@@ -6,14 +6,17 @@ import CaracteristicasSection from "@/components/engenharia-software-2/aula11/Ca
 import HistoriaUMLSection from "@/components/engenharia-software-2/aula11/HistoriaUMLSection";
 import TiposDiagramasSection from "@/components/engenharia-software-2/aula11/TiposDiagramasSection";
 import EstruturaisComportamentaisSection from "@/components/engenharia-software-2/aula11/EstruturaisComportamentaisSection";
+import ExemplosDiagramasSection from "@/components/engenharia-software-2/aula11/ExemplosDiagramasSection";
 
 const sections = [
   { id: "hero", title: "Início" },
   { id: "caracteristicas", title: "Fundamentos" },
   { id: "historia", title: "História" },
   { id: "diagramas", title: "Diagramas" },
+  { id: "exemplos-diagramas", title: "Exemplos Visuais" },
   { id: "estruturais-comportamentais", title: "Estruturais x Comportamentais" }
 ];
+
 
 const Aula11 = () => {
   return (
@@ -40,7 +43,10 @@ const Aula11 = () => {
           <TiposDiagramasSection />
         </div>
 
+        <ExemplosDiagramasSection />
+
         <EstruturaisComportamentaisSection />
+
       </div>
       <PdfExportButton filename="ES2_Aula-11_Introducao-UML.pdf" />
     </main>
