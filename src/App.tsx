@@ -110,6 +110,7 @@ import ChecklistAcessibilidade from "./pages/ferramentas/ChecklistAcessibilidade
 import Wireframes from "./pages/ferramentas/Wireframes";
 // Recursos Avançados
 import EditorUML from "./pages/avancado/EditorUML";
+import ImagemParaUML from "./pages/avancado/ImagemParaUML";
 import PlanningPoker from "./pages/avancado/PlanningPoker";
 import Burndown from "./pages/avancado/Burndown";
 import GaleriaPrototipos from "./pages/avancado/GaleriaPrototipos";
@@ -241,6 +242,7 @@ const App = () => (
           <Route path="/ferramentas/wireframes" element={<Wireframes />} />
           {/* Recursos Avançados */}
           <Route path="/avancado/editor-uml" element={<EditorUML />} />
+          <Route path="/avancado/imagem-para-uml" element={<ImagemParaUML />} />
           <Route path="/avancado/planning-poker" element={<PlanningPoker />} />
           <Route path="/avancado/burndown" element={<Burndown />} />
           <Route path="/avancado/prototipos" element={<GaleriaPrototipos />} />
