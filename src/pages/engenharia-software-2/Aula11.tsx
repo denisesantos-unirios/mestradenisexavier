@@ -43,7 +43,10 @@ const Aula11 = () => {
           <TiposDiagramasSection />
         </div>
 
+        <ExemplosDiagramasSection />
+
         <EstruturaisComportamentaisSection />
+
       </div>
       <PdfExportButton filename="ES2_Aula-11_Introducao-UML.pdf" />
     </main>
