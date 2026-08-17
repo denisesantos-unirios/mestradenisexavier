@@ -163,6 +163,7 @@ const menuItems = [
     icon: Rocket,
     submenu: [
       { title: "Editor UML", path: "/avancado/editor-uml" },
+      { title: "Imagem → Diagrama de Classes", path: "/avancado/imagem-para-uml" },
       { title: "Planning Poker", path: "/avancado/planning-poker" },
       { title: "Gráficos de Burndown", path: "/avancado/burndown" },
       { title: "Galeria de Protótipos", path: "/avancado/prototipos" },

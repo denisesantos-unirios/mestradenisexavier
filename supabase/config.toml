@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.deny-chat]
 verify_jwt = false
+
+[functions.imagem-para-uml]
+verify_jwt = false
