@@ -3,22 +3,25 @@ import mermaid from "mermaid";
 
 mermaid.initialize({
   startOnLoad: false,
-  theme: "dark",
+  theme: "base",
   themeVariables: {
-    primaryColor: "#a855f7",
-    primaryTextColor: "#f5f3ff",
-    primaryBorderColor: "#a855f7",
-    lineColor: "#ec4899",
-    secondaryColor: "#1e1b4b",
-    tertiaryColor: "#0f172a",
+    primaryColor: "#eff6ff",
+    primaryTextColor: "#0f172a",
+    primaryBorderColor: "#2563eb",
+    lineColor: "#f97316",
+    secondaryColor: "#fff7ed",
+    tertiaryColor: "#f8fafc",
     background: "transparent",
-    mainBkg: "#1e1b4b",
-    nodeBorder: "#a855f7",
-    classText: "#f5f3ff",
+    mainBkg: "#eff6ff",
+    nodeBorder: "#2563eb",
+    classText: "#0f172a",
+    textColor: "#0f172a",
+    fontSize: "14px",
   },
   securityLevel: "loose",
-  fontFamily: "ui-monospace, monospace",
+  fontFamily: "ui-sans-serif, system-ui, sans-serif",
 });
+
 
 interface MermaidDiagramProps {
   chart: string;
