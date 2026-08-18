@@ -45,13 +45,15 @@ const STATUS_COLOR: Record<string, string> = {
 const emptyForm = {
   nome: "", tema: "", mini_mundo: "",
   disciplinas: [] as string[], edital_ref: "Edital Interdisciplinar 2026.2",
+  configId: "",
 };
 
 export default function ProjetosInterdisciplinares() {
-  const { user, loading } = useAuth();
+  const { user, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [projetos, setProjetos] = useState<Projeto[]>([]);
+  const [configs, setConfigs] = useState<Config[]>([]);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [filtroDisc, setFiltroDisc] = useState<string>("todas");
@@ -60,13 +62,17 @@ export default function ProjetosInterdisciplinares() {
   useEffect(() => { if (!loading && !user) navigate("/protocolos/login"); }, [loading, user, navigate]);
 
   const load = async () => {
-    const { data } = await supabase
-      .from("projetos_interdisciplinares")
-      .select("*")
-      .order("created_at", { ascending: false });
-    setProjetos((data ?? []) as any);
+    const [p, c] = await Promise.all([
+      supabase.from("projetos_interdisciplinares").select("*").order("created_at", { ascending: false }),
+      supabase.from("pi_configuracoes").select("id,nome,semestre,disciplinas,edital_ref,ativa")
+        .eq("ativa", true).order("created_at", { ascending: false }),
+    ]);
+    setProjetos((p.data ?? []) as any);
+    setConfigs((c.data ?? []) as any);
   };
   useEffect(() => { if (user) load(); }, [user]);
+
+  const configSel = configs.find((c) => c.id === form.configId) ?? null;
 
   const toggleDisciplina = (d: string) => {
     setForm((f) => ({
@@ -76,27 +82,36 @@ export default function ProjetosInterdisciplinares() {
   };
 
   const criar = async () => {
-    if (!form.nome || form.disciplinas.length === 0) {
+    const disciplinas = configSel ? configSel.disciplinas : form.disciplinas;
+    if (!form.nome || disciplinas.length === 0) {
       return toast({ title: "Nome e ao menos uma disciplina são obrigatórios", variant: "destructive" });
     }
     const { data, error } = await supabase
       .from("projetos_interdisciplinares")
       .insert({
         nome: form.nome, tema: form.tema || null, mini_mundo: form.mini_mundo || null,
-        disciplinas: form.disciplinas, edital_ref: form.edital_ref || null,
+        disciplinas, edital_ref: (configSel?.edital_ref ?? form.edital_ref) || null,
+        config_id: configSel?.id ?? null, semestre: configSel?.semestre ?? null,
         criado_por: user!.id,
       })
       .select().single();
     if (error || !data) return toast({ title: "Erro", description: error?.message, variant: "destructive" });
 
-    // Pré-carrega fases do edital
-    const fases = gerarFasesIniciais(form.disciplinas).map((f) => ({
-      projeto_id: data.id, disciplina: f.disciplina, fase_num: f.fase_num,
-      descricao: f.descricao, data_limite: f.data_limite, pontos_max: f.pontos_max,
-    }));
-    if (fases.length) await supabase.from("projeto_fases").insert(fases);
+    // Gera a tabela de avaliação: fases da configuração do semestre (ou do edital padrão)
+    let fases: Array<{ disciplina: string; fase_num: number; descricao: string; data_limite: string | null; pontos_max: number }> = [];
+    if (configSel) {
+      const { data: cf } = await supabase.from("pi_config_fases").select("*").eq("config_id", configSel.id);
+      fases = (cf ?? []).map((f: any) => ({
+        disciplina: f.disciplina, fase_num: f.fase_num, descricao: f.descricao,
+        data_limite: f.data_limite, pontos_max: Number(f.pontos_max ?? 0),
+      }));
+    } else {
+      fases = gerarFasesIniciais(disciplinas);
+    }
+    const rows = fases.map((f) => ({ ...f, projeto_id: data.id }));
+    if (rows.length) await supabase.from("projeto_fases").insert(rows);
 
-    toast({ title: "Projeto criado", description: `${fases.length} fases pré-carregadas do edital.` });
+    toast({ title: "Grupo criado", description: `${rows.length} fases geradas na tabela de avaliação.` });
     setOpen(false); setForm(emptyForm); load();
     navigate(`/protocolos/interdisciplinar/${data.id}`);
   };
