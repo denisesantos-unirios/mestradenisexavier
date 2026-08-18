@@ -237,6 +237,89 @@ export type Database = {
         }
         Relationships: []
       }
+      pi_config_fases: {
+        Row: {
+          config_id: string
+          created_at: string
+          data_limite: string | null
+          descricao: string
+          disciplina: string
+          fase_num: number
+          id: string
+          pontos_max: number
+          updated_at: string
+        }
+        Insert: {
+          config_id: string
+          created_at?: string
+          data_limite?: string | null
+          descricao: string
+          disciplina: string
+          fase_num: number
+          id?: string
+          pontos_max?: number
+          updated_at?: string
+        }
+        Update: {
+          config_id?: string
+          created_at?: string
+          data_limite?: string | null
+          descricao?: string
+          disciplina?: string
+          fase_num?: number
+          id?: string
+          pontos_max?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pi_config_fases_config_id_fkey"
+            columns: ["config_id"]
+            isOneToOne: false
+            referencedRelation: "pi_configuracoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pi_configuracoes: {
+        Row: {
+          ativa: boolean
+          created_at: string
+          criado_por: string
+          descricao: string | null
+          disciplinas: string[]
+          edital_ref: string | null
+          id: string
+          nome: string
+          semestre: string
+          updated_at: string
+        }
+        Insert: {
+          ativa?: boolean
+          created_at?: string
+          criado_por: string
+          descricao?: string | null
+          disciplinas?: string[]
+          edital_ref?: string | null
+          id?: string
+          nome: string
+          semestre: string
+          updated_at?: string
+        }
+        Update: {
+          ativa?: boolean
+          created_at?: string
+          criado_por?: string
+          descricao?: string | null
+          disciplinas?: string[]
+          edital_ref?: string | null
+          id?: string
+          nome?: string
+          semestre?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           ativo: boolean
@@ -542,6 +625,7 @@ export type Database = {
       }
       projetos_interdisciplinares: {
         Row: {
+          config_id: string | null
           created_at: string
           criado_por: string
           disciplinas: string[]
@@ -549,11 +633,13 @@ export type Database = {
           id: string
           mini_mundo: string | null
           nome: string
+          semestre: string | null
           status: string
           tema: string | null
           updated_at: string
         }
         Insert: {
+          config_id?: string | null
           created_at?: string
           criado_por: string
           disciplinas?: string[]
@@ -561,11 +647,13 @@ export type Database = {
           id?: string
           mini_mundo?: string | null
           nome: string
+          semestre?: string | null
           status?: string
           tema?: string | null
           updated_at?: string
         }
         Update: {
+          config_id?: string | null
           created_at?: string
           criado_por?: string
           disciplinas?: string[]
@@ -573,11 +661,20 @@ export type Database = {
           id?: string
           mini_mundo?: string | null
           nome?: string
+          semestre?: string | null
           status?: string
           tema?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "projetos_interdisciplinares_config_id_fkey"
+            columns: ["config_id"]
+            isOneToOne: false
+            referencedRelation: "pi_configuracoes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       questions: {
         Row: {
