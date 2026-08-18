@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { ALL_MENU_KEYS, menuKey, subKey } from "@/lib/menu-permissions";
 
-export type PermissionKey =
-  | "framework-decide"
-  | "equipes"
-  | "projetos"
-  | "experimentos"
-  | "ferramentas"
-  | "avancado"
-  | "interdisciplinar";
-const ALL_PERMISSIONS: PermissionKey[] = [
+// Chaves legadas (áreas de protocolos) + chaves de menu/submenu ("menu:<id>" / "sub:<path>")
+export type PermissionKey = string;
+
+const LEGACY_PERMISSIONS: string[] = [
   "framework-decide",
   "equipes",
   "projetos",
@@ -19,6 +15,7 @@ const ALL_PERMISSIONS: PermissionKey[] = [
   "avancado",
   "interdisciplinar",
 ];
+const ALL_PERMISSIONS: string[] = [...LEGACY_PERMISSIONS, ...ALL_MENU_KEYS];
 const ADMIN_EMAILS = ["denise.santos@unirioes.edu.br", "denise.santos@uniriosead.com"];
 
 type AuthState = {
@@ -34,6 +31,7 @@ const listeners = new Set<(s: AuthState) => void>();
 let initialized = false;
 let accessCache: { userId: string; isProfessor: boolean; isGestor: boolean; permissions: PermissionKey[] } | null = null;
 let accessPromise: Promise<{ isProfessor: boolean; isGestor: boolean; permissions: PermissionKey[] }> | null = null;
+
 
 const setState = (next: Partial<AuthState>) => {
   state = { ...state, ...next };
@@ -59,11 +57,8 @@ const fetchAccess = (userId: string) => {
       const isGestor = !!roles?.some((r: any) => r.role === "gestor");
       const raw = (profile as any)?.permissions as string[] | null | undefined;
       const isAdminEmail = ADMIN_EMAILS.includes((state.user?.email ?? "").toLowerCase());
-      const permissions = isGestor || isAdminEmail
-        ? ALL_PERMISSIONS
-        : ((raw ?? ALL_PERMISSIONS) as string[]).filter((p): p is PermissionKey =>
-            ALL_PERMISSIONS.includes(p as PermissionKey)
-          );
+      const permissions = isGestor || isAdminEmail ? ALL_PERMISSIONS : (raw ?? ALL_PERMISSIONS);
+
       accessCache = { userId, isProfessor, isGestor, permissions };
       return { isProfessor, isGestor, permissions };
     } catch {
@@ -135,7 +130,17 @@ export const useAuth = () => {
   };
 
   const isAdminEmail = ADMIN_EMAILS.includes((s.user?.email ?? "").toLowerCase());
-  const hasPermission = (key: PermissionKey) => isAdminEmail || s.isGestor || s.permissions.includes(key);
+  const isAdmin = isAdminEmail || s.isGestor;
 
-  return { ...s, signOut, hasPermission };
+  const hasPermission = (key: PermissionKey) =>
+    isAdmin || s.permissions.includes(key) || s.permissions.includes(menuKey(key));
+
+  // true quando o usuário logado tem uma lista de menus liberada pela administradora
+  const restricted = !!s.user && !isAdmin;
+
+  const canAccessMenu = (id: string) => !restricted || s.permissions.includes(menuKey(id));
+  const canAccessPath = (path: string) => !restricted || s.permissions.includes(subKey(path));
+
+  return { ...s, signOut, hasPermission, isAdmin, restricted, canAccessMenu, canAccessPath };
+
 };
