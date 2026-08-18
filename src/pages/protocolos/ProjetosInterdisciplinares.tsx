@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Layers, Plus, Filter } from "lucide-react";
+import { Layers, Plus, Filter, Settings2 } from "lucide-react";
 import { DISCIPLINAS_EDITAL, gerarFasesIniciais } from "@/data/projetoInterdisciplinarFases";
 
 type Projeto = {
@@ -25,6 +25,13 @@ type Projeto = {
   edital_ref: string | null;
   status: string;
   created_at: string;
+  semestre?: string | null;
+  config_id?: string | null;
+};
+
+type Config = {
+  id: string; nome: string; semestre: string; disciplinas: string[];
+  edital_ref: string | null; ativa: boolean;
 };
 
 const STATUS = ["proposto", "aprovado", "em_andamento", "concluido"] as const;
