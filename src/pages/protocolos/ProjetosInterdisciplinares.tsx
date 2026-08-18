@@ -134,49 +134,77 @@ export default function ProjetosInterdisciplinares() {
               <h1 className="text-3xl font-bold text-foreground">Projeto Interdisciplinar</h1>
             </div>
             <p className="text-muted-foreground">
-              Grupos vinculando BD, ES II e LP II — cronograma pré-carregado do edital.
+              Cadastre os grupos e vincule-os à configuração do semestre — a tabela de avaliação
+              (fases, prazos e pontuação) é gerada automaticamente.
             </p>
           </div>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button><Plus className="w-4 h-4 mr-2" />Novo Projeto</Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-xl">
-              <DialogHeader><DialogTitle>Novo Projeto Interdisciplinar</DialogTitle></DialogHeader>
-              <div className="space-y-4">
-                <div><Label>Nome do grupo/projeto *</Label>
-                  <Input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
-                </div>
-                <div><Label>Tema</Label>
-                  <Input value={form.tema} onChange={(e) => setForm({ ...form, tema: e.target.value })} />
-                </div>
-                <div><Label>Mini-mundo (contexto do problema)</Label>
-                  <Textarea rows={4} value={form.mini_mundo} onChange={(e) => setForm({ ...form, mini_mundo: e.target.value })} />
-                </div>
-                <div>
-                  <Label>Disciplinas envolvidas *</Label>
-                  <div className="flex gap-4 mt-2">
-                    {DISCIPLINAS_EDITAL.map((d) => (
-                      <label key={d} className="flex items-center gap-2 cursor-pointer">
-                        <Checkbox checked={form.disciplinas.includes(d)} onCheckedChange={() => toggleDisciplina(d)} />
-                        <span>{d}</span>
-                      </label>
-                    ))}
+          <div className="flex gap-2">
+            {isAdmin && (
+              <Button variant="outline" onClick={() => navigate("/protocolos/interdisciplinar/config")}>
+                <Settings2 className="w-4 h-4 mr-2" />Configuração do semestre
+              </Button>
+            )}
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button><Plus className="w-4 h-4 mr-2" />Novo Grupo</Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto">
+                <DialogHeader><DialogTitle>Novo grupo do Projeto Interdisciplinar</DialogTitle></DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label>Configuração do semestre</Label>
+                    <Select value={form.configId || "nenhuma"}
+                      onValueChange={(v) => setForm({ ...form, configId: v === "nenhuma" ? "" : v })}>
+                      <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="nenhuma">Sem configuração (definir manualmente)</SelectItem>
+                        {configs.map((c) => (
+                          <SelectItem key={c.id} value={c.id}>{c.nome} · {c.semestre}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {configSel && (
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Disciplinas: {configSel.disciplinas.join(", ")} — as fases desta configuração
+                        serão copiadas para o grupo.
+                      </p>
+                    )}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    As fases do cronograma serão pré-carregadas automaticamente.
-                  </p>
+                  <div><Label>Nome do grupo *</Label>
+                    <Input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
+                  </div>
+                  <div><Label>Tema</Label>
+                    <Input value={form.tema} onChange={(e) => setForm({ ...form, tema: e.target.value })} />
+                  </div>
+                  <div><Label>Mini-mundo (contexto do problema)</Label>
+                    <Textarea rows={4} value={form.mini_mundo} onChange={(e) => setForm({ ...form, mini_mundo: e.target.value })} />
+                  </div>
+                  {!configSel && (
+                    <>
+                      <div>
+                        <Label>Disciplinas envolvidas *</Label>
+                        <div className="flex gap-4 mt-2">
+                          {DISCIPLINAS_EDITAL.map((d) => (
+                            <label key={d} className="flex items-center gap-2 cursor-pointer">
+                              <Checkbox checked={form.disciplinas.includes(d)} onCheckedChange={() => toggleDisciplina(d)} />
+                              <span>{d}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                      <div><Label>Referência do edital</Label>
+                        <Input value={form.edital_ref} onChange={(e) => setForm({ ...form, edital_ref: e.target.value })} />
+                      </div>
+                    </>
+                  )}
                 </div>
-                <div><Label>Referência do edital</Label>
-                  <Input value={form.edital_ref} onChange={(e) => setForm({ ...form, edital_ref: e.target.value })} />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
-                <Button onClick={criar}>Criar projeto</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
+                  <Button onClick={criar}>Criar grupo</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
         <Card className="mb-6">
