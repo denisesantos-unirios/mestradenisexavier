@@ -159,30 +159,13 @@ const ManifestoSection = () => {
           </motion.div>
         </ScrollReveal>
 
-        {/* Some Principles */}
+        {/* Ponte para os princípios */}
         <ScrollReveal animation="fadeUp" delay={0.5}>
-          <div className="mb-12">
-            <h3 className="text-xl font-bold text-foreground mb-6 text-center">
-              Alguns dos 12 Princípios
-            </h3>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
-              {principles.map((principle, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ x: 5 }}
-                  className="flex items-center gap-3 p-4 rounded-xl bg-card/50 border border-border/50"
-                >
-                  <span className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm flex-shrink-0">
-                    {index + 1}
-                  </span>
-                  <p className="text-sm text-muted-foreground">{principle}</p>
-                </motion.div>
-              ))}
-            </div>
+          <div className="mb-12 max-w-3xl mx-auto p-6 rounded-2xl border border-border bg-card/50 text-center">
+            <p className="text-muted-foreground">
+              Os 4 valores são sustentados por <strong className="text-foreground">12 princípios</strong>,
+              detalhados na próxima seção com a tradução prática de cada um no dia a dia do time.
+            </p>
           </div>
         </ScrollReveal>
 
@@ -192,8 +175,9 @@ const ManifestoSection = () => {
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <a href="#scrum" className="flex flex-col items-center gap-2 text-primary hover:text-primary/80 transition-colors">
-            <span className="text-sm font-medium">Próximo: Scrum na Prática</span>
+          <a href="#principios" className="flex flex-col items-center gap-2 text-primary hover:text-primary/80 transition-colors">
+            <span className="text-sm font-medium">Próximo: Os 12 Princípios</span>
+
             <ArrowRight className="w-5 h-5 rotate-90" />
           </a>
         </motion.div>
