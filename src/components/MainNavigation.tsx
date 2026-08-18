@@ -184,6 +184,7 @@ const menuItems = [
       { title: "Gerar Prova", path: "/provas/gerar-prova" },
       { title: "Estudos de Modelagem", path: "/modelagem" },
       { title: "Projeto Interdisciplinar", path: "/protocolos/interdisciplinar" },
+      { title: "Gestão de Usuários", path: "/protocolos/gestao" },
       { title: "Aula 7 - Suporte de IA Generativa (ES I)", path: "/engenharia-software-1/aula-7" }
     ]
   }
@@ -193,14 +194,24 @@ const MainNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
-  const { user, isProfessor, hasPermission } = useAuth();
-  const visibleItems = menuItems.filter(
-    (it: any) =>
-      (!it.professorOnly || isProfessor) &&
-      // menus com permissão ficam visíveis para visitantes (redirecionam ao login);
-      // só somem para quem está logado e não tem o acesso liberado
-      (!it.permission || !user || hasPermission(it.permission)),
-  );
+  const { user, isProfessor, hasPermission, restricted, canAccessMenu, canAccessPath } = useAuth();
+  const visibleItems = menuItems
+    .filter(
+      (it: any) =>
+        (!it.professorOnly || isProfessor) &&
+        // menus com permissão ficam visíveis para visitantes (redirecionam ao login);
+        // só somem para quem está logado e não tem o acesso liberado
+        (!it.permission || !user || hasPermission(it.permission)) &&
+        // menus liberados individualmente pela gestão de usuários
+        (!restricted || it.professorOnly || canAccessMenu(it.id)),
+    )
+    .map((it: any) =>
+      restricted && it.submenu
+        ? { ...it, submenu: it.submenu.filter((s: any) => it.professorOnly || canAccessPath(s.path)) }
+        : it,
+    )
+    .filter((it: any) => it.path || !restricted || (it.submenu?.length ?? 0) > 0);
+
 
   const toggleSubmenu = (id: string) => {
     setOpenSubmenu(openSubmenu === id ? null : id);
