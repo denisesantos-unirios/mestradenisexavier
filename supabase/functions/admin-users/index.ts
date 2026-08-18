@@ -7,9 +7,9 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
-const ADMIN_EMAIL = "denise.santos@unirioes.edu.br";
+const ADMIN_EMAIL = "denise.santos@uniriosead.com";
 const ADMIN_DEFAULT_PASSWORD = "admin2026";
-const ADMIN_EMAILS = [ADMIN_EMAIL, "denise.santos@uniriosead.com"];
+const ADMIN_EMAILS = [ADMIN_EMAIL];
 const ALL_PERMISSIONS = [
   "framework-decide",
   "equipes",
@@ -97,12 +97,12 @@ Deno.serve(async (req) => {
       .select("role")
       .eq("user_id", user.id);
     const isProfessor = roles?.some((r) => r.role === "professor");
-    const isGestor = roles?.some((r) => r.role === "gestor");
-    if (!isProfessor) return json({ error: "Forbidden" }, 403);
+    const isAdmin = (user.email ?? "").toLowerCase() === ADMIN_EMAIL;
+    if (!isProfessor && !isAdmin) return json({ error: "Forbidden" }, 403);
 
-    // Only the gestor can mutate users / permissions
+    // Only the admin account can mutate users / permissions
     const requireGestor = () => {
-      if (!isGestor) return json({ error: "Apenas o gestor pode executar esta ação" }, 403);
+      if (!isAdmin) return json({ error: "Apenas a administradora pode executar esta ação" }, 403);
       return null;
     };
 
