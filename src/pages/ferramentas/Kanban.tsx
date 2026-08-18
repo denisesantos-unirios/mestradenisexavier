@@ -97,6 +97,18 @@ const KanbanTool = () => {
 
   const remover = (id: string) => setCards((p) => p.filter((c) => c.id !== id));
 
+  const salvarEdicao = () => {
+    if (!editando) return;
+    if (!editando.titulo.trim()) {
+      toast({ title: "Informe o título do card.", variant: "destructive" });
+      return;
+    }
+    setCards((p) => p.map((c) => (c.id === editando.id ? editando : c)));
+    setEditando(null);
+    toast({ title: "Card atualizado." });
+  };
+
+
   const setWip = (idx: number, valor: string) => {
     const num = valor === "" ? null : Number(valor);
     setColunas((p) => p.map((c, i) => (i === idx ? { ...c, wip: num } : c)));
