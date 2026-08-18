@@ -16,7 +16,7 @@ const LEGACY_PERMISSIONS: string[] = [
   "interdisciplinar",
 ];
 const ALL_PERMISSIONS: string[] = [...LEGACY_PERMISSIONS, ...ALL_MENU_KEYS];
-const ADMIN_EMAILS = ["denise.santos@unirioes.edu.br", "denise.santos@uniriosead.com"];
+const ADMIN_EMAILS = ["denise.santos@uniriosead.com"];
 
 type AuthState = {
   user: User | null;
@@ -57,7 +57,7 @@ const fetchAccess = (userId: string) => {
       const isGestor = !!roles?.some((r: any) => r.role === "gestor");
       const raw = (profile as any)?.permissions as string[] | null | undefined;
       const isAdminEmail = ADMIN_EMAILS.includes((state.user?.email ?? "").toLowerCase());
-      const permissions = isGestor || isAdminEmail ? ALL_PERMISSIONS : (raw ?? ALL_PERMISSIONS);
+      const permissions = isAdminEmail ? ALL_PERMISSIONS : (raw ?? []);
 
       accessCache = { userId, isProfessor, isGestor, permissions };
       return { isProfessor, isGestor, permissions };
@@ -130,7 +130,7 @@ export const useAuth = () => {
   };
 
   const isAdminEmail = ADMIN_EMAILS.includes((s.user?.email ?? "").toLowerCase());
-  const isAdmin = isAdminEmail || s.isGestor;
+  const isAdmin = isAdminEmail;
 
   const hasPermission = (key: PermissionKey) =>
     isAdmin || s.permissions.includes(key) || s.permissions.includes(menuKey(key));

@@ -14,7 +14,7 @@ interface Props {
 }
 
 const ProtocolosGuard = ({ children, permission, requireGestor }: Props) => {
-  const { user, isProfessor, isGestor, hasPermission, canAccessPath, loading } = useAuth();
+  const { user, isProfessor, isAdmin, hasPermission, canAccessPath, loading } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -47,8 +47,8 @@ const ProtocolosGuard = ({ children, permission, requireGestor }: Props) => {
   }
 
   const denied =
-    (requireGestor && !isGestor) ||
-    (permission ? !hasPermission(permission) : !isProfessor && !canAccessPath(location.pathname));
+    (requireGestor && !isAdmin) ||
+    (permission ? !hasPermission(permission) : !isAdmin && !isProfessor && !canAccessPath(location.pathname));
 
   if (denied) {
     return (
