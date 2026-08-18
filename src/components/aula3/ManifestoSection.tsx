@@ -34,14 +34,6 @@ const agileValues = [
   }
 ];
 
-const principles = [
-  "Satisfazer o cliente através de entregas contínuas",
-  "Aceitar mudanças de requisitos, mesmo tardias",
-  "Entregar software funcionando frequentemente",
-  "Pessoas de negócio e devs trabalhando juntos",
-  "Construir projetos com pessoas motivadas",
-  "Conversa face-a-face é a melhor comunicação"
-];
 
 const ManifestoSection = () => {
   return (
