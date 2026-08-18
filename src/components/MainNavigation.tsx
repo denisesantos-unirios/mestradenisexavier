@@ -194,20 +194,20 @@ const MainNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
-  const { user, isProfessor, hasPermission, restricted, canAccessMenu, canAccessPath } = useAuth();
+  const { user, isProfessor, isAdmin, hasPermission, restricted, canAccessMenu, canAccessPath } = useAuth();
   const visibleItems = menuItems
     .filter(
       (it: any) =>
-        (!it.professorOnly || isProfessor) &&
+        (!it.professorOnly || isAdmin || isProfessor) &&
         // menus com permissão ficam visíveis para visitantes (redirecionam ao login);
         // só somem para quem está logado e não tem o acesso liberado
         (!it.permission || !user || hasPermission(it.permission)) &&
         // menus liberados individualmente pela gestão de usuários
-        (!restricted || it.professorOnly || canAccessMenu(it.id)),
+        (!restricted || canAccessMenu(it.id)),
     )
     .map((it: any) =>
       restricted && it.submenu
-        ? { ...it, submenu: it.submenu.filter((s: any) => it.professorOnly || canAccessPath(s.path)) }
+        ? { ...it, submenu: it.submenu.filter((s: any) => canAccessPath(s.path)) }
         : it,
     )
     .filter((it: any) => it.path || !restricted || (it.submenu?.length ?? 0) > 0);
