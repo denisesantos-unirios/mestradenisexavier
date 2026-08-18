@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { ALL_MENU_KEYS, menuKey, subKey } from "@/lib/menu-permissions";
 
-export type PermissionKey =
-  | "framework-decide"
-  | "equipes"
-  | "projetos"
-  | "experimentos"
-  | "ferramentas"
-  | "avancado"
-  | "interdisciplinar";
-const ALL_PERMISSIONS: PermissionKey[] = [
+// Chaves legadas (áreas de protocolos) + chaves de menu/submenu ("menu:<id>" / "sub:<path>")
+export type PermissionKey = string;
+
+const LEGACY_PERMISSIONS: string[] = [
   "framework-decide",
   "equipes",
   "projetos",
@@ -19,6 +15,7 @@ const ALL_PERMISSIONS: PermissionKey[] = [
   "avancado",
   "interdisciplinar",
 ];
+const ALL_PERMISSIONS: string[] = [...LEGACY_PERMISSIONS, ...ALL_MENU_KEYS];
 const ADMIN_EMAILS = ["denise.santos@unirioes.edu.br", "denise.santos@uniriosead.com"];
 
 type AuthState = {
@@ -34,6 +31,7 @@ const listeners = new Set<(s: AuthState) => void>();
 let initialized = false;
 let accessCache: { userId: string; isProfessor: boolean; isGestor: boolean; permissions: PermissionKey[] } | null = null;
 let accessPromise: Promise<{ isProfessor: boolean; isGestor: boolean; permissions: PermissionKey[] }> | null = null;
+
 
 const setState = (next: Partial<AuthState>) => {
   state = { ...state, ...next };
