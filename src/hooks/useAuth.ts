@@ -130,7 +130,17 @@ export const useAuth = () => {
   };
 
   const isAdminEmail = ADMIN_EMAILS.includes((s.user?.email ?? "").toLowerCase());
-  const hasPermission = (key: PermissionKey) => isAdminEmail || s.isGestor || s.permissions.includes(key);
+  const isAdmin = isAdminEmail || s.isGestor;
 
-  return { ...s, signOut, hasPermission };
+  const hasPermission = (key: PermissionKey) =>
+    isAdmin || s.permissions.includes(key) || s.permissions.includes(menuKey(key));
+
+  // true quando o usuário logado tem uma lista de menus liberada pela administradora
+  const restricted = !!s.user && !isAdmin;
+
+  const canAccessMenu = (id: string) => !restricted || s.permissions.includes(menuKey(id));
+  const canAccessPath = (path: string) => !restricted || s.permissions.includes(subKey(path));
+
+  return { ...s, signOut, hasPermission, isAdmin, restricted, canAccessMenu, canAccessPath };
+
 };
