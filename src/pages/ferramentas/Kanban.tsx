@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Columns3, Plus, Trash2, ChevronLeft, ChevronRight, AlertTriangle } from "lucide-react";
+import { Columns3, Plus, Trash2, ChevronLeft, ChevronRight, AlertTriangle, Pencil } from "lucide-react";
 import MainNavigation from "@/components/MainNavigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { writeLS } from "@/lib/ferramentas-store";
 
@@ -17,6 +19,9 @@ type Card = {
   responsavel: string;
   prioridade: Prioridade;
   coluna: number;
+  pontos?: number;
+  regras?: string;
+  criterios?: string;
 };
 
 type Coluna = { nome: string; wip: number | null };
@@ -31,6 +36,7 @@ const COLUNAS_DEFAULT: Coluna[] = [
   { nome: "Review", wip: 3 },
   { nome: "Done", wip: null },
 ];
+
 
 const prioColor: Record<Prioridade, string> = {
   Alta: "bg-red-500/15 text-red-600 border-red-500/30",
