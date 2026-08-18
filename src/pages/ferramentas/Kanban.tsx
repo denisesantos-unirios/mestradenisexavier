@@ -49,6 +49,8 @@ const KanbanTool = () => {
   const [colunas, setColunas] = useState<Coluna[]>(COLUNAS_DEFAULT);
   const [cards, setCards] = useState<Card[]>([]);
   const [novo, setNovo] = useState({ titulo: "", responsavel: "", prioridade: "Média" as Prioridade });
+  const [editando, setEditando] = useState<Card | null>(null);
+
 
   useEffect(() => {
     try {
