@@ -240,7 +240,10 @@ export default function ProjetosInterdisciplinares() {
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2">
                     <CardTitle className="text-lg">{p.nome}</CardTitle>
-                    <Badge className={`${STATUS_COLOR[p.status]} text-white`}>{STATUS_LABEL[p.status]}</Badge>
+                    <div className="flex gap-1 shrink-0">
+                      {p.semestre && <Badge variant="outline">{p.semestre}</Badge>}
+                      <Badge className={`${STATUS_COLOR[p.status]} text-white`}>{STATUS_LABEL[p.status]}</Badge>
+                    </div>
                   </div>
                   {p.tema && <p className="text-sm text-muted-foreground">{p.tema}</p>}
                 </CardHeader>
