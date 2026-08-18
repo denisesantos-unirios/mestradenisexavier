@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Columns3, Plus, Trash2, ChevronLeft, ChevronRight, AlertTriangle } from "lucide-react";
+import { Columns3, Plus, Trash2, ChevronLeft, ChevronRight, AlertTriangle, Pencil } from "lucide-react";
 import MainNavigation from "@/components/MainNavigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { writeLS } from "@/lib/ferramentas-store";
 
@@ -17,6 +19,9 @@ type Card = {
   responsavel: string;
   prioridade: Prioridade;
   coluna: number;
+  pontos?: number;
+  regras?: string;
+  criterios?: string;
 };
 
 type Coluna = { nome: string; wip: number | null };
@@ -32,6 +37,7 @@ const COLUNAS_DEFAULT: Coluna[] = [
   { nome: "Done", wip: null },
 ];
 
+
 const prioColor: Record<Prioridade, string> = {
   Alta: "bg-red-500/15 text-red-600 border-red-500/30",
   Média: "bg-amber-500/15 text-amber-600 border-amber-500/30",
@@ -43,6 +49,8 @@ const KanbanTool = () => {
   const [colunas, setColunas] = useState<Coluna[]>(COLUNAS_DEFAULT);
   const [cards, setCards] = useState<Card[]>([]);
   const [novo, setNovo] = useState({ titulo: "", responsavel: "", prioridade: "Média" as Prioridade });
+  const [editando, setEditando] = useState<Card | null>(null);
+
 
   useEffect(() => {
     try {
@@ -88,6 +96,18 @@ const KanbanTool = () => {
   };
 
   const remover = (id: string) => setCards((p) => p.filter((c) => c.id !== id));
+
+  const salvarEdicao = () => {
+    if (!editando) return;
+    if (!editando.titulo.trim()) {
+      toast({ title: "Informe o título do card.", variant: "destructive" });
+      return;
+    }
+    setCards((p) => p.map((c) => (c.id === editando.id ? editando : c)));
+    setEditando(null);
+    toast({ title: "Card atualizado." });
+  };
+
 
   const setWip = (idx: number, valor: string) => {
     const num = valor === "" ? null : Number(valor);
@@ -157,14 +177,23 @@ const KanbanTool = () => {
                     {cards.filter((c) => c.coluna === idx).map((c) => (
                       <div key={c.id} className="p-2 rounded-lg bg-background border border-border">
                         <p className="text-xs font-medium text-foreground mb-1">{c.titulo}</p>
-                        <div className="flex items-center justify-between gap-1">
+                        <div className="flex items-center justify-between gap-1 flex-wrap">
                           <Badge className={`${prioColor[c.prioridade]} text-[10px]`}>{c.prioridade}</Badge>
+                          {typeof c.pontos === "number" && c.pontos > 0 && (
+                            <Badge variant="outline" className="text-[10px]">{c.pontos} pts</Badge>
+                          )}
                           {c.responsavel && <span className="text-[10px] text-muted-foreground truncate">{c.responsavel}</span>}
                         </div>
+                        {(c.regras || c.criterios) && (
+                          <p className="text-[10px] text-muted-foreground mt-1 line-clamp-2">
+                            {c.criterios || c.regras}
+                          </p>
+                        )}
                         <div className="flex gap-1 mt-2">
                           <Button size="icon" variant="ghost" className="h-6 w-6" disabled={idx === 0} onClick={() => mover(c.id, -1)}><ChevronLeft className="w-3 h-3" /></Button>
                           <Button size="icon" variant="ghost" className="h-6 w-6" disabled={idx === colunas.length - 1} onClick={() => mover(c.id, 1)}><ChevronRight className="w-3 h-3" /></Button>
-                          <Button size="icon" variant="ghost" className="h-6 w-6 ml-auto" onClick={() => remover(c.id)}><Trash2 className="w-3 h-3 text-destructive" /></Button>
+                          <Button size="icon" variant="ghost" className="h-6 w-6 ml-auto" onClick={() => setEditando({ pontos: 0, regras: "", criterios: "", ...c })}><Pencil className="w-3 h-3" /></Button>
+                          <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => remover(c.id)}><Trash2 className="w-3 h-3 text-destructive" /></Button>
                         </div>
                       </div>
                     ))}
@@ -174,8 +203,67 @@ const KanbanTool = () => {
             })}
           </div>
         </div>
+
+        <Dialog open={!!editando} onOpenChange={(o) => !o && setEditando(null)}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Editar card</DialogTitle>
+            </DialogHeader>
+            {editando && (
+              <div className="space-y-3 max-h-[65vh] overflow-y-auto pr-1">
+                <div>
+                  <Label>Título</Label>
+                  <Input value={editando.titulo} onChange={(e) => setEditando({ ...editando, titulo: e.target.value })} />
+                </div>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  <div>
+                    <Label>Responsável</Label>
+                    <Input value={editando.responsavel} onChange={(e) => setEditando({ ...editando, responsavel: e.target.value })} />
+                  </div>
+                  <div>
+                    <Label>Pontuação</Label>
+                    <Input type="number" min={0} value={editando.pontos ?? 0} onChange={(e) => setEditando({ ...editando, pontos: Number(e.target.value) || 0 })} />
+                  </div>
+                  <div>
+                    <Label>Prioridade</Label>
+                    <select
+                      className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                      value={editando.prioridade}
+                      onChange={(e) => setEditando({ ...editando, prioridade: e.target.value as Prioridade })}
+                    >
+                      <option>Alta</option><option>Média</option><option>Baixa</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <Label>Coluna</Label>
+                  <select
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                    value={editando.coluna}
+                    onChange={(e) => setEditando({ ...editando, coluna: Number(e.target.value) })}
+                  >
+                    {colunas.map((col, i) => <option key={i} value={i}>{col.nome}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <Label>Regras de negócio</Label>
+                  <Textarea rows={3} placeholder="ex.: Só permitir reserva se o cliente tiver CNH válida" value={editando.regras ?? ""} onChange={(e) => setEditando({ ...editando, regras: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Critérios de aceite</Label>
+                  <Textarea rows={4} placeholder={"Dado que...\nQuando...\nEntão..."} value={editando.criterios ?? ""} onChange={(e) => setEditando({ ...editando, criterios: e.target.value })} />
+                </div>
+              </div>
+            )}
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEditando(null)}>Cancelar</Button>
+              <Button onClick={salvarEdicao}>Salvar</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </main>
+
   );
 };
 
