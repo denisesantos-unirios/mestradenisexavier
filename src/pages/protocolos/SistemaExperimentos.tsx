@@ -107,9 +107,9 @@ const accentMap: Record<string, { ring: string; bg: string; text: string; chip: 
 };
 
 const SistemaExperimentos = () => {
-  const { user, signOut, hasPermission, isGestor } = useAuth();
+  const { user, signOut, hasPermission, isAdmin } = useAuth();
   const visibleSteps = steps.filter((s) =>
-    s.gestorOnly ? isGestor : hasPermission(s.permission!)
+    s.gestorOnly ? isAdmin : hasPermission(s.permission!)
   );
 
   return (
