@@ -57,11 +57,8 @@ const fetchAccess = (userId: string) => {
       const isGestor = !!roles?.some((r: any) => r.role === "gestor");
       const raw = (profile as any)?.permissions as string[] | null | undefined;
       const isAdminEmail = ADMIN_EMAILS.includes((state.user?.email ?? "").toLowerCase());
-      const permissions = isGestor || isAdminEmail
-        ? ALL_PERMISSIONS
-        : ((raw ?? ALL_PERMISSIONS) as string[]).filter((p): p is PermissionKey =>
-            ALL_PERMISSIONS.includes(p as PermissionKey)
-          );
+      const permissions = isGestor || isAdminEmail ? ALL_PERMISSIONS : (raw ?? ALL_PERMISSIONS);
+
       accessCache = { userId, isProfessor, isGestor, permissions };
       return { isProfessor, isGestor, permissions };
     } catch {
