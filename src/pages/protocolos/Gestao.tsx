@@ -201,6 +201,91 @@ const Gestao = () => {
   const [importing, setImporting] = useState(false);
   const [importLog, setImportLog] = useState<{ email: string; ok: boolean; msg?: string }[]>([]);
 
+  function baixarModelo() {
+    const ws = XLSX.utils.aoa_to_sheet([
+      ["nome", "matricula", "disciplina", "semestre", "email", "senha"],
+      ["Maria Silva", "2026001", DISCIPLINAS[0], SEMESTRE_PADRAO, "maria.silva@exemplo.com", "aluno123"],
+    ]);
+    ws["!cols"] = [{ wch: 28 }, { wch: 14 }, { wch: 30 }, { wch: 12 }, { wch: 30 }, { wch: 14 }];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "usuarios");
+    XLSX.writeFile(wb, "modelo-importacao-usuarios.xlsx");
+  }
+
+  async function handleFile(file: File) {
+    const buf = await file.arrayBuffer();
+    const wb = XLSX.read(buf, { type: "array" });
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const raw = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "" });
+
+    const rows: ImportRow[] = raw.map((r) => {
+      const row: ImportRow = {
+        display_name: "",
+        matricula: "",
+        disciplina: DISCIPLINAS[0],
+        semestre: SEMESTRE_PADRAO,
+        email: "",
+        password: "",
+      };
+      Object.entries(r).forEach(([k, v]) => {
+        const field = HEADER_ALIASES[norm(k)];
+        if (field && field !== "erro") row[field] = String(v ?? "").trim();
+      });
+      if (!row.disciplina) row.disciplina = DISCIPLINAS[0];
+      if (!row.semestre) row.semestre = SEMESTRE_PADRAO;
+      if (!row.password) row.password = `aluno${row.matricula || "2026"}`;
+      const erros: string[] = [];
+      if (!row.display_name) erros.push("nome");
+      if (!row.matricula) erros.push("matrícula");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email)) erros.push("e-mail");
+      if (row.password.length < 6) erros.push("senha (mín. 6)");
+      if (erros.length) row.erro = `Campos inválidos: ${erros.join(", ")}`;
+      return row;
+    });
+
+    if (rows.length === 0) {
+      toast({ title: "Planilha vazia", description: "Nenhuma linha encontrada.", variant: "destructive" });
+      return;
+    }
+    setImportRows(rows);
+    setImportLog([]);
+    setImportOpen(true);
+  }
+
+  async function executarImportacao() {
+    const validas = importRows.filter((r) => !r.erro);
+    if (validas.length === 0) {
+      toast({ title: "Nenhuma linha válida para importar", variant: "destructive" });
+      return;
+    }
+    setImporting(true);
+    const log: { email: string; ok: boolean; msg?: string }[] = [];
+    for (const r of validas) {
+      const { data, error } = await supabase.functions.invoke("admin-users", {
+        body: {
+          action: "create",
+          email: r.email.toLowerCase(),
+          password: r.password,
+          display_name: r.display_name,
+          matricula: r.matricula,
+          disciplina: r.disciplina,
+          semestre: r.semestre,
+          permissions: importPerms,
+        },
+      });
+      const err = (data as any)?.error ?? error?.message;
+      log.push({ email: r.email, ok: !err, msg: err });
+      setImportLog([...log]);
+    }
+    setImporting(false);
+    const ok = log.filter((l) => l.ok).length;
+    toast({
+      title: "Importação concluída",
+      description: `${ok} de ${validas.length} usuário(s) cadastrado(s).`,
+      variant: ok === 0 ? "destructive" : "default",
+    });
+    loadUsers();
+  }
 
 
   async function loadUsers() {
