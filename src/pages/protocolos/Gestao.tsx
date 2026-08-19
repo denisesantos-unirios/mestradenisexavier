@@ -158,6 +158,15 @@ const Gestao = () => {
   const [draftPerms, setDraftPerms] = useState<string[]>([]);
   const [savingPerms, setSavingPerms] = useState(false);
 
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [importOpen, setImportOpen] = useState(false);
+  const [importRows, setImportRows] = useState<ImportRow[]>([]);
+  const [importPerms, setImportPerms] = useState<string[]>([]);
+  const [importing, setImporting] = useState(false);
+  const [importLog, setImportLog] = useState<{ email: string; ok: boolean; msg?: string }[]>([]);
+
+
+
   async function loadUsers() {
     setLoading(true);
     const { data, error } = await supabase.functions.invoke("admin-users", { method: "GET" });
