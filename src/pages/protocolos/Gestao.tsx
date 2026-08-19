@@ -414,6 +414,24 @@ const Gestao = () => {
             <Button onClick={() => setCreateOpen(true)}>
               <UserPlus className="w-4 h-4 mr-2" /> Cadastrar usuário
             </Button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleFile(f);
+                e.target.value = "";
+              }}
+            />
+            <Button variant="outline" onClick={() => fileRef.current?.click()}>
+              <Upload className="w-4 h-4 mr-2" /> Importar XLS
+            </Button>
+            <Button variant="outline" onClick={baixarModelo}>
+              <Download className="w-4 h-4 mr-2" /> Modelo
+            </Button>
+
             <Button variant="outline" onClick={signOut}>
               <LogOut className="w-4 h-4 mr-2" /> Sair
             </Button>
