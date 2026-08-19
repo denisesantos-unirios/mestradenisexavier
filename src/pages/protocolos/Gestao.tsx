@@ -518,6 +518,81 @@ const Gestao = () => {
         </div>
       </div>
 
+      {/* Importação XLS */}
+      <Dialog open={importOpen} onOpenChange={(o) => !importing && setImportOpen(o)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileSpreadsheet className="w-5 h-5" /> Importar usuários da planilha
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground -mt-2">
+            Colunas aceitas: nome, matricula, disciplina, semestre, email, senha. Sem senha, o sistema usa
+            "aluno" + matrícula.
+          </p>
+
+          <div className="border border-border rounded-lg overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50 text-left">
+                <tr>
+                  <th className="p-2">Nome</th>
+                  <th className="p-2">Matrícula</th>
+                  <th className="p-2">Disciplina</th>
+                  <th className="p-2">Semestre</th>
+                  <th className="p-2">E-mail</th>
+                  <th className="p-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {importRows.map((r, i) => {
+                  const res = importLog.find((l) => l.email === r.email);
+                  return (
+                    <tr key={i} className="border-t border-border">
+                      <td className="p-2">{r.display_name || "—"}</td>
+                      <td className="p-2">{r.matricula || "—"}</td>
+                      <td className="p-2">{r.disciplina}</td>
+                      <td className="p-2">{r.semestre}</td>
+                      <td className="p-2">{r.email || "—"}</td>
+                      <td className="p-2">
+                        {r.erro ? (
+                          <span className="text-destructive">{r.erro}</span>
+                        ) : res ? (
+                          <span className={res.ok ? "text-primary" : "text-destructive"}>
+                            {res.ok ? "Cadastrado" : res.msg}
+                          </span>
+                        ) : (
+                          <span className="text-muted-foreground">Pronto</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <Label className="mb-2 block">Menus e submenus liberados para todos os importados</Label>
+            <div className="max-h-[35vh] overflow-y-auto pr-1">
+              <PermissionTree value={importPerms} onChange={setImportPerms} />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setImportOpen(false)} disabled={importing}>
+              Fechar
+            </Button>
+            <Button onClick={executarImportacao} disabled={importing}>
+              <Upload className="w-4 h-4 mr-2" />
+              {importing
+                ? "Importando..."
+                : `Importar ${importRows.filter((r) => !r.erro).length} usuário(s)`}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+
       {/* Cadastro */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
