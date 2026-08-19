@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import * as XLSX from "xlsx";
 import {
   UserPlus,
   Trash2,
@@ -11,7 +12,11 @@ import {
   ChevronDown,
   ChevronRight,
   Search,
+  Upload,
+  Download,
+  FileSpreadsheet,
 } from "lucide-react";
+
 import MainNavigation from "@/components/MainNavigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +48,42 @@ interface ManagedUser {
 }
 
 const SEMESTRE_PADRAO = "2026.2";
+
+interface ImportRow {
+  display_name: string;
+  matricula: string;
+  disciplina: string;
+  semestre: string;
+  email: string;
+  password: string;
+  erro?: string;
+}
+
+const HEADER_ALIASES: Record<string, keyof ImportRow> = {
+  nome: "display_name",
+  "nome completo": "display_name",
+  aluno: "display_name",
+  matricula: "matricula",
+  matrícula: "matricula",
+  disciplina: "disciplina",
+  curso: "disciplina",
+  semestre: "semestre",
+  "semestre letivo": "semestre",
+  email: "email",
+  "e-mail": "email",
+  "e-mail de acesso": "email",
+  senha: "password",
+  "senha inicial": "password",
+  password: "password",
+};
+
+const norm = (s: unknown) =>
+  String(s ?? "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
 
 const emptyForm = {
   display_name: "",
@@ -152,6 +193,100 @@ const Gestao = () => {
   const [permUser, setPermUser] = useState<ManagedUser | null>(null);
   const [draftPerms, setDraftPerms] = useState<string[]>([]);
   const [savingPerms, setSavingPerms] = useState(false);
+
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [importOpen, setImportOpen] = useState(false);
+  const [importRows, setImportRows] = useState<ImportRow[]>([]);
+  const [importPerms, setImportPerms] = useState<string[]>([]);
+  const [importing, setImporting] = useState(false);
+  const [importLog, setImportLog] = useState<{ email: string; ok: boolean; msg?: string }[]>([]);
+
+  function baixarModelo() {
+    const ws = XLSX.utils.aoa_to_sheet([
+      ["nome", "matricula", "disciplina", "semestre", "email", "senha"],
+      ["Maria Silva", "2026001", DISCIPLINAS[0], SEMESTRE_PADRAO, "maria.silva@exemplo.com", "aluno123"],
+    ]);
+    ws["!cols"] = [{ wch: 28 }, { wch: 14 }, { wch: 30 }, { wch: 12 }, { wch: 30 }, { wch: 14 }];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "usuarios");
+    XLSX.writeFile(wb, "modelo-importacao-usuarios.xlsx");
+  }
+
+  async function handleFile(file: File) {
+    const buf = await file.arrayBuffer();
+    const wb = XLSX.read(buf, { type: "array" });
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const raw = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "" });
+
+    const rows: ImportRow[] = raw.map((r) => {
+      const row: ImportRow = {
+        display_name: "",
+        matricula: "",
+        disciplina: DISCIPLINAS[0],
+        semestre: SEMESTRE_PADRAO,
+        email: "",
+        password: "",
+      };
+      Object.entries(r).forEach(([k, v]) => {
+        const field = HEADER_ALIASES[norm(k)];
+        if (field && field !== "erro") row[field] = String(v ?? "").trim();
+      });
+      if (!row.disciplina) row.disciplina = DISCIPLINAS[0];
+      if (!row.semestre) row.semestre = SEMESTRE_PADRAO;
+      if (!row.password) row.password = `aluno${row.matricula || "2026"}`;
+      const erros: string[] = [];
+      if (!row.display_name) erros.push("nome");
+      if (!row.matricula) erros.push("matrícula");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email)) erros.push("e-mail");
+      if (row.password.length < 6) erros.push("senha (mín. 6)");
+      if (erros.length) row.erro = `Campos inválidos: ${erros.join(", ")}`;
+      return row;
+    });
+
+    if (rows.length === 0) {
+      toast({ title: "Planilha vazia", description: "Nenhuma linha encontrada.", variant: "destructive" });
+      return;
+    }
+    setImportRows(rows);
+    setImportLog([]);
+    setImportOpen(true);
+  }
+
+  async function executarImportacao() {
+    const validas = importRows.filter((r) => !r.erro);
+    if (validas.length === 0) {
+      toast({ title: "Nenhuma linha válida para importar", variant: "destructive" });
+      return;
+    }
+    setImporting(true);
+    const log: { email: string; ok: boolean; msg?: string }[] = [];
+    for (const r of validas) {
+      const { data, error } = await supabase.functions.invoke("admin-users", {
+        body: {
+          action: "create",
+          email: r.email.toLowerCase(),
+          password: r.password,
+          display_name: r.display_name,
+          matricula: r.matricula,
+          disciplina: r.disciplina,
+          semestre: r.semestre,
+          permissions: importPerms,
+        },
+      });
+      const err = (data as any)?.error ?? error?.message;
+      log.push({ email: r.email, ok: !err, msg: err });
+      setImportLog([...log]);
+    }
+    setImporting(false);
+    const ok = log.filter((l) => l.ok).length;
+    toast({
+      title: "Importação concluída",
+      description: `${ok} de ${validas.length} usuário(s) cadastrado(s).`,
+      variant: ok === 0 ? "destructive" : "default",
+    });
+    loadUsers();
+  }
+
 
   async function loadUsers() {
     setLoading(true);
@@ -279,6 +414,24 @@ const Gestao = () => {
             <Button onClick={() => setCreateOpen(true)}>
               <UserPlus className="w-4 h-4 mr-2" /> Cadastrar usuário
             </Button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleFile(f);
+                e.target.value = "";
+              }}
+            />
+            <Button variant="outline" onClick={() => fileRef.current?.click()}>
+              <Upload className="w-4 h-4 mr-2" /> Importar XLS
+            </Button>
+            <Button variant="outline" onClick={baixarModelo}>
+              <Download className="w-4 h-4 mr-2" /> Modelo
+            </Button>
+
             <Button variant="outline" onClick={signOut}>
               <LogOut className="w-4 h-4 mr-2" /> Sair
             </Button>
@@ -364,6 +517,81 @@ const Gestao = () => {
           )}
         </div>
       </div>
+
+      {/* Importação XLS */}
+      <Dialog open={importOpen} onOpenChange={(o) => !importing && setImportOpen(o)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileSpreadsheet className="w-5 h-5" /> Importar usuários da planilha
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground -mt-2">
+            Colunas aceitas: nome, matricula, disciplina, semestre, email, senha. Sem senha, o sistema usa
+            "aluno" + matrícula.
+          </p>
+
+          <div className="border border-border rounded-lg overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50 text-left">
+                <tr>
+                  <th className="p-2">Nome</th>
+                  <th className="p-2">Matrícula</th>
+                  <th className="p-2">Disciplina</th>
+                  <th className="p-2">Semestre</th>
+                  <th className="p-2">E-mail</th>
+                  <th className="p-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {importRows.map((r, i) => {
+                  const res = importLog.find((l) => l.email === r.email);
+                  return (
+                    <tr key={i} className="border-t border-border">
+                      <td className="p-2">{r.display_name || "—"}</td>
+                      <td className="p-2">{r.matricula || "—"}</td>
+                      <td className="p-2">{r.disciplina}</td>
+                      <td className="p-2">{r.semestre}</td>
+                      <td className="p-2">{r.email || "—"}</td>
+                      <td className="p-2">
+                        {r.erro ? (
+                          <span className="text-destructive">{r.erro}</span>
+                        ) : res ? (
+                          <span className={res.ok ? "text-primary" : "text-destructive"}>
+                            {res.ok ? "Cadastrado" : res.msg}
+                          </span>
+                        ) : (
+                          <span className="text-muted-foreground">Pronto</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <Label className="mb-2 block">Menus e submenus liberados para todos os importados</Label>
+            <div className="max-h-[35vh] overflow-y-auto pr-1">
+              <PermissionTree value={importPerms} onChange={setImportPerms} />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setImportOpen(false)} disabled={importing}>
+              Fechar
+            </Button>
+            <Button onClick={executarImportacao} disabled={importing}>
+              <Upload className="w-4 h-4 mr-2" />
+              {importing
+                ? "Importando..."
+                : `Importar ${importRows.filter((r) => !r.erro).length} usuário(s)`}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
 
       {/* Cadastro */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
