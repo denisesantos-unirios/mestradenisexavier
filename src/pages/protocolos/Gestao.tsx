@@ -49,6 +49,42 @@ interface ManagedUser {
 
 const SEMESTRE_PADRAO = "2026.2";
 
+interface ImportRow {
+  display_name: string;
+  matricula: string;
+  disciplina: string;
+  semestre: string;
+  email: string;
+  password: string;
+  erro?: string;
+}
+
+const HEADER_ALIASES: Record<string, keyof ImportRow> = {
+  nome: "display_name",
+  "nome completo": "display_name",
+  aluno: "display_name",
+  matricula: "matricula",
+  matrícula: "matricula",
+  disciplina: "disciplina",
+  curso: "disciplina",
+  semestre: "semestre",
+  "semestre letivo": "semestre",
+  email: "email",
+  "e-mail": "email",
+  "e-mail de acesso": "email",
+  senha: "password",
+  "senha inicial": "password",
+  password: "password",
+};
+
+const norm = (s: unknown) =>
+  String(s ?? "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+
 const emptyForm = {
   display_name: "",
   matricula: "",
