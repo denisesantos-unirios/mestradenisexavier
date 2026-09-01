@@ -211,11 +211,12 @@ const AtividadeSection = () => {
                         <text x="348" y="125" fill="hsl(168,80%,50%)" fontSize="12" fontWeight="bold">1</text>
                         <text x="395" y="125" fill="hsl(168,80%,50%)" fontSize="12" fontWeight="bold">N</text>
 
-                        {/* ALUGUEL (entidade associativa) */}
+                        {/* ALUGUEL (entidade associativa): losango dentro do retângulo */}
                         <rect x="410" y="100" width="130" height="65" rx="5" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2.5" />
-                        <text x="475" y="125" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="13" fontWeight="bold">ALUGUEL</text>
-                        <text x="475" y="142" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="8">(Ent. Associativa)</text>
-                        <text x="475" y="156" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="8">Data_Ret, Data_Dev, Valor</text>
+                        <polygon points="475,108 520,132 475,156 430,132" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2" />
+                        <text x="475" y="130" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="11" fontWeight="bold">aluga</text>
+                        <text x="475" y="143" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="7">Data_Ret, Data_Dev, Valor</text>
+                        <text x="475" y="182" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="11" fontWeight="bold">ALUGUEL (Ent. Associativa)</text>
 
                         {/* Linha ALUGUEL → CLIENTE (N:1) */}
                         <line x1="540" y1="132" x2="610" y2="132" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
