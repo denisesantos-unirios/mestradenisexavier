@@ -264,8 +264,9 @@ const PraticaSection = () => {
                     <rect x="5" y="25" width="90" height="40" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
                     <text x="50" y="50" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">CLIENTE</text>
                     <rect x="140" y="20" width="100" height="50" rx="4" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2.5" />
-                    <text x="190" y="42" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="11" fontWeight="bold">COMPRA</text>
-                    <text x="190" y="58" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="9">(Entidade)</text>
+                    <polygon points="190,26 218,45 190,64 162,45" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2" />
+                    <text x="190" y="49" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="10" fontWeight="bold">compra</text>
+                    <text x="190" y="85" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="10" fontWeight="bold">COMPRA (Ent. Associativa)</text>
                     <rect x="285" y="25" width="90" height="40" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
                     <text x="330" y="50" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">LIVRO</text>
                     <line x1="95" y1="45" x2="140" y2="45" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
