@@ -315,6 +315,8 @@ const ElementosMERSection = () => {
               <svg viewBox="0 0 700 220" className="w-full max-w-2xl mx-auto" style={{ minWidth: 400 }}>
                 <rect x="30" y="80" width="150" height="60" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
                 <text x="105" y="115" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="15" fontWeight="bold">OPERADORA</text>
+                {/* Entidade associativa: losango dentro do retângulo */}
+                <rect x="282" y="72" width="136" height="76" rx="6" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="1.5" />
                 <polygon points="350,80 410,110 350,140 290,110" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
                 <text x="350" y="115" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="13" fontWeight="bold">possui</text>
                 <rect x="540" y="80" width="130" height="60" rx="6" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
