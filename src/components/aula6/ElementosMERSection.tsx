@@ -62,25 +62,29 @@ const classificacaoAtributo = [
   { tipo: "Compostos", descricao: "Atributos combinados definem uma característica.", exemplo: "Endereço = Rua + Nº + Bairro + Cidade + Estado", emoji: "🧩" },
 ];
 
-const CardinalidadeVisual = ({ esq, dir }: { esq: string; dir: string }) => (
-  <svg viewBox="0 0 220 80" className="w-full h-20">
-    {/* Entidade A */}
-    <rect x="10" y="25" width="70" height="30" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
-    <text x="45" y="45" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="11" fontWeight="bold">A</text>
-    {/* Relacionamento (losango) */}
-    <polygon points="110,25 135,40 110,55 85,40" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
-    <text x="110" y="44" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="9" fontWeight="bold">R</text>
-    {/* Entidade B */}
-    <rect x="140" y="25" width="70" height="30" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
-    <text x="175" y="45" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="11" fontWeight="bold">B</text>
-    {/* Linhas */}
-    <line x1="80" y1="40" x2="85" y2="40" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
-    <line x1="135" y1="40" x2="140" y2="40" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
-    {/* Cardinalidades */}
-    <text x="82" y="32" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">{esq}</text>
-    <text x="138" y="32" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">{dir}</text>
-  </svg>
-);
+const CardinalidadeVisual = ({ esq, dir }: { esq: string; dir: string }) => {
+  const isNN = esq === "N" && dir === "N";
+  return (
+    <svg viewBox="0 0 220 80" className="w-full h-20">
+      {/* Entidade A */}
+      <rect x="10" y="25" width="70" height="30" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
+      <text x="45" y="45" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="11" fontWeight="bold">A</text>
+      {/* Relacionamento (losango) — N:N usa notação de entidade associativa (losango dentro do retângulo) */}
+      {isNN && <rect x="72" y="14" width="76" height="52" rx="4" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="1.5" />}
+      <polygon points="110,25 135,40 110,55 85,40" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
+      <text x="110" y="44" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="9" fontWeight="bold">R</text>
+      {/* Entidade B */}
+      <rect x="140" y="25" width="70" height="30" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
+      <text x="175" y="45" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="11" fontWeight="bold">B</text>
+      {/* Linhas */}
+      <line x1="80" y1="40" x2="85" y2="40" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+      <line x1="135" y1="40" x2="140" y2="40" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
+      {/* Cardinalidades */}
+      <text x="82" y="32" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">{esq}</text>
+      <text x="138" y="32" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">{dir}</text>
+    </svg>
+  );
+};
 
 const cardinalidades = [
   {
