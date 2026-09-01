@@ -167,7 +167,8 @@ const PraticaSection = () => {
                 <text x="40" y="274" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10">Telefone</text>
                 <line x1="50" y1="254" x2="70" y2="205" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
 
-                {/* Relacionamento compra N:N */}
+                {/* Relacionamento compra N:N — entidade associativa (losango dentro do retângulo) */}
+                <rect x="262" y="142" width="136" height="71" rx="5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="1.5" />
                 <polygon points="330,150 390,177.5 330,205 270,177.5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
                 <text x="330" y="182" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">compra</text>
                 <line x1="170" y1="177.5" x2="270" y2="177.5" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
@@ -204,7 +205,8 @@ const PraticaSection = () => {
                 <text x="80" y="255" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">N</text>
                 <text x="210" y="330" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">1</text>
 
-                {/* Relacionamento vende N:N */}
+                {/* Relacionamento vende N:N — entidade associativa (losango dentro do retângulo) */}
+                <rect x="507" y="252" width="96" height="71" rx="5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="1.5" />
                 <polygon points="555,260 595,287.5 555,315 515,287.5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
                 <text x="555" y="292" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="11" fontWeight="bold">vende</text>
                 <line x1="555" y1="205" x2="555" y2="260" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
@@ -244,6 +246,7 @@ const PraticaSection = () => {
                   <svg viewBox="0 0 320 100" className="w-full" style={{ minWidth: 250 }}>
                     <rect x="10" y="25" width="90" height="40" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
                     <text x="55" y="50" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">CLIENTE</text>
+                    <rect x="117" y="17" width="86" height="56" rx="4" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="1.5" />
                     <polygon points="160,25 195,45 160,65 125,45" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
                     <text x="160" y="49" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="10" fontWeight="bold">compra</text>
                     <rect x="220" y="25" width="90" height="40" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
