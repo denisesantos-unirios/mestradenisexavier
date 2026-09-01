@@ -216,7 +216,7 @@ const ElementosMERSection = () => {
                 whileHover={{ scale: 1.03, y: -5 }}
                 className="p-6 rounded-2xl bg-card/90 border border-border text-center"
               >
-                <div className="text-3xl font-mono font-bold text-teal-400 mb-3">{card.visual}</div>
+                <div className="mb-3">{card.visual}</div>
                 <h4 className="font-bold text-foreground mb-2">{card.tipo}</h4>
                 <p className="text-sm text-muted-foreground mb-3">{card.descricao}</p>
                 <div className="p-3 rounded-lg bg-secondary/50">
