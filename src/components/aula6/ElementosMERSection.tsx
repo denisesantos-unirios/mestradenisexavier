@@ -347,6 +347,7 @@ const ElementosMERSection = () => {
             </div>
             <p className="text-sm text-muted-foreground mt-3 text-center">
               No relacionamento N:N, o atributo <strong className="text-teal-400">Plano</strong> pertence ao relacionamento, não a nenhuma das entidades.
+              Note a notação de <strong className="text-teal-400">entidade associativa</strong>: o losango (relacionamento) desenhado <strong className="text-teal-400">dentro de um retângulo</strong>, indicando que o relacionamento N:N também se comporta como uma entidade.
             </p>
           </div>
         </ScrollReveal>
