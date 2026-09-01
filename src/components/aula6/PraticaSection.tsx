@@ -167,7 +167,8 @@ const PraticaSection = () => {
                 <text x="40" y="274" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10">Telefone</text>
                 <line x1="50" y1="254" x2="70" y2="205" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
 
-                {/* Relacionamento compra N:N */}
+                {/* Relacionamento compra N:N — entidade associativa (losango dentro do retângulo) */}
+                <rect x="262" y="142" width="136" height="71" rx="5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="1.5" />
                 <polygon points="330,150 390,177.5 330,205 270,177.5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
                 <text x="330" y="182" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">compra</text>
                 <line x1="170" y1="177.5" x2="270" y2="177.5" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
@@ -204,7 +205,8 @@ const PraticaSection = () => {
                 <text x="80" y="255" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">N</text>
                 <text x="210" y="330" fill="hsl(168,80%,50%)" fontSize="13" fontWeight="bold">1</text>
 
-                {/* Relacionamento vende N:N */}
+                {/* Relacionamento vende N:N — entidade associativa (losango dentro do retângulo) */}
+                <rect x="507" y="252" width="96" height="71" rx="5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="1.5" />
                 <polygon points="555,260 595,287.5 555,315 515,287.5" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
                 <text x="555" y="292" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="11" fontWeight="bold">vende</text>
                 <line x1="555" y1="205" x2="555" y2="260" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
@@ -244,6 +246,7 @@ const PraticaSection = () => {
                   <svg viewBox="0 0 320 100" className="w-full" style={{ minWidth: 250 }}>
                     <rect x="10" y="25" width="90" height="40" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
                     <text x="55" y="50" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">CLIENTE</text>
+                    <rect x="117" y="17" width="86" height="56" rx="4" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="1.5" />
                     <polygon points="160,25 195,45 160,65 125,45" fill="none" stroke="hsl(168,80%,50%)" strokeWidth="2" />
                     <text x="160" y="49" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="10" fontWeight="bold">compra</text>
                     <rect x="220" y="25" width="90" height="40" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
@@ -261,8 +264,9 @@ const PraticaSection = () => {
                     <rect x="5" y="25" width="90" height="40" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
                     <text x="50" y="50" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">CLIENTE</text>
                     <rect x="140" y="20" width="100" height="50" rx="4" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2.5" />
-                    <text x="190" y="42" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="11" fontWeight="bold">COMPRA</text>
-                    <text x="190" y="58" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="9">(Entidade)</text>
+                    <polygon points="190,26 218,45 190,64 162,45" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2" />
+                    <text x="190" y="49" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="10" fontWeight="bold">compra</text>
+                    <text x="190" y="85" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="10" fontWeight="bold">COMPRA (Ent. Associativa)</text>
                     <rect x="285" y="25" width="90" height="40" rx="4" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
                     <text x="330" y="50" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">LIVRO</text>
                     <line x1="95" y1="45" x2="140" y2="45" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" />
@@ -310,11 +314,12 @@ const PraticaSection = () => {
                 <text x="90" y="64" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="9">Nome</text>
                 <line x1="88" y1="74" x2="85" y2="120" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
 
-                {/* COMPRA (entidade associativa) */}
+                {/* COMPRA (entidade associativa): losango dentro do retângulo */}
                 <rect x="200" y="110" width="130" height="70" rx="5" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2.5" />
-                <text x="265" y="138" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="13" fontWeight="bold">COMPRA</text>
-                <text x="265" y="155" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="9">(Ent. Associativa)</text>
-                <text x="265" y="172" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="8">Data, Qtd, Valor_Total</text>
+                <polygon points="265,122 310,145 265,168 220,145" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2" />
+                <text x="265" y="142" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">compra</text>
+                <text x="265" y="155" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="7.5">Data, Qtd, Valor_Total</text>
+                <text x="265" y="197" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="11" fontWeight="bold">COMPRA (Ent. Associativa)</text>
                 {/* Linha Cliente → Compra */}
                 <line x1="130" y1="145" x2="200" y2="145" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
                 <text x="145" y="138" fill="hsl(168,80%,50%)" fontSize="12" fontWeight="bold">1</text>
@@ -344,11 +349,12 @@ const PraticaSection = () => {
                 <text x="775" y="244" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="9" fontWeight="bold" textDecoration="underline">ID</text>
                 <line x1="750" y1="245" x2="740" y2="255" stroke="hsl(var(--muted-foreground))" strokeWidth="1" />
 
-                {/* VENDA (entidade associativa) */}
+                {/* VENDA (entidade associativa): losango dentro do retângulo */}
                 <rect x="540" y="110" width="120" height="70" rx="5" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2.5" />
-                <text x="600" y="138" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="13" fontWeight="bold">VENDA</text>
-                <text x="600" y="155" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="9">(Ent. Associativa)</text>
-                <text x="600" y="172" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="8">Data, Comissão</text>
+                <polygon points="600,122 645,145 600,168 555,145" fill="none" stroke="hsl(38,92%,50%)" strokeWidth="2" />
+                <text x="600" y="142" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12" fontWeight="bold">vende</text>
+                <text x="600" y="155" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="7.5">Data, Comissão</text>
+                <text x="600" y="197" textAnchor="middle" fill="hsl(38,92%,50%)" fontSize="11" fontWeight="bold">VENDA (Ent. Associativa)</text>
                 {/* Linha Livro → Venda */}
                 <line x1="530" y1="145" x2="540" y2="145" stroke="hsl(var(--muted-foreground))" strokeWidth="2" />
                 <text x="533" y="138" fill="hsl(168,80%,50%)" fontSize="10" fontWeight="bold">1</text>
