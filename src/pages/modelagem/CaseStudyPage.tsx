@@ -105,7 +105,7 @@ const CaseStudyPage = () => {
             <TabsContent value="conceitual" forceMount className="data-[state=inactive]:hidden print-show">
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
-                  <SectionTitle icon={Network} title="Modelagem Conceitual" subtitle="Visão de entidades, atributos e cardinalidades" />
+                  <SectionTitle icon={Network} title="Modelagem Conceitual" subtitle="Notação clássica de Peter Chen — entidade (retângulo), relacionamento (losango), atributo (elipse), chave (elipse sublinhada), cardinalidade 1:1, 1:N, N:N" />
                   <div className="bg-background/40 rounded-lg p-4 border border-border/30">
                     <MermaidDiagram chart={cs.conceitual} />
                   </div>

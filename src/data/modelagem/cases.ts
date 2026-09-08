@@ -65,13 +65,34 @@ export const cases: CaseStudy[] = [
     string setor_destino FK
   }`,
     conceitual: `flowchart LR
-  D[(DEPARTAMENTO<br/>sigla, nome)] -->|1:N possui| S[(SETOR<br/>sigla, nome)]
-  S -->|1:N responsavel| B[(BEM_MOVEL<br/>numero, descricao,<br/>data, valor)]
-  B -->|1:N sofre| O[(OCORRENCIA<br/>nro, data, descricao)]
-  T[(TIPO_DANO<br/>codigo, descricao)] -->|1:N classifica| O
-  B -->|1:N historico| TR[(TRANSFERENCIA<br/>data, origem, destino)]
-  S -->|origem| TR
-  S -->|destino| TR`,
+  D[DEPARTAMENTO] -- "1" --- R1{possui}
+  R1 -- "N" --- S[SETOR]
+  S -- "1" --- R2{responsavel}
+  R2 -- "N" --- B[BEM_MOVEL]
+  B -- "1" --- R3{sofre}
+  R3 -- "N" --- O[OCORRENCIA]
+  T[TIPO_DANO] -- "1" --- R4{classifica}
+  R4 -- "N" --- O
+  B -- "1" --- R5{historico}
+  R5 -- "N" --- TR[TRANSFERENCIA]
+  S -- "1" --- R6{origem}
+  R6 -- "N" --- TR
+  S -- "1" --- R7{destino}
+  R7 -- "N" --- TR
+  D --- A1(("<u>sigla</u>"))
+  D --- A2((nome))
+  S --- A3(("<u>sigla</u>"))
+  S --- A4((nome))
+  B --- A5(("<u>numero</u>"))
+  B --- A6((descricao))
+  B --- A7((data_compra))
+  B --- A8((valor))
+  O --- A9(("<u>nro_registro</u>"))
+  O --- A10((data))
+  O --- A11((descricao))
+  T --- A12(("<u>codigo</u>"))
+  T --- A13((descricao))
+  TR --- A14((data))`,
     classes: `classDiagram
   class Departamento { +string sigla; +string nome; +addSetor() }
   class Setor { +string sigla; +string nome; +listarBens() }
@@ -194,10 +215,28 @@ CREATE TABLE transferencia (
     date dt_enterro
   }`,
     conceitual: `flowchart LR
-  Q[(QUADRA<br/>numero, nome, metragem)] -->|1:N| L[(LOTE *fraca*<br/>seq, dt_compra, situacao)]
-  L -->|1:N| J[(JAZIGO *fraca*<br/>letra, situacao)]
-  P[(PROPRIETARIO<br/>id, nome, tipo PF/PJ)] -->|1:N possui| L
-  J -.->|0:1 ocupa| PE[(PESSOA_ENTERRADA<br/>nome, dt_nasc, dt_obito)]`,
+  Q[QUADRA] -- "1" --- R1{compoe}
+  R1 -- "N" --- L[["LOTE (fraca)"]]
+  L -- "1" --- R2{contem}
+  R2 -- "N" --- J[["JAZIGO (fraca)"]]
+  P[PROPRIETARIO] -- "1" --- R3{possui}
+  R3 -- "N" --- L
+  J -- "1" --- R4{ocupa}
+  R4 -- "0..1" --- PE[PESSOA_ENTERRADA]
+  Q --- A1(("<u>numero</u>"))
+  Q --- A2((nome))
+  Q --- A3((metragem))
+  L --- A4(("<u>seq</u>"))
+  L --- A5((dt_compra))
+  L --- A6((situacao))
+  J --- A7(("<u>letra</u>"))
+  J --- A8((situacao))
+  P --- A9(("<u>id</u>"))
+  P --- A10((nome))
+  P --- A11(("tipo PF/PJ"))
+  PE --- A12((nome))
+  PE --- A13((dt_nasc))
+  PE --- A14((dt_obito))`,
     classes: `classDiagram
   class Quadra { +int numero; +string nome; +decimal metragem }
   class Lote { +int seq; +Date dataCompra; +string sitPgto; +string sitLote }
@@ -334,12 +373,26 @@ CREATE TABLE jazigo (
     int casa_destino FK
   }`,
     conceitual: `flowchart LR
-  CD[(CASA_DETENCAO)] -->|1:N| PV[(PAVILHAO *fraca*<br/>sexo)]
-  PV -->|1:N| CE[(CELA *fraca*<br/>num, capacidade)]
-  CE -->|1:N| DT[(DETENTO<br/>numero, nome)]
-  DT <-->|N:N reclusao| DL[(DELITO)]
-  DT -->|1:N| RV[(REGISTRO_VISITA)]
-  DT -->|1:N| RM[(REMANEJAMENTO<br/>data, origem, destino)]`,
+  CD[CASA_DETENCAO] -- "1" --- R1{compoe}
+  R1 -- "N" --- PV[["PAVILHAO (fraca)"]]
+  PV -- "1" --- R2{contem}
+  R2 -- "N" --- CE[["CELA (fraca)"]]
+  CE -- "1" --- R3{aloja}
+  R3 -- "N" --- DT[DETENTO]
+  DT -- "N" --- R4{reclusao}
+  R4 -- "N" --- DL[DELITO]
+  DT -- "1" --- R5{recebe}
+  R5 -- "N" --- RV[REGISTRO_VISITA]
+  DT -- "1" --- R6{sofre}
+  R6 -- "N" --- RM[REMANEJAMENTO]
+  PV --- B1((sexo))
+  CE --- B2(("<u>num</u>"))
+  CE --- B3((capacidade))
+  DT --- B4(("<u>numero</u>"))
+  DT --- B5((nome))
+  DL --- B6(("<u>numero</u>"))
+  DL --- B7((descricao))
+  RM --- B8((data))`,
     classes: `classDiagram
   class CasaDetencao { +int cod; +string nome; +int capacidade }
   class Pavilhao { +int id; +string sexo }
@@ -477,12 +530,27 @@ CREATE TABLE remanejamento (
   ALOCACAO_MOTORISTA { date dt_inicio; date dt_fim }
   MANUTENCAO { int id PK; date data; string tipo }`,
     conceitual: `flowchart LR
-  O[(ONIBUS<br/>placa, km, tipo)] -->|N:N historico| L[(LINHA<br/>numero, nome)]
-  M[(MOTORISTA<br/>cpf, cnh)] -->|N:N historico| L
-  L -->|N:N| PP[(PONTO_PARADA *fraca*)]
-  R[(RUA)] -->|1:N| PP
-  B[(BAIRRO)] -->|1:N| R
-  O -->|1:N| MT[(MANUTENCAO<br/>data, tipo)]`,
+  O[ONIBUS] -- "N" --- R1{historico}
+  R1 -- "N" --- L[LINHA]
+  M[MOTORISTA] -- "N" --- R2{historico}
+  R2 -- "N" --- L
+  L -- "N" --- R3{passa}
+  R3 -- "N" --- PP[["PONTO_PARADA (fraca)"]]
+  R[RUA] -- "1" --- R4{localiza}
+  R4 -- "N" --- PP
+  B[BAIRRO] -- "1" --- R5{agrega}
+  R5 -- "N" --- R
+  O -- "1" --- R6{sofre}
+  R6 -- "N" --- MT[MANUTENCAO]
+  O --- C1(("<u>placa</u>"))
+  O --- C2((km))
+  O --- C3((tipo))
+  L --- C4(("<u>numero</u>"))
+  L --- C5((nome))
+  M --- C6(("<u>cpf</u>"))
+  M --- C7((cnh))
+  MT --- C8((data))
+  MT --- C9((tipo))`,
     classes: `classDiagram
   class Onibus { +string placa; +string marca; +int km; +string tipo }
   class Linha { +int numero; +string nome }
@@ -591,13 +659,26 @@ CREATE TABLE manutencao (
   ALOCACAO_PONTO { date dt_inicio; date dt_fim }
   RECARGA { date data }`,
     conceitual: `flowchart LR
-  F[(FABRICANTE)] -->|1:N| EX[(EXTINTOR<br/>cod, dt_fab)]
-  RV[(REVENDEDOR)] -->|1:N| EX
-  EX <-->|N:N| CI[(CAUSA_INCENDIO<br/>periodo_meses)]
-  EX -->|N:N data| RC[(RECARGA)]
-  ER[(EMPRESA_RECARGA)] -->|1:N| RC
-  AN[(ANDAR)] -->|1:N| PC[(PONTO_COLOCACAO *fraca*)]
-  EX -->|N:N historico| PC`,
+  F[FABRICANTE] -- "1" --- R1{fabrica}
+  R1 -- "N" --- EX[EXTINTOR]
+  RV[REVENDEDOR] -- "1" --- R2{vende}
+  R2 -- "N" --- EX
+  EX -- "N" --- R3{indicado}
+  R3 -- "N" --- CI[CAUSA_INCENDIO]
+  EX -- "1" --- R4{sofre}
+  R4 -- "N" --- RC[RECARGA]
+  ER[EMPRESA_RECARGA] -- "1" --- R5{executa}
+  R5 -- "N" --- RC
+  AN[ANDAR] -- "1" --- R6{contem}
+  R6 -- "N" --- PC[["PONTO_COLOCACAO (fraca)"]]
+  EX -- "N" --- R7{historico}
+  R7 -- "N" --- PC
+  EX --- D1(("<u>cod</u>"))
+  EX --- D2((dt_fab))
+  CI --- D3((periodo_meses))
+  RC --- D4((data))
+  ER --- D5(("<u>cnpj</u>"))
+  ER --- D6((nome))`,
     classes: `classDiagram
   class Extintor { +int cod; +Date dtFab; +string situacao; +recarregar() }
   class Fabricante { +int cod; +string nome; +string uf }
@@ -700,13 +781,35 @@ CREATE TABLE recarga (
   SOLICITACAO_COMPRA { int num PK; date data; string status }
   ITEM_SOLICITACAO { int qtd }`,
     conceitual: `flowchart LR
-  CL[(CLIENTE)] -->|1:N| PD[(PEDIDO<br/>num, data, desconto)]
-  PD -->|1:N| IP[(ITEM_PEDIDO<br/>qtd_ped, qtd_atend, qtd_pend)]
-  PR[(PRODUTO<br/>estoque, preco)] -->|1:N| IP
-  PR <-->|N:N| FN[(FORNECEDOR)]
-  FN -->|1:N| SC[(SOLICITACAO_COMPRA)]
-  SC -->|1:N| IS[(ITEM_SOLICITACAO)]
-  PR -->|1:N| IS`,
+  CL[CLIENTE] -- "1" --- R1{realiza}
+  R1 -- "N" --- PD[PEDIDO]
+  PD -- "1" --- R2{contem}
+  R2 -- "N" --- IP[ITEM_PEDIDO]
+  PR[PRODUTO] -- "1" --- R3{compoe}
+  R3 -- "N" --- IP
+  PR -- "N" --- R4{fornece}
+  R4 -- "N" --- FN[FORNECEDOR]
+  FN -- "1" --- R5{origina}
+  R5 -- "N" --- SC[SOLICITACAO_COMPRA]
+  SC -- "1" --- R6{contem}
+  R6 -- "N" --- IS[ITEM_SOLICITACAO]
+  PR -- "1" --- R7{solicitado}
+  R7 -- "N" --- IS
+  PD --- E1(("<u>num</u>"))
+  PD --- E2((data))
+  PD --- E3((desconto))
+  IP --- E4((qtd_ped))
+  IP --- E5((qtd_atend))
+  IP --- E6((qtd_pend))
+  PR --- E7(("<u>cod</u>"))
+  PR --- E8((estoque))
+  PR --- E9((preco))
+  FN --- E10(("<u>id</u>"))
+  FN --- E11((razao))
+  FN --- E12((cnpj))
+  SC --- E13(("<u>num</u>"))
+  SC --- E14((data))
+  SC --- E15((status))`,
     classes: `classDiagram
   class Cliente { +int id; +string nome }
   class Pedido { +int num; +Date data; +decimal desconto; +calcularTotal() }
@@ -814,15 +917,32 @@ CREATE TABLE item_solicitacao (
   COLABORADOR { string cpf PK; string nome; string titulacao }
   STATUS_PROJETO { string situacao; date dt_inicio }`,
     conceitual: `flowchart LR
-  PJ[(PROJETO)] -.->|1:N subprojeto| PJ
-  CE[(CENTRO_ESTUDOS)] -->|1:N| PJ
-  PJ -->|1:N| ST[(STATUS_PROJETO)]
-  PR[(PROFESSOR)] <-->|N:N| PJ
-  AL[(ALUNO)] <-->|N:N| PJ
-  IF[(INSTITUICAO<br/>FOMENTADORA)] <-->|N:N valor| PJ
-  CO[(COLABORADOR)] <-->|N:N| PJ
-  OA[(ORGANISMO<br/>ADJUNTO)] <-->|N:N| PJ
-  CU[(CURSO)] -->|1:N| AL`,
+  PJ[PROJETO] -- "1" --- R1{subprojeto}
+  R1 -- "N" --- PJ
+  CE[CENTRO_ESTUDOS] -- "1" --- R2{desenvolve}
+  R2 -- "N" --- PJ
+  PJ -- "1" --- R3{possui}
+  R3 -- "N" --- ST[STATUS_PROJETO]
+  PR[PROFESSOR] -- "N" --- R4{coordena}
+  R4 -- "N" --- PJ
+  AL[ALUNO] -- "N" --- R5{participa}
+  R5 -- "N" --- PJ
+  IF[INSTITUICAO_FOMENTADORA] -- "N" --- R6{"financia (valor)"}
+  R6 -- "N" --- PJ
+  CO[COLABORADOR] -- "N" --- R7{colabora}
+  R7 -- "N" --- PJ
+  OA[ORGANISMO_ADJUNTO] -- "N" --- R8{vincula}
+  R8 -- "N" --- PJ
+  CU[CURSO] -- "1" --- R9{inscreve}
+  R9 -- "N" --- AL
+  PR --- F1(("<u>mat</u>"))
+  PR --- F2((nome))
+  AL --- F3(("<u>mat</u>"))
+  AL --- F4((nome))
+  CU --- F5(("<u>cod</u>"))
+  CU --- F6((nome))
+  CO --- F7(("<u>cpf</u>"))
+  CO --- F8((titulacao))`,
     classes: `classDiagram
   class Projeto { +int cod; +string nome; +Date dtInicio; +decimal totalGastos; +addSubprojeto() }
   class CentroEstudos { +int cod; +string nome }
@@ -921,13 +1041,33 @@ CREATE TABLE projeto_organismo (projeto_cod INT, org_cod INT, PRIMARY KEY(projet
   AGROTOXICO { int cod PK; string nome }
   APLICACAO { int id PK; date data; decimal qtd; string tipo }`,
     conceitual: `flowchart LR
-  FN[(FUNCIONARIO)] -->|1:N| AR[(AREA_PLANTIO)]
-  TC[(TIPO_CULTURA)] -->|1:N| AR
-  TC <-->|N:N suscetibilidade| PR[(PRAGA)]
-  PR <-->|N:N combate| AG[(AGROTOXICO)]
-  AR -->|1:N| AP[(APLICACAO<br/>preventiva/corretiva)]
-  AG -->|1:N| AP
-  PR -.->|0:N corretiva| AP`,
+  FN[FUNCIONARIO] -- "1" --- R1{responsavel}
+  R1 -- "N" --- AR[AREA_PLANTIO]
+  TC[TIPO_CULTURA] -- "1" --- R2{cultivada}
+  R2 -- "N" --- AR
+  TC -- "N" --- R3{suscetibilidade}
+  R3 -- "N" --- PR[PRAGA]
+  PR -- "N" --- R4{combate}
+  R4 -- "N" --- AG[AGROTOXICO]
+  AR -- "1" --- R5{recebe}
+  R5 -- "N" --- AP[APLICACAO]
+  AG -- "1" --- R6{utilizada}
+  R6 -- "N" --- AP
+  PR -- "0..N" --- R7{corretiva}
+  R7 -- "N" --- AP
+  FN --- G1(("<u>mat</u>"))
+  FN --- G2((nome))
+  AR --- G3(("<u>cod</u>"))
+  AR --- G4((hectares))
+  TC --- G5(("<u>cod</u>"))
+  TC --- G6((nome))
+  PR --- G7(("<u>cod</u>"))
+  PR --- G8((nome))
+  AG --- G9(("<u>cod</u>"))
+  AG --- G10((nome))
+  AP --- G11(("<u>id</u>"))
+  AP --- G12((data))
+  AP --- G13((qtd))`,
     classes: `classDiagram
   class Funcionario { +int mat; +string nome }
   class AreaPlantio { +int cod; +decimal hectares }
@@ -1027,16 +1167,37 @@ CREATE TABLE aplicacao (
   CLIENTE { string cpf_cnpj PK; string nome; string tipo }
   LOCACAO { int num PK; date dt_inicio; date dt_fim; decimal valor }`,
     conceitual: `flowchart LR
-  CD[(CIDADE)] -->|1:1| FL[(FILIAL)]
-  FL -->|1:N| VC[(VEICULO<br/>placa, ano)]
-  MC[(MARCA)] -->|1:N| MO[(MODELO<br/>preco_diaria)]
-  MO -->|1:N| VC
-  VC <-->|N:N| AC[(ACESSORIO)]
-  CL[(CLIENTE)] -.->|generalizacao| CE[(EVENTUAL)] & CH[(HABITUAL)] & CP[(EMPRESA)]
-  CL -->|1:N| LC[(LOCACAO<br/>dt_inicio, dt_fim, valor)]
-  VC -->|1:N| LC
-  FL -->|origem| LC
-  FL -->|destino| LC`,
+  CD[CIDADE] -- "1" --- R1{situa}
+  R1 -- "1" --- FL[FILIAL]
+  FL -- "1" --- R2{possui}
+  R2 -- "N" --- VC[VEICULO]
+  MC[MARCA] -- "1" --- R3{define}
+  R3 -- "N" --- MO[MODELO]
+  MO -- "1" --- R4{classifica}
+  R4 -- "N" --- VC
+  VC -- "N" --- R5{equipado}
+  R5 -- "N" --- AC[ACESSORIO]
+  CL[CLIENTE] --- ISA{{ISA}}
+  ISA --- CE[EVENTUAL]
+  ISA --- CH[HABITUAL]
+  ISA --- CP[EMPRESA]
+  CL -- "1" --- R6{realiza}
+  R6 -- "N" --- LC[LOCACAO]
+  VC -- "1" --- R7{locado}
+  R7 -- "N" --- LC
+  FL -- "1" --- R8{origem}
+  R8 -- "N" --- LC
+  FL -- "1" --- R9{destino}
+  R9 -- "N" --- LC
+  VC --- H1(("<u>placa</u>"))
+  VC --- H2((ano))
+  MO --- H3((preco_diaria))
+  CL --- H4(("<u>cpf_cnpj</u>"))
+  CL --- H5((nome))
+  LC --- H6(("<u>num</u>"))
+  LC --- H7((dt_inicio))
+  LC --- H8((dt_fim))
+  LC --- H9((valor))`,
     classes: `classDiagram
   class Cidade { +int cod; +string nome }
   class Filial { +int cod; +string endereco }
