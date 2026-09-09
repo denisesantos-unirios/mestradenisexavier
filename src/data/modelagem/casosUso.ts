@@ -27,6 +27,7 @@ const ATORES: Record<string, { principal: string; secundarios: string }> = {
   "papgp-projetos-pesquisa": { principal: "Coordenador de Projeto", secundarios: "Professor, Aluno, Fomentadora" },
   "fazenda-feliz-grao": { principal: "Responsável Técnico Agrícola", secundarios: "Aplicador" },
   "locadora-carrobom": { principal: "Atendente da Locadora", secundarios: "Cliente, Filial de Destino" },
+  "clinica-veterinaria-patas-cuidados": { principal: "Recepcionista", secundarios: "Tutor, Veterinário, Administrador" },
 };
 
 const uid = () => Math.random().toString(36).slice(2, 10);

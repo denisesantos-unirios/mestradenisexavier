@@ -29,7 +29,7 @@ const ModelagemIndex = () => {
               <span className="bg-gradient-to-r from-blue-400 to-orange-400 bg-clip-text text-transparent">Modelagem</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              9 mini-mundos completos com DER, modelagem conceitual, diagrama de classes,
+              10 mini-mundos completos com DER, modelagem conceitual (notação de Peter Chen), diagrama de classes,
               diagrama de atividades, requisitos funcionais, script SQL e histórias de usuário.
             </p>
           </motion.div>
