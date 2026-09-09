@@ -9,6 +9,7 @@ export interface CaseStudy {
   classes: string;
   atividades: string;
   atividadesTitulo: string;
+  casosUsoDiagrama?: string;
   requisitosFuncionais: { id: string; titulo: string; descricao: string }[];
   sql: string;
   historiasUsuario: { id: string; comoQuem: string; quero: string; paraQue: string; criterios: string[] }[];
@@ -1292,6 +1293,400 @@ CREATE TABLE locacao (
       { id: "HU02", comoQuem: "Atendente", quero: "consultar disponibilidade", paraQue: "agilizar locação", criterios: ["Por filial"] },
       { id: "HU03", comoQuem: "Atendente", quero: "registrar locação", paraQue: "alugar o veículo", criterios: ["Com acessórios e desconto"] },
       { id: "HU04", comoQuem: "Cliente", quero: "devolver em outra filial", paraQue: "ter flexibilidade", criterios: ["Filial destino registrada"] },
+    ],
+  },
+  // ============ 10. CLÍNICA VETERINÁRIA ============
+  {
+    slug: "clinica-veterinaria-patas-cuidados",
+    numero: "10",
+    titulo: "Clínica Veterinária Patas & Cuidados",
+    subtitulo: "Agendamento, atendimento e histórico médico de animais",
+    miniMundo:
+      "A clínica veterinária Patas & Cuidados deseja implantar um sistema para organizar o agendamento e o acompanhamento das consultas. O sistema cadastra tutores (nome, CPF, telefone e endereço) e animais (nome, espécie, raça, sexo, data de nascimento, peso e tutor responsável). Cada veterinário informa suas especialidades e os dias/horários disponíveis para atendimento. Tutores solicitam agendamento conforme especialidade, veterinário e horários livres, podendo cancelar ou reagendar respeitando o prazo definido pela clínica. Após o atendimento, o veterinário registra diagnóstico, procedimentos realizados, medicamentos prescritos e orientações ao tutor. A recepção consulta a agenda diária, confirma a chegada do animal e altera o status da consulta (agendada, confirmada, em atendimento, concluída, cancelada, não compareceu). O sistema permite consultar o histórico médico de cada animal e emitir relatórios de consultas realizadas, cancelamentos, faltas e atendimentos por veterinário ou período.",
+    der: `erDiagram
+  TUTOR ||--o{ ANIMAL : "responsavel"
+  ESPECIE ||--o{ ANIMAL : "classifica"
+  VETERINARIO }o--o{ ESPECIALIDADE : "possui"
+  VETERINARIO ||--o{ DISPONIBILIDADE : "define"
+  ANIMAL ||--o{ CONSULTA : "atendido"
+  VETERINARIO ||--o{ CONSULTA : "realiza"
+  ESPECIALIDADE ||--o{ CONSULTA : "referente"
+  CONSULTA ||--o| ATENDIMENTO : "gera"
+  ATENDIMENTO ||--o{ PRESCRICAO : "contem"
+  MEDICAMENTO ||--o{ PRESCRICAO : "prescrito"
+  ATENDIMENTO }o--o{ PROCEDIMENTO : "executa"
+  CONSULTA ||--o{ HISTORICO_STATUS : "registra"
+  TUTOR {
+    string cpf PK
+    string nome
+    string telefone
+    string endereco
+  }
+  ESPECIE {
+    int cod PK
+    string nome
+  }
+  ANIMAL {
+    int id PK
+    string nome
+    string raca
+    char sexo
+    date dt_nascimento
+    decimal peso
+    string tutor_cpf FK
+    int especie_cod FK
+  }
+  VETERINARIO {
+    int crmv PK
+    string nome
+    string telefone
+  }
+  ESPECIALIDADE {
+    int cod PK
+    string nome
+  }
+  DISPONIBILIDADE {
+    int id PK
+    int crmv FK
+    string dia_semana
+    time hora_inicio
+    time hora_fim
+  }
+  CONSULTA {
+    int num PK
+    date data
+    time hora
+    string status
+    string origem_agendamento
+    int animal_id FK
+    int crmv FK
+    int especialidade_cod FK
+  }
+  HISTORICO_STATUS {
+    int id PK
+    int consulta_num FK
+    string status
+    timestamp momento
+  }
+  ATENDIMENTO {
+    int id PK
+    int consulta_num FK
+    string diagnostico
+    string orientacoes
+    decimal peso_aferido
+  }
+  PROCEDIMENTO {
+    int cod PK
+    string nome
+    decimal valor
+  }
+  MEDICAMENTO {
+    int cod PK
+    string nome
+    string apresentacao
+  }
+  PRESCRICAO {
+    int id PK
+    int atendimento_id FK
+    int medicamento_cod FK
+    string posologia
+    int duracao_dias
+  }`,
+    conceitual: `flowchart LR
+  TU[TUTOR] -- "1" --- R1{responsavel}
+  R1 -- "N" --- AN[ANIMAL]
+  ES[ESPECIE] -- "1" --- R2{classifica}
+  R2 -- "N" --- AN
+  VE[VETERINARIO] -- "N" --- R3{possui}
+  R3 -- "N" --- EP[ESPECIALIDADE]
+  VE -- "1" --- R4{define}
+  R4 -- "N" --- DP[["DISPONIBILIDADE (fraca)"]]
+  AN -- "1" --- R5{atendido}
+  R5 -- "N" --- CO[CONSULTA]
+  VE -- "1" --- R6{realiza}
+  R6 -- "N" --- CO
+  EP -- "1" --- R7{referente}
+  R7 -- "N" --- CO
+  CO -- "1" --- R8{gera}
+  R8 -- "0..1" --- AT[ATENDIMENTO]
+  CO -- "1" --- R9{registra}
+  R9 -- "N" --- HS[["HISTORICO_STATUS (fraca)"]]
+  AT -- "N" --- R10{executa}
+  R10 -- "N" --- PC[PROCEDIMENTO]
+  AT -- "1" --- R11{contem}
+  R11 -- "N" --- PS[PRESCRICAO]
+  ME[MEDICAMENTO] -- "1" --- R12{prescrito}
+  R12 -- "N" --- PS
+  TU --- A1(("<u>cpf</u>"))
+  TU --- A2((nome))
+  TU --- A3((telefone))
+  TU --- A4((endereco))
+  AN --- A5(("<u>id</u>"))
+  AN --- A6((nome))
+  AN --- A7((raca))
+  AN --- A8((sexo))
+  AN --- A9((dt_nascimento))
+  AN --- A10((peso))
+  ES --- A11(("<u>cod</u>"))
+  ES --- A12((nome))
+  VE --- A13(("<u>crmv</u>"))
+  VE --- A14((nome))
+  EP --- A15(("<u>cod</u>"))
+  EP --- A16((nome))
+  DP --- A17((dia_semana))
+  DP --- A18((hora_inicio))
+  DP --- A19((hora_fim))
+  CO --- A20(("<u>num</u>"))
+  CO --- A21((data))
+  CO --- A22((hora))
+  CO --- A23((status))
+  AT --- A24(("<u>id</u>"))
+  AT --- A25((diagnostico))
+  AT --- A26((orientacoes))
+  PC --- A27(("<u>cod</u>"))
+  PC --- A28((valor))
+  ME --- A29(("<u>cod</u>"))
+  ME --- A30((apresentacao))
+  PS --- A31((posologia))
+  PS --- A32((duracao_dias))`,
+    classes: `classDiagram
+  class Tutor { +string cpf; +string nome; +string telefone; +string endereco; +solicitarConsulta() }
+  class Animal { +int id; +string nome; +string raca; +char sexo; +Date dtNascimento; +decimal peso; +historicoMedico() }
+  class Especie { +int cod; +string nome }
+  class Veterinario { +int crmv; +string nome; +consultarAgenda(); +registrarAtendimento() }
+  class Especialidade { +int cod; +string nome }
+  class Disponibilidade { +string diaSemana; +Time horaInicio; +Time horaFim; +gerarSlots() }
+  class Consulta { +int num; +Date data; +Time hora; +string status; +confirmar(); +cancelar(); +reagendar(Date) }
+  class HistoricoStatus { +string status; +DateTime momento }
+  class Atendimento { +int id; +string diagnostico; +string orientacoes; +decimal pesoAferido }
+  class Procedimento { +int cod; +string nome; +decimal valor }
+  class Medicamento { +int cod; +string nome; +string apresentacao }
+  class Prescricao { +string posologia; +int duracaoDias }
+  Tutor "1" --> "*" Animal
+  Especie "1" --> "*" Animal
+  Veterinario "*" -- "*" Especialidade
+  Veterinario "1" *-- "*" Disponibilidade
+  Animal "1" --> "*" Consulta
+  Veterinario "1" --> "*" Consulta
+  Especialidade "1" --> "*" Consulta
+  Consulta "1" *-- "*" HistoricoStatus
+  Consulta "1" --> "0..1" Atendimento
+  Atendimento "*" -- "*" Procedimento
+  Atendimento "1" *-- "*" Prescricao
+  Medicamento "1" --> "*" Prescricao`,
+    casosUsoDiagrama: `flowchart LR
+  TUT([Tutor]) --- UC1(Cadastrar Animal)
+  TUT --- UC2(Consultar Horarios Disponiveis)
+  TUT --- UC3(Solicitar Agendamento de Consulta)
+  TUT --- UC4(Cancelar / Reagendar Consulta)
+  TUT --- UC5(Consultar Historico Medico do Animal)
+  REC([Recepcionista]) --- UC6(Cadastrar Tutor)
+  REC --- UC1
+  REC --- UC7(Consultar Agenda Diaria)
+  REC --- UC8(Confirmar Chegada do Animal)
+  REC --- UC9(Alterar Status da Consulta)
+  REC --- UC3
+  VET([Veterinario]) --- UC10(Consultar Minha Agenda)
+  VET --- UC11(Registrar Atendimento Clinico)
+  VET --- UC5
+  ADM([Administrador]) --- UC12(Cadastrar Veterinario e Especialidades)
+  ADM --- UC13(Definir Horarios de Atendimento)
+  ADM --- UC14(Emitir Relatorios Gerenciais)
+  UC3 -. include .-> UC2
+  UC4 -. include .-> UC15(Validar Prazo de Cancelamento)
+  UC11 -. include .-> UC16(Prescrever Medicamentos)
+  UC9 -. extend .-> UC17(Registrar Nao Comparecimento)
+  UC8 -. include .-> UC9`,
+    atividadesTitulo: "Agendar Consulta Veterinária",
+    atividades: `flowchart TD
+  S((●)) --> A[Tutor seleciona o animal]
+  A --> B[Escolher especialidade desejada]
+  B --> C[Sistema lista veterinarios da especialidade]
+  C --> D[Tutor escolhe veterinario]
+  D --> E[Sistema calcula horarios livres da disponibilidade]
+  E --> V{Existe horario livre?}
+  V -->|Nao| F[Sugerir outra data ou veterinario] --> C
+  V -->|Sim| G[Tutor seleciona data e hora]
+  G --> H{Animal ja tem consulta no mesmo horario?}
+  H -->|Sim| I[Exibir conflito de agenda] --> G
+  H -->|Nao| J[Gravar consulta com status Agendada]
+  J --> K[Registrar historico de status]
+  K --> L[Enviar confirmacao ao tutor]
+  L --> Fim(((⊗)))`,
+    requisitosFuncionais: [
+      { id: "RF01", titulo: "Cadastrar Tutor", descricao: "O sistema deve permitir CRUD de tutores com nome, CPF (único), telefone e endereço, validando o formato do CPF." },
+      { id: "RF02", titulo: "Cadastrar Animal", descricao: "O sistema deve permitir CRUD de animais com nome, espécie, raça, sexo, data de nascimento, peso e vínculo obrigatório a um tutor responsável." },
+      { id: "RF03", titulo: "Cadastrar Veterinário", descricao: "O sistema deve permitir ao administrador cadastrar veterinários com CRMV único, nome e contato." },
+      { id: "RF04", titulo: "Manter Especialidades do Veterinário", descricao: "O sistema deve permitir associar uma ou mais especialidades a cada veterinário (relação N:N)." },
+      { id: "RF05", titulo: "Definir Disponibilidade de Atendimento", descricao: "O sistema deve permitir registrar os dias da semana e faixas de horário em que cada veterinário atende, gerando os horários passíveis de agendamento." },
+      { id: "RF06", titulo: "Consultar Horários Disponíveis", descricao: "O sistema deve exibir os horários livres filtrando por especialidade, veterinário e data, excluindo horários já ocupados." },
+      { id: "RF07", titulo: "Agendar Consulta", descricao: "O sistema deve permitir ao tutor ou à recepção agendar consulta para um animal em horário livre, criando a consulta com status 'agendada'." },
+      { id: "RF08", titulo: "Cancelar Consulta", descricao: "O sistema deve permitir cancelar uma consulta desde que respeitado o prazo mínimo definido pela clínica (ex.: 24 horas de antecedência)." },
+      { id: "RF09", titulo: "Reagendar Consulta", descricao: "O sistema deve permitir alterar data/hora de uma consulta dentro do prazo, liberando o horário anterior e validando o novo horário." },
+      { id: "RF10", titulo: "Consultar Agenda Diária", descricao: "A recepção deve visualizar todas as consultas do dia com animal, tutor, veterinário, horário e status." },
+      { id: "RF11", titulo: "Confirmar Chegada do Animal", descricao: "O sistema deve permitir à recepção confirmar a chegada, alterando o status da consulta para 'confirmada' e depois 'em atendimento'." },
+      { id: "RF12", titulo: "Alterar Status da Consulta", descricao: "O sistema deve controlar os status agendada, confirmada, em atendimento, concluída, cancelada e não compareceu, mantendo histórico de cada mudança." },
+      { id: "RF13", titulo: "Registrar Atendimento Clínico", descricao: "O veterinário deve registrar diagnóstico, peso aferido, procedimentos realizados e orientações ao tutor, concluindo a consulta." },
+      { id: "RF14", titulo: "Prescrever Medicamentos", descricao: "O sistema deve permitir prescrever medicamentos com posologia e duração, vinculados ao atendimento." },
+      { id: "RF15", titulo: "Consultar Histórico Médico do Animal", descricao: "O sistema deve exibir todas as consultas, diagnósticos, procedimentos e prescrições anteriores de um animal em ordem cronológica." },
+      { id: "RF16", titulo: "Emitir Relatórios Gerenciais", descricao: "O sistema deve gerar relatórios de consultas realizadas, cancelamentos, faltas e atendimentos por veterinário ou por período." },
+    ],
+    sql: `CREATE TABLE tutor (
+  cpf CHAR(11) PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  telefone VARCHAR(20) NOT NULL,
+  endereco VARCHAR(200)
+);
+CREATE TABLE especie (
+  cod SERIAL PRIMARY KEY,
+  nome VARCHAR(60) NOT NULL UNIQUE
+);
+CREATE TABLE animal (
+  id SERIAL PRIMARY KEY,
+  nome VARCHAR(80) NOT NULL,
+  raca VARCHAR(80),
+  sexo CHAR(1) CHECK (sexo IN ('M','F')),
+  dt_nascimento DATE,
+  peso NUMERIC(6,2) CHECK (peso > 0),
+  tutor_cpf CHAR(11) NOT NULL REFERENCES tutor(cpf),
+  especie_cod INT NOT NULL REFERENCES especie(cod)
+);
+CREATE TABLE veterinario (
+  crmv INT PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  telefone VARCHAR(20)
+);
+CREATE TABLE especialidade (
+  cod SERIAL PRIMARY KEY,
+  nome VARCHAR(80) NOT NULL UNIQUE
+);
+CREATE TABLE vet_especialidade (
+  crmv INT REFERENCES veterinario(crmv),
+  especialidade_cod INT REFERENCES especialidade(cod),
+  PRIMARY KEY (crmv, especialidade_cod)
+);
+CREATE TABLE disponibilidade (
+  id SERIAL PRIMARY KEY,
+  crmv INT NOT NULL REFERENCES veterinario(crmv),
+  dia_semana VARCHAR(10) NOT NULL,
+  hora_inicio TIME NOT NULL,
+  hora_fim TIME NOT NULL,
+  CHECK (hora_fim > hora_inicio)
+);
+CREATE TABLE consulta (
+  num SERIAL PRIMARY KEY,
+  data DATE NOT NULL,
+  hora TIME NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'agendada'
+    CHECK (status IN ('agendada','confirmada','em_atendimento','concluida','cancelada','nao_compareceu')),
+  origem_agendamento VARCHAR(20) DEFAULT 'tutor',
+  animal_id INT NOT NULL REFERENCES animal(id),
+  crmv INT NOT NULL REFERENCES veterinario(crmv),
+  especialidade_cod INT NOT NULL REFERENCES especialidade(cod),
+  UNIQUE (crmv, data, hora)
+);
+CREATE TABLE historico_status (
+  id SERIAL PRIMARY KEY,
+  consulta_num INT NOT NULL REFERENCES consulta(num) ON DELETE CASCADE,
+  status VARCHAR(20) NOT NULL,
+  momento TIMESTAMP NOT NULL DEFAULT now()
+);
+CREATE TABLE atendimento (
+  id SERIAL PRIMARY KEY,
+  consulta_num INT NOT NULL UNIQUE REFERENCES consulta(num),
+  diagnostico TEXT NOT NULL,
+  orientacoes TEXT,
+  peso_aferido NUMERIC(6,2)
+);
+CREATE TABLE procedimento (
+  cod SERIAL PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  valor NUMERIC(10,2) NOT NULL DEFAULT 0
+);
+CREATE TABLE atendimento_procedimento (
+  atendimento_id INT REFERENCES atendimento(id) ON DELETE CASCADE,
+  procedimento_cod INT REFERENCES procedimento(cod),
+  PRIMARY KEY (atendimento_id, procedimento_cod)
+);
+CREATE TABLE medicamento (
+  cod SERIAL PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  apresentacao VARCHAR(80)
+);
+CREATE TABLE prescricao (
+  id SERIAL PRIMARY KEY,
+  atendimento_id INT NOT NULL REFERENCES atendimento(id) ON DELETE CASCADE,
+  medicamento_cod INT NOT NULL REFERENCES medicamento(cod),
+  posologia VARCHAR(200) NOT NULL,
+  duracao_dias INT CHECK (duracao_dias > 0)
+);`,
+    historiasUsuario: [
+      {
+        id: "HU01",
+        comoQuem: "Tutor",
+        quero: "cadastrar meu animal com espécie, raça, sexo, data de nascimento e peso",
+        paraQue: "que a clínica tenha os dados corretos antes do atendimento",
+        criterios: [
+          "Dado que informo todos os campos obrigatórios, quando salvo, então o animal fica vinculado ao meu CPF",
+          "Não é possível salvar animal sem tutor responsável",
+          "Peso deve ser maior que zero e data de nascimento não pode ser futura",
+        ],
+      },
+      {
+        id: "HU02",
+        comoQuem: "Tutor",
+        quero: "consultar os horários disponíveis por especialidade e veterinário e solicitar o agendamento",
+        paraQue: "marcar a consulta no melhor horário para mim",
+        criterios: [
+          "A lista mostra apenas horários dentro da disponibilidade do veterinário e ainda não ocupados",
+          "Ao confirmar, a consulta é criada com status 'agendada' e recebo a confirmação",
+          "O sistema bloqueia dois agendamentos do mesmo animal no mesmo horário",
+        ],
+      },
+      {
+        id: "HU03",
+        comoQuem: "Tutor",
+        quero: "cancelar ou reagendar minha consulta dentro do prazo da clínica",
+        paraQue: "liberar o horário para outro tutor sem penalidade",
+        criterios: [
+          "Cancelamento só é permitido com no mínimo 24h de antecedência",
+          "Fora do prazo, o sistema exibe mensagem e orienta contato com a recepção",
+          "No reagendamento, o horário anterior volta a ficar disponível",
+        ],
+      },
+      {
+        id: "HU04",
+        comoQuem: "Recepcionista",
+        quero: "visualizar a agenda diária e confirmar a chegada do animal",
+        paraQue: "organizar a ordem dos atendimentos do dia",
+        criterios: [
+          "A agenda lista animal, tutor, veterinário, horário e status",
+          "Ao confirmar chegada, o status muda para 'confirmada' e depois 'em atendimento'",
+          "Toda mudança de status fica registrada no histórico com data e hora",
+        ],
+      },
+      {
+        id: "HU05",
+        comoQuem: "Veterinário",
+        quero: "registrar diagnóstico, procedimentos, medicamentos e orientações após o atendimento",
+        paraQue: "manter o prontuário do animal completo",
+        criterios: [
+          "Só é possível registrar atendimento em consulta com status 'em atendimento'",
+          "Ao salvar, a consulta passa automaticamente para 'concluída'",
+          "Cada medicamento prescrito exige posologia e duração em dias",
+        ],
+      },
+      {
+        id: "HU06",
+        comoQuem: "Administrador",
+        quero: "emitir relatórios de consultas realizadas, cancelamentos, faltas e atendimentos por veterinário ou período",
+        paraQue: "acompanhar a produtividade e reduzir faltas na clínica",
+        criterios: [
+          "Filtros por período, veterinário e especialidade",
+          "Relatório mostra totais e percentual de faltas e cancelamentos",
+          "Permite exportar o resultado",
+        ],
+      },
     ],
   },
 ];
