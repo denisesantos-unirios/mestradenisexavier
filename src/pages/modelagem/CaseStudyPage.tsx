@@ -158,6 +158,14 @@ const CaseStudyPage = () => {
               <Card className="bg-card/50 border-border/50">
                 <CardContent className="p-6">
                   <SectionTitle icon={UserCheck} title="Casos de Uso" subtitle="Especificações UML derivadas dos requisitos funcionais" />
+                  {cs.casosUsoDiagrama && (
+                    <div className="mb-6">
+                      <h3 className="text-sm font-semibold text-muted-foreground mb-2">Diagrama de Casos de Uso (atores e funcionalidades)</h3>
+                      <div className="bg-background/40 rounded-lg p-4 border border-border/30">
+                        <MermaidDiagram chart={cs.casosUsoDiagrama} />
+                      </div>
+                    </div>
+                  )}
                   <div className="grid md:grid-cols-2 gap-4">
                     {casosUso.map((uc) => (
                       <div key={uc.id} className="p-4 rounded-lg bg-background/40 border border-border/30">
