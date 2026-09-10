@@ -162,7 +162,7 @@ const CaseStudyPage = () => {
                     <div className="mb-6">
                       <h3 className="text-sm font-semibold text-muted-foreground mb-2">Diagrama de Casos de Uso (atores e funcionalidades)</h3>
                       <div className="bg-background/40 rounded-lg p-4 border border-border/30">
-                        <MermaidDiagram chart={cs.casosUsoDiagrama} />
+                        <MermaidDiagram chart={cs.casosUsoDiagrama} downloadName={`CasosDeUso_${cs.slug}`} />
                       </div>
                     </div>
                   )}
