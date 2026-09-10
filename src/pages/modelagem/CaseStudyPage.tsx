@@ -129,7 +129,7 @@ const CaseStudyPage = () => {
                 <CardContent className="p-6">
                   <SectionTitle icon={Workflow} title="Diagrama de Atividades" subtitle={`Fluxo principal: ${cs.atividadesTitulo}`} />
                   <div className="bg-background/40 rounded-lg p-4 border border-border/30">
-                    <MermaidDiagram chart={cs.atividades} />
+                    <MermaidDiagram chart={cs.atividades} downloadName={`Atividades_${cs.slug}`} />
                   </div>
                 </CardContent>
               </Card>
