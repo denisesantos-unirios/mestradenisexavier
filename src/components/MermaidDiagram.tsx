@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
+import { Download } from "lucide-react";
 
 mermaid.initialize({
   startOnLoad: false,
