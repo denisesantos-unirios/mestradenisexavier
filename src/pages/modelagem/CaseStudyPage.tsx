@@ -118,7 +118,7 @@ const CaseStudyPage = () => {
                 <CardContent className="p-6">
                   <SectionTitle icon={Code} title="Diagrama de Classes" subtitle="Visão UML orientada a objetos" />
                   <div className="bg-background/40 rounded-lg p-4 border border-border/30">
-                    <MermaidDiagram chart={cs.classes} />
+                    <MermaidDiagram chart={cs.classes} downloadName={`Classes_${cs.slug}`} />
                   </div>
                 </CardContent>
               </Card>
