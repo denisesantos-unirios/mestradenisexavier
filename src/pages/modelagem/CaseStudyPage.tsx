@@ -96,7 +96,7 @@ const CaseStudyPage = () => {
                 <CardContent className="p-6">
                   <SectionTitle icon={Database} title="DER" subtitle="Diagrama Entidade-Relacionamento (notação crow's foot)" />
                   <div className="bg-background/40 rounded-lg p-4 border border-border/30">
-                    <MermaidDiagram chart={cs.der} />
+                    <MermaidDiagram chart={cs.der} downloadName={`DER_${cs.slug}`} />
                   </div>
                 </CardContent>
               </Card>
@@ -107,7 +107,7 @@ const CaseStudyPage = () => {
                 <CardContent className="p-6">
                   <SectionTitle icon={Network} title="Modelagem Conceitual" subtitle="Notação clássica de Peter Chen — entidade (retângulo), relacionamento (losango), atributo (elipse), chave (elipse sublinhada), cardinalidade 1:1, 1:N, N:N" />
                   <div className="bg-background/40 rounded-lg p-4 border border-border/30">
-                    <MermaidDiagram chart={cs.conceitual} />
+                    <MermaidDiagram chart={cs.conceitual} downloadName={`Conceitual_${cs.slug}`} />
                   </div>
                 </CardContent>
               </Card>
@@ -118,7 +118,7 @@ const CaseStudyPage = () => {
                 <CardContent className="p-6">
                   <SectionTitle icon={Code} title="Diagrama de Classes" subtitle="Visão UML orientada a objetos" />
                   <div className="bg-background/40 rounded-lg p-4 border border-border/30">
-                    <MermaidDiagram chart={cs.classes} />
+                    <MermaidDiagram chart={cs.classes} downloadName={`Classes_${cs.slug}`} />
                   </div>
                 </CardContent>
               </Card>
@@ -129,7 +129,7 @@ const CaseStudyPage = () => {
                 <CardContent className="p-6">
                   <SectionTitle icon={Workflow} title="Diagrama de Atividades" subtitle={`Fluxo principal: ${cs.atividadesTitulo}`} />
                   <div className="bg-background/40 rounded-lg p-4 border border-border/30">
-                    <MermaidDiagram chart={cs.atividades} />
+                    <MermaidDiagram chart={cs.atividades} downloadName={`Atividades_${cs.slug}`} />
                   </div>
                 </CardContent>
               </Card>
@@ -162,7 +162,7 @@ const CaseStudyPage = () => {
                     <div className="mb-6">
                       <h3 className="text-sm font-semibold text-muted-foreground mb-2">Diagrama de Casos de Uso (atores e funcionalidades)</h3>
                       <div className="bg-background/40 rounded-lg p-4 border border-border/30">
-                        <MermaidDiagram chart={cs.casosUsoDiagrama} />
+                        <MermaidDiagram chart={cs.casosUsoDiagrama} downloadName={`CasosDeUso_${cs.slug}`} />
                       </div>
                     </div>
                   )}
