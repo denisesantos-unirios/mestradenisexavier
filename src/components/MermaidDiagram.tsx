@@ -100,11 +100,27 @@ const MermaidDiagram = ({ chart, id, className = "", downloadName }: MermaidDiag
   }, [chart]);
 
   return (
-    <div
-      ref={ref}
-      className={`mermaid-container w-full overflow-x-auto flex justify-center [&_svg]:max-w-full [&_svg]:h-auto ${className}`}
-      dangerouslySetInnerHTML={{ __html: svg }}
-    />
+    <div className="w-full">
+      {downloadName && (
+        <div className="flex justify-end mb-2 print:hidden">
+          <button
+            type="button"
+            onClick={baixarPng}
+            disabled={baixando || !svg}
+            className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-border/60 bg-background/60 text-foreground hover:bg-accent transition-colors disabled:opacity-50"
+            title="Baixar diagrama em imagem PNG"
+          >
+            <Download className="w-3.5 h-3.5" />
+            {baixando ? "Gerando..." : "Gerar imagem"}
+          </button>
+        </div>
+      )}
+      <div
+        ref={ref}
+        className={`mermaid-container w-full overflow-x-auto flex justify-center [&_svg]:max-w-full [&_svg]:h-auto ${className}`}
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
+    </div>
   );
 };
 
