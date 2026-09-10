@@ -96,7 +96,7 @@ const CaseStudyPage = () => {
                 <CardContent className="p-6">
                   <SectionTitle icon={Database} title="DER" subtitle="Diagrama Entidade-Relacionamento (notação crow's foot)" />
                   <div className="bg-background/40 rounded-lg p-4 border border-border/30">
-                    <MermaidDiagram chart={cs.der} />
+                    <MermaidDiagram chart={cs.der} downloadName={`DER_${cs.slug}`} />
                   </div>
                 </CardContent>
               </Card>
