@@ -86,15 +86,45 @@ const MermaidDiagram = ({ chart, id, className = "", downloadName }: MermaidDiag
 
   useEffect(() => {
     let cancelled = false;
-    mermaid
-      .render(diagramId.current, chart)
-      .then(({ svg }) => {
+
+    const ehFalhaDeChunk = (err: unknown) => {
+      const msg = String((err as Error)?.message || err);
+      return (
+        msg.includes("dynamically imported module") ||
+        msg.includes("Importing a module script failed") ||
+        msg.includes("Failed to fetch")
+      );
+    };
+
+    const renderizar = async (tentativa = 0): Promise<void> => {
+      try {
+        const { svg } = await mermaid.render(`${diagramId.current}-t${tentativa}`, chart);
         if (!cancelled) setSvg(svg);
-      })
-      .catch((err) => {
+      } catch (err) {
+        if (cancelled) return;
+        if (ehFalhaDeChunk(err)) {
+          if (tentativa < 2) {
+            await new Promise((r) => setTimeout(r, 400 * (tentativa + 1)));
+            return renderizar(tentativa + 1);
+          }
+          // Versão antiga da página em cache: recarrega uma única vez
+          const chave = "mermaid-chunk-reload";
+          if (typeof window !== "undefined" && !sessionStorage.getItem(chave)) {
+            sessionStorage.setItem(chave, "1");
+            window.location.reload();
+            return;
+          }
+          setSvg(
+            `<p class="text-xs text-muted-foreground">Não foi possível carregar o diagrama. Atualize a página (Ctrl+F5).</p>`
+          );
+          return;
+        }
         console.error("Mermaid render error:", err);
-        if (!cancelled) setSvg(`<pre class="text-red-400 text-xs">${String(err)}</pre>`);
-      });
+        setSvg(`<pre class="text-red-400 text-xs">${String(err)}</pre>`);
+      }
+    };
+
+    renderizar();
     return () => {
       cancelled = true;
     };
