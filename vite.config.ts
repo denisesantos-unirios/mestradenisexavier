@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  optimizeDeps: {
+    include: ["mermaid"],
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

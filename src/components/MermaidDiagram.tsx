@@ -99,7 +99,10 @@ const MermaidDiagram = ({ chart, id, className = "", downloadName }: MermaidDiag
     const renderizar = async (tentativa = 0): Promise<void> => {
       try {
         const { svg } = await mermaid.render(`${diagramId.current}-t${tentativa}`, chart);
-        if (!cancelled) setSvg(svg);
+        if (!cancelled) {
+          setSvg(svg);
+          try { sessionStorage.removeItem("mermaid-chunk-reload"); } catch {}
+        }
       } catch (err) {
         if (cancelled) return;
         if (ehFalhaDeChunk(err)) {
