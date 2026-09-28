@@ -198,6 +198,7 @@ const GruposHeuristicaChecklist = () => {
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <h3 className="font-semibold text-foreground">Checklist — {aberto.nome}</h3>
             <div className="flex gap-2">
+              <Button size="sm" onClick={() => exportarPdf(aberto)}><FileText className="w-3 h-3 mr-1" /> PDF</Button>
               <Button size="sm" variant="outline" onClick={() => exportar(aberto)}><Download className="w-3 h-3 mr-1" /> .md</Button>
               <Button size="sm" variant="ghost" onClick={() => setAbertoId(null)}><X className="w-4 h-4" /></Button>
             </div>
