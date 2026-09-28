@@ -1,0 +1,177 @@
+import { useEffect, useState } from "react";
+import { Plus, Pencil, Trash2, FolderOpen, X, Save, Download, Check, Minus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { uid, baixarMd } from "@/lib/ferramentas-store";
+
+export const CHECKLIST = [
+  { h: "H1 — Visibilidade do status do sistema", q: "O sistema sempre informa ao usuário o que está acontecendo (carregamento, confirmações, progresso) em tempo razoável?" },
+  { h: "H2 — Correspondência entre o sistema e o mundo real", q: "A interface usa linguagem, ícones e conceitos familiares ao usuário, em vez de termos técnicos?" },
+  { h: "H3 — Controle e liberdade do usuário", q: "O usuário consegue desfazer, refazer, cancelar ou sair facilmente de uma ação indesejada?" },
+  { h: "H4 — Consistência e padrões", q: "Elementos, termos e ações seguem o mesmo padrão em todas as telas e as convenções da plataforma?" },
+  { h: "H5 — Prevenção de erros", q: "O design evita que erros aconteçam (validações, confirmações antes de ações destrutivas, restrições)?" },
+  { h: "H6 — Reconhecimento em vez de memorização", q: "Opções, ações e informações estão visíveis, sem exigir que o usuário memorize dados entre telas?" },
+  { h: "H7 — Flexibilidade e eficiência de uso", q: "Existem atalhos, filtros ou personalizações que aceleram o uso para usuários experientes?" },
+  { h: "H8 — Estética e design minimalista", q: "As telas mostram apenas informações relevantes, sem excesso visual que dispute atenção?" },
+  { h: "H9 — Reconhecer, diagnosticar e recuperar-se de erros", q: "As mensagens de erro são claras, em linguagem simples, indicam o problema e sugerem uma solução?" },
+  { h: "H10 — Ajuda e documentação", q: "Há ajuda, dicas ou documentação acessível e fácil de pesquisar quando o usuário precisa?" },
+];
+
+type Resp = "sim" | "nao" | "na" | "";
+type Item = { resposta: Resp; obs: string };
+export type GrupoAval = {
+  id: string; nome: string; periodo: string; data: string; integrantes: string;
+  checklist: Item[]; criadoEm: string;
+};
+
+const KEY = "ferramentas_heuristicas_grupos";
+const novo = (): GrupoAval => ({
+  id: uid(), nome: "", periodo: "", data: new Date().toISOString().slice(0, 10), integrantes: "",
+  checklist: CHECKLIST.map(() => ({ resposta: "", obs: "" })), criadoEm: new Date().toISOString(),
+});
+
+const placar = (g: GrupoAval) => {
+  const sim = g.checklist.filter((i) => i.resposta === "sim").length;
+  const nao = g.checklist.filter((i) => i.resposta === "nao").length;
+  const aplic = sim + nao;
+  return { sim, nao, resp: g.checklist.filter((i) => i.resposta).length, pct: aplic ? Math.round((sim / aplic) * 100) : 0 };
+};
+
+const GruposHeuristicaChecklist = () => {
+  const { toast } = useToast();
+  const [grupos, setGrupos] = useState<GrupoAval[]>(() => {
+    try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { return []; }
+  });
+  const [form, setForm] = useState<GrupoAval | null>(null);
+  const [abertoId, setAbertoId] = useState<string | null>(null);
+
+  useEffect(() => { try { localStorage.setItem(KEY, JSON.stringify(grupos)); } catch { /* ignore */ } }, [grupos]);
+
+  const aberto = grupos.find((g) => g.id === abertoId) || null;
+
+  const salvarForm = () => {
+    if (!form || !form.nome.trim()) { toast({ title: "Informe o nome do grupo.", variant: "destructive" }); return; }
+    setGrupos((l) => l.some((g) => g.id === form.id) ? l.map((g) => g.id === form.id ? form : g) : [form, ...l]);
+    toast({ title: "Grupo salvo!" });
+    setForm(null);
+  };
+
+  const excluir = (id: string) => {
+    if (!confirm("Excluir este grupo e seu checklist?")) return;
+    setGrupos((l) => l.filter((g) => g.id !== id));
+    if (abertoId === id) setAbertoId(null);
+  };
+
+  const setItem = (idx: number, patch: Partial<Item>) => {
+    if (!aberto) return;
+    setGrupos((l) => l.map((g) => g.id !== aberto.id ? g : { ...g, checklist: g.checklist.map((it, i) => i === idx ? { ...it, ...patch } : it) }));
+  };
+
+  const exportar = (g: GrupoAval) => {
+    const p = placar(g);
+    baixarMd(`checklist-heuristico-${g.nome.replace(/\s+/g, "-").toLowerCase()}.md`,
+      `# Checklist Heurístico — ${g.nome}\n**Período:** ${g.periodo || "—"} · **Data:** ${g.data || "—"}\n**Integrantes:** ${g.integrantes || "—"}\n\nAtende: ${p.sim} · Não atende: ${p.nao} · Conformidade: ${p.pct}%\n\n` +
+      CHECKLIST.map((c, i) => {
+        const it = g.checklist[i];
+        const r = it.resposta === "sim" ? "✅ Sim" : it.resposta === "nao" ? "❌ Não" : it.resposta === "na" ? "N/A" : "— não avaliado";
+        return `## ${c.h}\n**Pergunta:** ${c.q}\n**Resposta:** ${r}${it.obs ? `\n**Observação:** ${it.obs}` : ""}`;
+      }).join("\n\n"));
+  };
+
+  const RespBtn = ({ idx, v, label, icon }: { idx: number; v: Resp; label: string; icon: React.ReactNode }) => {
+    const ativo = aberto?.checklist[idx].resposta === v;
+    return (
+      <Button size="sm" variant={ativo ? (v === "nao" ? "destructive" : "default") : "outline"} className="h-8"
+        onClick={() => setItem(idx, { resposta: ativo ? "" : v })}>{icon}{label}</Button>
+    );
+  };
+
+  return (
+    <Card className="p-5 mb-6 space-y-4">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div>
+          <h2 className="text-lg font-semibold">Grupos avaliados ({grupos.length})</h2>
+          <p className="text-xs text-muted-foreground">Cadastre os grupos e abra cada um para responder o checklist das 10 heurísticas.</p>
+        </div>
+        <Button size="sm" onClick={() => setForm(novo())}><Plus className="w-4 h-4 mr-1" /> Inserir grupo</Button>
+      </div>
+
+      {form && (
+        <div className="p-4 rounded-lg border border-border bg-muted/30 space-y-3">
+          <div className="grid sm:grid-cols-3 gap-3">
+            <div><Label>Nome do grupo / projeto</Label><Input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} placeholder="ex.: Equipe FoodShare" /></div>
+            <div><Label>Período</Label><Input value={form.periodo} onChange={(e) => setForm({ ...form, periodo: e.target.value })} placeholder="ex.: 2026.2" /></div>
+            <div><Label>Data da avaliação</Label><Input type="date" value={form.data} onChange={(e) => setForm({ ...form, data: e.target.value })} /></div>
+          </div>
+          <div><Label>Integrantes (opcional)</Label><Input value={form.integrantes} onChange={(e) => setForm({ ...form, integrantes: e.target.value })} /></div>
+          <div className="flex gap-2 justify-end">
+            <Button size="sm" variant="ghost" onClick={() => setForm(null)}><X className="w-4 h-4 mr-1" /> Cancelar</Button>
+            <Button size="sm" onClick={salvarForm}><Save className="w-4 h-4 mr-1" /> Salvar</Button>
+          </div>
+        </div>
+      )}
+
+      {!grupos.length && !form && <p className="text-sm text-muted-foreground text-center py-4">Nenhum grupo cadastrado.</p>}
+
+      {grupos.length > 0 && (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead><tr className="text-left text-xs text-muted-foreground border-b border-border">
+              <th className="py-2">Grupo</th><th>Período</th><th>Data</th><th>Progresso</th><th>Conformidade</th><th className="text-right">Ações</th>
+            </tr></thead>
+            <tbody>
+              {grupos.map((g) => {
+                const p = placar(g);
+                return (
+                  <tr key={g.id} className={`border-b border-border ${abertoId === g.id ? "bg-primary/5" : ""}`}>
+                    <td className="py-2 font-medium text-foreground">{g.nome}</td>
+                    <td>{g.periodo || "—"}</td>
+                    <td>{g.data ? new Date(g.data + "T00:00").toLocaleDateString("pt-BR") : "—"}</td>
+                    <td>{p.resp}/10</td>
+                    <td><Badge variant={p.pct >= 70 ? "default" : "outline"}>{p.pct}%</Badge></td>
+                    <td className="text-right whitespace-nowrap">
+                      <Button size="icon" variant="ghost" className="h-8 w-8" title="Abrir" onClick={() => setAbertoId(abertoId === g.id ? null : g.id)}><FolderOpen className="w-4 h-4 text-primary" /></Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" title="Editar" onClick={() => setForm({ ...g })}><Pencil className="w-4 h-4" /></Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" title="Excluir" onClick={() => excluir(g.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {aberto && (
+        <div className="pt-4 border-t border-border space-y-3">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h3 className="font-semibold text-foreground">Checklist — {aberto.nome}</h3>
+            <div className="flex gap-2">
+              <Button size="sm" variant="outline" onClick={() => exportar(aberto)}><Download className="w-3 h-3 mr-1" /> .md</Button>
+              <Button size="sm" variant="ghost" onClick={() => setAbertoId(null)}><X className="w-4 h-4" /></Button>
+            </div>
+          </div>
+          {CHECKLIST.map((c, i) => (
+            <div key={c.h} className="p-3 rounded-lg border border-border bg-card space-y-2">
+              <p className="text-xs font-semibold text-primary">{c.h}</p>
+              <p className="text-sm text-foreground">{c.q}</p>
+              <div className="flex gap-2 flex-wrap">
+                <RespBtn idx={i} v="sim" label="Sim" icon={<Check className="w-3 h-3 mr-1" />} />
+                <RespBtn idx={i} v="nao" label="Não" icon={<X className="w-3 h-3 mr-1" />} />
+                <RespBtn idx={i} v="na" label="Não se aplica" icon={<Minus className="w-3 h-3 mr-1" />} />
+              </div>
+              <Textarea rows={1} placeholder="Observação / evidência (opcional)" value={aberto.checklist[i].obs} onChange={(e) => setItem(i, { obs: e.target.value })} />
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+};
+
+export default GruposHeuristicaChecklist;

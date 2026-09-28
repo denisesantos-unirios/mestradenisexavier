@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { FKEYS, uid, readLS, writeLS, baixarMd, enviarParaBugs, enviarParaBacklog } from "@/lib/ferramentas-store";
+import GruposHeuristicaChecklist from "@/components/ferramentas/GruposHeuristicaChecklist";
 
 const HEURISTICAS = [
   "H1 — Visibilidade do status do sistema",
@@ -116,15 +117,7 @@ const AvaliacaoHeuristica = () => {
           </div>
         </motion.header>
 
-        <Card className="p-5 mb-6">
-          <h2 className="text-lg font-semibold mb-3">Grupo avaliado</h2>
-          <div className="grid sm:grid-cols-3 gap-3">
-            <div><Label>Nome do grupo / projeto</Label><Input value={grupo.nome} onChange={(e) => setGrupo({ ...grupo, nome: e.target.value })} placeholder="ex.: Equipe FoodShare" /></div>
-            <div><Label>Período</Label><Input value={grupo.periodo} onChange={(e) => setGrupo({ ...grupo, periodo: e.target.value })} placeholder="ex.: 2026.2" /></div>
-            <div><Label>Data da avaliação</Label><Input type="date" value={grupo.data} onChange={(e) => setGrupo({ ...grupo, data: e.target.value })} /></div>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">Identifique o grupo cujo projeto você está avaliando profissionalmente. Esses dados saem no relatório exportado.</p>
-        </Card>
+        <GruposHeuristicaChecklist />
 
         <div className="grid sm:grid-cols-3 gap-3 mb-6">
           <Card className="p-4"><p className="text-xs text-muted-foreground">Problemas</p><p className="text-2xl font-bold text-foreground">{lista.length}</p></Card>
