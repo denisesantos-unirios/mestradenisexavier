@@ -101,7 +101,7 @@ const AvaliacaoHeuristica = () => {
   };
 
   const exportar = () => baixarMd("avaliacao-heuristica.md",
-    `# Avaliação Heurística (Nielsen)\nProblemas: ${lista.length} · Severidade média: ${media} · Críticos: ${criticos}\n\n` +
+    `# Avaliação Heurística (Nielsen)\n**Grupo:** ${grupo.nome || "—"} · **Período:** ${grupo.periodo || "—"} · **Data:** ${grupo.data || "—"}\nProblemas: ${lista.length} · Severidade média: ${media} · Críticos: ${criticos}\n\n` +
     lista.map((p) => `## ${p.heuristica}\n- Local: ${p.local || "—"}\n- Severidade: ${SEVERIDADES[p.severidade]} · Frequência: ${p.frequencia}/4\n- Avaliador: ${p.avaliador || "—"}\n\n${p.descricao}\n\n**Recomendação:** ${p.recomendacao || "—"}`).join("\n\n---\n\n"));
 
   return (
