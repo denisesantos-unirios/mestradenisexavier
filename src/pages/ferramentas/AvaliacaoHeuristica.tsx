@@ -32,6 +32,8 @@ const SEVERIDADES = [
   "4 — Catastrófico",
 ];
 
+type Grupo = { nome: string; periodo: string; data: string };
+
 type Problema = {
   id: string; heuristica: string; local: string; descricao: string; severidade: number;
   frequencia: number; recomendacao: string; avaliador: string; criadoEm: string;
