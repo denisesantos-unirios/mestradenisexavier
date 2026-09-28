@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, FolderOpen, X, Save, Download, Check, Minus } from "lucide-react";
+import { Plus, Pencil, Trash2, FolderOpen, X, Save, Download, Check, Minus, FileText } from "lucide-react";
+import html2pdf from "html2pdf.js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -70,6 +71,51 @@ const GruposHeuristicaChecklist = () => {
   const setItem = (idx: number, patch: Partial<Item>) => {
     if (!aberto) return;
     setGrupos((l) => l.map((g) => g.id !== aberto.id ? g : { ...g, checklist: g.checklist.map((it, i) => i === idx ? { ...it, ...patch } : it) }));
+  };
+
+  const exportarPdf = async (g: GrupoAval) => {
+    const p = placar(g);
+    const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const rotulo = (r: Resp) => r === "sim" ? "✅ Sim" : r === "nao" ? "❌ Não" : r === "na" ? "N/A" : "— não avaliado";
+    const linhas = CHECKLIST.map((c, i) => {
+      const it = g.checklist[i];
+      const cor = it.resposta === "sim" ? "#16a34a" : it.resposta === "nao" ? "#dc2626" : "#6b7280";
+      return `<div style="border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;margin-bottom:8px;page-break-inside:avoid;">
+        <p style="margin:0 0 2px;font-size:11px;font-weight:700;color:#1d4ed8;">${esc(c.h)}</p>
+        <p style="margin:0 0 4px;font-size:12px;color:#111827;">${esc(c.q)}</p>
+        <p style="margin:0;font-size:12px;font-weight:700;color:${cor};">${rotulo(it.resposta)}</p>
+        ${it.obs ? `<p style="margin:4px 0 0;font-size:11px;color:#374151;"><b>Observação:</b> ${esc(it.obs)}</p>` : ""}
+      </div>`;
+    }).join("");
+    const el = document.createElement("div");
+    el.style.cssText = "width:700px;padding:24px;background:#fff;font-family:Arial,Helvetica,sans-serif;color:#111827;";
+    el.innerHTML = `
+      <h1 style="font-size:20px;margin:0 0 4px;">Avaliação Heurística — ${esc(g.nome)}</h1>
+      <p style="font-size:12px;color:#4b5563;margin:0 0 12px;">
+        <b>Período:</b> ${esc(g.periodo || "—")} &nbsp;·&nbsp; <b>Data:</b> ${g.data ? new Date(g.data + "T00:00").toLocaleDateString("pt-BR") : "—"}
+        ${g.integrantes ? ` &nbsp;·&nbsp; <b>Integrantes:</b> ${esc(g.integrantes)}` : ""}
+      </p>
+      <div style="display:flex;gap:8px;margin-bottom:14px;">
+        <div style="flex:1;border:1px solid #e5e7eb;border-radius:8px;padding:8px;text-align:center;"><p style="margin:0;font-size:18px;font-weight:800;color:#16a34a;">${p.sim}</p><p style="margin:0;font-size:10px;color:#6b7280;">Atende</p></div>
+        <div style="flex:1;border:1px solid #e5e7eb;border-radius:8px;padding:8px;text-align:center;"><p style="margin:0;font-size:18px;font-weight:800;color:#dc2626;">${p.nao}</p><p style="margin:0;font-size:10px;color:#6b7280;">Não atende</p></div>
+        <div style="flex:1;border:1px solid #e5e7eb;border-radius:8px;padding:8px;text-align:center;"><p style="margin:0;font-size:18px;font-weight:800;color:#1d4ed8;">${p.pct}%</p><p style="margin:0;font-size:10px;color:#6b7280;">Conformidade</p></div>
+      </div>
+      <h2 style="font-size:14px;margin:0 0 8px;">Resumo das observações por heurística</h2>
+      ${linhas}
+      <p style="font-size:10px;color:#9ca3af;margin-top:12px;">Gerado em ${new Date().toLocaleString("pt-BR")} — Portal de Aulas · Avaliação Heurística (10 heurísticas de Nielsen)</p>`;
+    document.body.appendChild(el);
+    try {
+      await html2pdf().set({
+        margin: 10,
+        filename: `avaliacao-heuristica-${g.nome.replace(/\s+/g, "-").toLowerCase()}.pdf`,
+        image: { type: "jpeg", quality: 0.95 },
+        html2canvas: { scale: 2, backgroundColor: "#ffffff" },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      }).from(el).save();
+      toast({ title: "PDF gerado!" });
+    } finally {
+      el.remove();
+    }
   };
 
   const exportar = (g: GrupoAval) => {
@@ -152,6 +198,7 @@ const GruposHeuristicaChecklist = () => {
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <h3 className="font-semibold text-foreground">Checklist — {aberto.nome}</h3>
             <div className="flex gap-2">
+              <Button size="sm" onClick={() => exportarPdf(aberto)}><FileText className="w-3 h-3 mr-1" /> PDF</Button>
               <Button size="sm" variant="outline" onClick={() => exportar(aberto)}><Download className="w-3 h-3 mr-1" /> .md</Button>
               <Button size="sm" variant="ghost" onClick={() => setAbertoId(null)}><X className="w-4 h-4" /></Button>
             </div>
