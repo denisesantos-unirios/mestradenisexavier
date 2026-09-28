@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, FolderOpen, X, Save, Download, Check, Minus } from "lucide-react";
+import { Plus, Pencil, Trash2, FolderOpen, X, Save, Download, Check, Minus, FileText } from "lucide-react";
+import html2pdf from "html2pdf.js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
