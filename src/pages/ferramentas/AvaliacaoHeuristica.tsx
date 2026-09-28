@@ -48,9 +48,16 @@ const AvaliacaoHeuristica = () => {
   const { toast } = useToast();
   const [lista, setLista] = useState<Problema[]>([]);
   const [atual, setAtual] = useState<Problema>(empty());
+  const [grupo, setGrupo] = useState<Grupo>({ nome: "", periodo: "", data: new Date().toISOString().slice(0, 10) });
 
-  useEffect(() => setLista(readLS<Problema[]>(FKEYS.heuristicas, [])), []);
+  useEffect(() => {
+    setLista(readLS<Problema[]>(FKEYS.heuristicas, []));
+    setGrupo(readLS<Grupo>("ferramentas_heuristicas_grupo", { nome: "", periodo: "", data: new Date().toISOString().slice(0, 10) }));
+  }, []);
   useEffect(() => writeLS(FKEYS.heuristicas, lista), [lista]);
+  useEffect(() => {
+    try { localStorage.setItem("ferramentas_heuristicas_grupo", JSON.stringify(grupo)); } catch { /* ignore */ }
+  }, [grupo]);
 
   const porHeuristica = useMemo(() => {
     const m: Record<string, number> = {};
