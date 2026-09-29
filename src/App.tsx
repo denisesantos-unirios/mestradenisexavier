@@ -97,6 +97,7 @@ import NuvemView from "./pages/nuvem/NuvemView";
 import NuvemParticipar from "./pages/nuvem/NuvemParticipar";
 // Ferramentas
 import HistoriasUsuario from "./pages/ferramentas/HistoriasUsuario";
+import JornadaAgil from "./pages/ferramentas/JornadaAgil";
 import Backlog from "./pages/ferramentas/Backlog";
 import KanbanTool from "./pages/ferramentas/Kanban";
 import SprintPlanning from "./pages/ferramentas/SprintPlanning";
@@ -230,6 +231,7 @@ const App = () => (
           <Route path="/nuvem/:id/participar" element={<NuvemParticipar />} />
           {/* Ferramentas */}
           <Route path="/ferramentas/historias-usuario" element={<HistoriasUsuario />} />
+          <Route path="/ferramentas/jornada-agil" element={<JornadaAgil />} />
           <Route path="/ferramentas/backlog" element={<Backlog />} />
           <Route path="/ferramentas/kanban" element={<KanbanTool />} />
           <Route path="/ferramentas/sprint-planning" element={<SprintPlanning />} />

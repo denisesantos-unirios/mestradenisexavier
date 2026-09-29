@@ -133,6 +133,7 @@ const menuItems = [
     title: "Ferramentas",
     icon: Wrench,
     submenu: [
+      { title: "Jornada Ágil (jogo)", path: "/ferramentas/jornada-agil" },
       { title: "Histórias de Usuário", path: "/ferramentas/historias-usuario" },
       { title: "Backlog", path: "/ferramentas/backlog" },
       { title: "Kanban", path: "/ferramentas/kanban" },
