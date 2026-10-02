@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import MermaidDiagram from "@/components/MermaidDiagram";
 
 type Progresso = { concluidas: string[]; pontos: number };
 const KEY = "jornada-agil-progresso";
@@ -21,9 +22,9 @@ const ESTACOES = [
 ];
 
 type Fala = { quem: string; texto: string };
-type Cena = { titulo: string; falas: Fala[]; pergunta: string; opcoes: string[]; correta: number; explica: string };
+type Cena = { titulo: string; falas: Fala[]; diagrama?: string; pergunta: string; opcoes: string[]; correta: number; explica: string };
 
-const CENAS: Cena[] = [
+const CENAS_PADRAO: Cena[] = [
   {
     titulo: "Daily Scrum",
     falas: [
@@ -90,7 +91,57 @@ const CENAS: Cena[] = [
   },
 ];
 
-function EstacaoCerimonias({ onConcluir, onVoltar }: { onConcluir: (pts: number) => void; onVoltar: () => void }) {
+
+const CENAS_STORIES: Cena[] = [
+  { titulo: "Formato da história", falas: [{ quem: "Carla (PO)", texto: "Os tutores reclamam que precisam ligar para marcar consulta." }],
+    pergunta: "Qual é a user story bem escrita?", opcoes: [
+      "Criar tela de agendamento com banco PostgreSQL",
+      "Como tutor, quero agendar consultas online, para não precisar ligar para a clínica",
+      "O sistema deve ser rápido e bonito",
+      "Agendamento: prioridade alta",
+    ], correta: 1, explica: "Formato Como [persona], quero [ação], para [benefício]: foca no valor para o usuário, não na solução técnica." },
+  { titulo: "INVEST — Small", falas: [{ quem: "Diego (Dev)", texto: "A história 'Como gestor, quero um sistema completo de gestão da clínica' vale 89 pontos..." }],
+    pergunta: "Qual critério INVEST ela viola e o que fazer?", opcoes: [
+      "Valiosa — remover do backlog",
+      "Small — quebrar em histórias menores que caibam em uma sprint",
+      "Testável — escrever código primeiro",
+      "Nenhum, está ótima",
+    ], correta: 1, explica: "É um épico. Histórias devem ser pequenas (Small) o suficiente para caber numa sprint; divida por fluxo ou funcionalidade." },
+  { titulo: "Critério de aceite (Gherkin)", falas: [{ quem: "Eva (QA)", texto: "Preciso de um critério testável para o agendamento." }],
+    pergunta: "Qual critério segue o formato Gherkin corretamente?", opcoes: [
+      "O agendamento deve funcionar bem",
+      "Testar o agendamento várias vezes",
+      "Dado que o horário 14h está livre, quando o tutor confirmar o agendamento, então o horário fica reservado e ele recebe confirmação",
+      "Quando possível, agendar",
+    ], correta: 2, explica: "Dado (contexto) / Quando (ação) / Então (resultado observável) torna o critério verificável e objetivo." },
+  { titulo: "Priorização MoSCoW", falas: [{ quem: "Carla (PO)", texto: "Para o MVP temos: agendamento, login, tema escuro e chat com veterinário." }],
+    pergunta: "Qual item é mais provavelmente 'Could have'?", opcoes: ["Agendamento online", "Login do tutor", "Tema escuro", "Cadastro do animal"],
+    correta: 2, explica: "Tema escuro é desejável, mas não essencial para o MVP. Must = sem ele o produto não funciona." },
+];
+
+const CENAS_UML: Cena[] = [
+  { titulo: "Casos de Uso", falas: [{ quem: "Arquiteta", texto: "Veja este diagrama da clínica." }],
+    diagrama: "flowchart LR\n  t((Tutor))\n  subgraph Sistema\n    a([Agendar consulta])\n    b([Autenticar])\n  end\n  t --> a\n  a -. include .-> b",
+    pergunta: "O que significa a relação 'include' entre Agendar e Autenticar?", opcoes: [
+      "Autenticar é opcional",
+      "Agendar sempre executa Autenticar",
+      "Autenticar é um ator",
+      "Agendar herda de Autenticar",
+    ], correta: 1, explica: "<<include>> indica comportamento obrigatório reutilizado; <<extend>> é que indica comportamento opcional/condicional." },
+  { titulo: "Diagrama de Classes", falas: [{ quem: "Diego (Dev)", texto: "Um Tutor pode ter vários Animais; cada Animal tem um único Tutor." }],
+    diagrama: "classDiagram\n  class Tutor { +nome }\n  class Animal { +especie }\n  Tutor \"1\" --> \"*\" Animal : possui",
+    pergunta: "Qual é a multiplicidade correta?", opcoes: ["1 para 1", "N para N", "1 para * (um para muitos)", "0 para 0"],
+    correta: 2, explica: "Um tutor (1) possui vários animais (*). A multiplicidade fica em cada ponta da associação." },
+  { titulo: "Diagrama de Sequência", falas: [{ quem: "Eva (QA)", texto: "Quero mostrar a ordem das mensagens entre usuário, front-end e API no tempo." }],
+    pergunta: "Qual diagrama UML é mais adequado?", opcoes: ["Diagrama de Classes", "Diagrama de Sequência", "Diagrama de Implantação", "Diagrama de Pacotes"],
+    correta: 1, explica: "O Diagrama de Sequência é comportamental e mostra a troca de mensagens entre objetos ao longo do tempo (linhas de vida)." },
+  { titulo: "Diagrama de Atividades", falas: [{ quem: "Arquiteta", texto: "Analise o fluxo." }],
+    diagrama: "flowchart TD\n  A([Início]) --> B[Receber pedido]\n  B --> C{Horário livre?}\n  C -- Sim --> D[Confirmar]\n  C -- Não --> E[Sugerir outro]\n  E --> B\n  D --> F([Fim])",
+    pergunta: "O losango 'Horário livre?' representa:", opcoes: ["Uma entidade", "Um nó de decisão", "Um ator", "Uma classe abstrata"],
+    correta: 1, explica: "No Diagrama de Atividades, o losango é um nó de decisão com fluxos alternativos guardados por condições." },
+];
+
+function EstacaoCerimonias({ onConcluir, onVoltar, cenas: CENAS = CENAS_PADRAO, sprint = 1 }: { onConcluir: (pts: number) => void; onVoltar: () => void; cenas?: Cena[]; sprint?: number }) {
   const [i, setI] = useState(0);
   const [escolha, setEscolha] = useState<number | null>(null);
   const [acertos, setAcertos] = useState(0);
@@ -111,7 +162,7 @@ function EstacaoCerimonias({ onConcluir, onVoltar }: { onConcluir: (pts: number)
     return (
       <Card className="p-8 text-center space-y-4">
         <Trophy className="w-14 h-14 mx-auto text-primary" />
-        <h2 className="text-2xl font-bold">{aprovado ? "Sprint 1 concluída!" : "Sprint não fechada"}</h2>
+        <h2 className="text-2xl font-bold">{aprovado ? `Sprint ${sprint} concluída!` : "Sprint não fechada"}</h2>
         <p className="text-muted-foreground">Você acertou {acertos} de {CENAS.length} cenas.{!aprovado && " São necessários 3 acertos."}</p>
         <div className="flex gap-2 justify-center">
           {aprovado ? (
@@ -139,6 +190,7 @@ function EstacaoCerimonias({ onConcluir, onVoltar }: { onConcluir: (pts: number)
             <p>{f.texto}</p>
           </motion.div>
         ))}
+        {cena.diagrama && <div className="bg-card border rounded-lg p-3"><MermaidDiagram chart={cena.diagrama} /></div>}
         <p className="font-semibold pt-2">{cena.pergunta}</p>
         <div className="grid gap-2">
           {cena.opcoes.map((o, k) => {
@@ -179,6 +231,10 @@ export default function JornadaAgil() {
       <main className="container mx-auto px-4 py-24 max-w-5xl">
         {ativa === "cerimonias" ? (
           <EstacaoCerimonias onVoltar={() => setAtiva(null)} onConcluir={(p) => concluir("cerimonias", p)} />
+        ) : ativa === "stories" ? (
+          <EstacaoCerimonias key="stories" cenas={CENAS_STORIES} sprint={2} onVoltar={() => setAtiva(null)} onConcluir={(p) => concluir("stories", p)} />
+        ) : ativa === "uml" ? (
+          <EstacaoCerimonias key="uml" cenas={CENAS_UML} sprint={3} onVoltar={() => setAtiva(null)} onConcluir={(p) => concluir("uml", p)} />
         ) : (
           <>
             <header className="mb-8 space-y-3">
@@ -195,7 +251,7 @@ export default function JornadaAgil() {
               {ESTACOES.map((e, idx) => {
                 const feita = prog.concluidas.includes(e.id);
                 const liberada = idx === 0 || prog.concluidas.includes(ESTACOES[idx - 1].id);
-                const disponivel = e.id === "cerimonias";
+                const disponivel = e.id !== "docs";
                 const Icon = e.icon;
                 return (
                   <motion.div key={e.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }}>
