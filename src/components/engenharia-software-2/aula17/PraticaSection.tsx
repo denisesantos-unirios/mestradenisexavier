@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, ArrowRight, Lightbulb, Target } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import MermaidDiagram from "@/components/MermaidDiagram";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import LocacaoConceitualDiagram from "./LocacaoConceitualDiagram";
 
 const locacaoDiagram = `classDiagram
   direction TB
@@ -216,11 +218,20 @@ const PraticaSection = () => {
           <Card className="bg-gradient-to-br from-purple-500/5 to-pink-500/5 border-purple-500/30 mb-16">
             <CardContent className="p-6 md:p-8">
               <h4 className="font-bold text-purple-400 mb-2 flex items-center gap-2">
-                📊 Diagrama de Classes — Sistema de Locação
+                📊 Modelagens — Sistema de Locação
               </h4>
               <p className="text-sm text-muted-foreground mb-6">
-                Visualização UML do mini-cenário com herança (Carro/Moto → Veículo) e associações com multiplicidade.
+                Compare os conceitos do domínio com as classes do mesmo mini-cenário de locação de veículos.
               </p>
+               <Tabs defaultValue="conceitual">
+                 <TabsList className="h-auto w-full flex flex-wrap justify-start mb-5" aria-label="Modelagens do sistema de locação">
+                   <TabsTrigger value="conceitual" className="whitespace-normal">Modelagem Conceitual</TabsTrigger>
+                   <TabsTrigger value="classes" className="whitespace-normal">Diagrama de Classes</TabsTrigger>
+                 </TabsList>
+                 <TabsContent value="conceitual">
+                   <LocacaoConceitualDiagram />
+                 </TabsContent>
+                 <TabsContent value="classes">
               <div className="bg-background/40 rounded-lg p-4 border border-purple-500/20">
                 <MermaidDiagram chart={locacaoDiagram} id="locacao-diagram" />
               </div>
@@ -238,6 +249,8 @@ const PraticaSection = () => {
                   <span className="text-muted-foreground"> definida em cada ponta</span>
                 </div>
               </div>
+                 </TabsContent>
+               </Tabs>
             </CardContent>
           </Card>
         </ScrollReveal>
