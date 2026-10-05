@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen, GitBranch, Layers, Link2, Boxes, Zap, Code2 } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import MermaidDiagram from "@/components/MermaidDiagram";
+import ModelagemConceitualSection from "./ModelagemConceitualSection";
 
 const sistemaAcademicoDiagram = `classDiagram
   direction TB
@@ -84,7 +85,7 @@ const sistemaAcademicoDiagram = `classDiagram
   Departamento "1" --> "1..*" Professor : possui
 
   Disciplina "1" -- "0..*" Turma : oferta
-  Turma "1" -- "0..*" Aluno : matricula
+  Turma "0..*" -- "0..*" Aluno : matricula
   Turma "0..*" -- "1" Professor : ministra
 
   Aluno "1" *-- "1" HistoricoEscolar : possui
@@ -170,7 +171,7 @@ const EstudoCasoSection = () => {
               📚 Estudo de Caso: <span className="text-purple-400">Sistema Acadêmico</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Modelagem completa de um SIGAA simplificado, demonstrando <strong className="text-pink-400">todos os tipos de relacionamentos UML</strong> em um único diagrama.
+              Do modelo conceitual de um SIGAA simplificado ao diagrama de classes, demonstrando <strong className="text-pink-400">todos os tipos de relacionamentos UML</strong> no mesmo estudo de caso.
             </p>
           </div>
         </ScrollReveal>
@@ -193,7 +194,7 @@ const EstudoCasoSection = () => {
                   <strong className="text-foreground">Pessoas</strong> no sistema podem ser <strong className="text-foreground">Alunos</strong> ou <strong className="text-foreground">Professores</strong> (<strong className="text-purple-400">generalização</strong>). Toda pessoa precisa se autenticar, implementando a interface <code className="text-cyan-400">Autenticavel</code> (<strong className="text-cyan-400">realização</strong>).
                 </p>
                 <p>
-                  Cada Disciplina pode ofertar várias <strong className="text-foreground">Turmas</strong> por semestre. Uma Turma <strong className="text-blue-400">associa</strong> alunos matriculados e o professor responsável.
+                  Cada Disciplina pode ofertar várias <strong className="text-foreground">Turmas</strong> por semestre. Uma Turma <strong className="text-blue-400">associa</strong> alunos matriculados e o professor responsável. Um aluno pode se matricular em várias turmas e cada turma pode receber vários alunos (N:N); cada turma tem um professor, que pode ministrar várias turmas.
                 </p>
                 <p>
                   Todo Aluno possui um <strong className="text-foreground">Histórico Escolar</strong> único — quando o aluno é removido, seu histórico é destruído junto (<strong className="text-pink-400">composição</strong>).
@@ -205,6 +206,8 @@ const EstudoCasoSection = () => {
             </CardContent>
           </Card>
         </ScrollReveal>
+
+        <ModelagemConceitualSection />
 
         {/* Diagrama Visual */}
         <ScrollReveal animation="fadeUp" delay={0.2}>
