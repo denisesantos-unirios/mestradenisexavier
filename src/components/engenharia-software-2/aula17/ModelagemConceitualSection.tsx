@@ -68,7 +68,7 @@ const ModelagemConceitualSection = () => (
       </p>
     </div>
     <figure className="border border-border rounded-lg bg-background p-3 overflow-x-auto">
-      <svg viewBox="0 0 1200 940" role="img" aria-labelledby="academico-chen-title academico-chen-desc" className="w-full min-w-[850px] h-auto text-foreground">
+      <svg viewBox="-20 0 1240 940" role="img" aria-labelledby="academico-chen-title academico-chen-desc" className="w-full min-w-[850px] h-auto text-foreground">
         <title id="academico-chen-title">Modelo conceitual de Peter Chen do Sistema Acadêmico</title>
         <desc id="academico-chen-desc">Universidade organiza departamentos; departamento contém disciplinas e possui professores; disciplina oferta turmas; professor ministra turmas; aluno participa de turmas pela entidade associativa Matrícula; Pessoa especializa-se em Aluno e Professor, reside em Endereço, e Aluno possui Histórico Escolar.</desc>
         <g fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -96,8 +96,8 @@ const ModelagemConceitualSection = () => (
               {r.associative && <rect x={r.x - 70} y={r.y - 38} width="140" height="76" className="fill-background stroke-primary" />}
               <polygon points={`${r.x - 62},${r.y} ${r.x},${r.y - 32} ${r.x + 62},${r.y} ${r.x},${r.y + 32}`} className="fill-background stroke-primary" />
               <text x={r.x} y={r.y + 5} textAnchor="middle" stroke="none" className="fill-foreground text-[14px]">{r.label}</text>
-              <text x={vertical ? r.x + 15 : r.from[0] + 24} y={vertical ? r.from[1] + 24 : r.from[1] - 12} stroke="none" className="fill-foreground text-[13px]">{r.a}</text>
-              <text x={vertical || r.associative ? r.to[0] + 15 : r.to[0] - 45} y={vertical || r.associative ? r.to[1] - 18 : r.to[1] - 12} stroke="none" className="fill-foreground text-[13px]">{r.b}</text>
+              <text x={vertical || r.y === 810 ? r.x + 15 : r.from[0] + 24} y={vertical || r.y === 810 ? r.from[1] + 24 : r.from[1] - 12} stroke="none" className="fill-foreground text-[13px]">{r.a}</text>
+              <text x={vertical || r.associative ? r.to[0] + 15 : r.to[0] - 45} y={r.associative ? r.to[1] + 35 : vertical ? r.to[1] - 18 : r.to[1] - 12} stroke="none" className="fill-foreground text-[13px]">{r.b}</text>
             </g>;
           })}
           <polygon points="325,320 325,380 395,350" className="fill-background stroke-primary" />

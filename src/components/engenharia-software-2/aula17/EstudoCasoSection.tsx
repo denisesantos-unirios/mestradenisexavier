@@ -5,7 +5,7 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import MermaidDiagram from "@/components/MermaidDiagram";
 import ModelagemConceitualSection from "./ModelagemConceitualSection";
 
-const sistemaAcademicoDiagram = `classDiagram
+export const sistemaAcademicoDiagram = `classDiagram
   direction TB
 
   class Pessoa {
