@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Lock, FlaskConical } from "lucide-react";
+import { Lock, FlaskConical, GraduationCap } from "lucide-react";
+import { lovable } from "@/integrations/lovable";
 import MainNavigation from "@/components/MainNavigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +31,29 @@ const ProtocolosLogin = () => {
   useEffect(() => {
     if (!loading && user && isProfessor) navigate(from, { replace: true });
   }, [user, isProfessor, loading, from, navigate]);
+
+  const handleGoogleLogin = async () => {
+    // O login OAuth só funciona no domínio hospedado pela Lovable.
+    // No GitHub Pages o fluxo /~oauth não existe (404), então redirecionamos para o portal publicado.
+    if (window.location.hostname.endsWith("github.io")) {
+      window.location.href = "https://mestradenisexavier.lovable.app/protocolos/login";
+      return;
+    }
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/protocolos/login",
+      extraParams: {
+        login_hint: "denise.santos@uniriosead.com",
+        hd: "uniriosead.com",
+      },
+    });
+    if (result.error) {
+      toast({
+        title: "Erro ao fazer login",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,6 +93,21 @@ const ProtocolosLogin = () => {
               Sua conta está autenticada mas não possui permissão de acesso aos Protocolos.
             </div>
           )}
+
+          <Button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold"
+          >
+            <GraduationCap className="w-4 h-4 mr-2" />
+            Entrar com Google
+          </Button>
+
+          <div className="flex items-center gap-3 my-2">
+            <div className="h-px flex-1 bg-border" />
+            <span className="text-xs text-muted-foreground">ou com e-mail e senha</span>
+            <div className="h-px flex-1 bg-border" />
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
