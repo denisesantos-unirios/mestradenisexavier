@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Lock, FlaskConical } from "lucide-react";
+import { Lock, FlaskConical, GraduationCap } from "lucide-react";
+import { lovable } from "@/integrations/lovable";
 import MainNavigation from "@/components/MainNavigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
