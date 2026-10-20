@@ -32,6 +32,29 @@ const ProtocolosLogin = () => {
     if (!loading && user && isProfessor) navigate(from, { replace: true });
   }, [user, isProfessor, loading, from, navigate]);
 
+  const handleGoogleLogin = async () => {
+    // O login OAuth só funciona no domínio hospedado pela Lovable.
+    // No GitHub Pages o fluxo /~oauth não existe (404), então redirecionamos para o portal publicado.
+    if (window.location.hostname.endsWith("github.io")) {
+      window.location.href = "https://mestradenisexavier.lovable.app/protocolos/login";
+      return;
+    }
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/protocolos/login",
+      extraParams: {
+        login_hint: "denise.santos@uniriosead.com",
+        hd: "uniriosead.com",
+      },
+    });
+    if (result.error) {
+      toast({
+        title: "Erro ao fazer login",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
