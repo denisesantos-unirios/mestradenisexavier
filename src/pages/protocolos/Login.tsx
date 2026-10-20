@@ -94,6 +94,21 @@ const ProtocolosLogin = () => {
             </div>
           )}
 
+          <Button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold"
+          >
+            <GraduationCap className="w-4 h-4 mr-2" />
+            Entrar com Google
+          </Button>
+
+          <div className="flex items-center gap-3 my-2">
+            <div className="h-px flex-1 bg-border" />
+            <span className="text-xs text-muted-foreground">ou com e-mail e senha</span>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="email">E-mail</Label>
