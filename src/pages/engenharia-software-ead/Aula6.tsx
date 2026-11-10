@@ -9,6 +9,7 @@ import EntrevistaSection from "@/components/engenharia-software-ead/aula6/Entrev
 import ObservacaoSection from "@/components/engenharia-software-ead/aula6/ObservacaoSection";
 import HabilidadesSection from "@/components/engenharia-software-ead/aula6/HabilidadesSection";
 import OrganizacaoSection from "@/components/engenharia-software-ead/aula6/OrganizacaoSection";
+import HistoriaPraticaSection from "@/components/engenharia-software-ead/aula6/HistoriaPraticaSection";
 import ReferenciasSection from "@/components/engenharia-software-ead/aula6/ReferenciasSection";
 
 const sections = [
@@ -19,6 +20,7 @@ const sections = [
   { id: "observacao", title: "Observação" },
   { id: "habilidades", title: "Habilidades" },
   { id: "organizacao", title: "Organização" },
+  { id: "pratica-hu", title: "Prática: HU" },
   { id: "referencias", title: "Referências" },
 ];
 
@@ -35,6 +37,7 @@ const Aula6 = () => (
       <ObservacaoSection />
       <HabilidadesSection />
       <OrganizacaoSection />
+      <HistoriaPraticaSection />
       <ReferenciasSection />
     </div>
     <footer className="py-12 border-t border-border">
